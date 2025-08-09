@@ -1,0 +1,7 @@
+.timer-area {
+  text-align: center;
+  margin-top: 1rem;
+  padding: 1rem 1rem 2rem 1rem;
+  background-color: var(--bg-alt);
+  border-radius: 1rem;
+}

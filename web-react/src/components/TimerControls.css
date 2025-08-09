@@ -1,0 +1,28 @@
+.timer-controls {
+  position: relative;
+}
+
+.timer-control {
+  color: var(--bg);
+  background-color: var(--fg);
+  border-radius: 10px;
+  border: none;
+  font-size: 30px;
+  padding: 0.25rem 4rem;
+  cursor: pointer;
+}
+
+.timer-reset {
+  position: absolute;
+  top: 50%;
+  margin-left: 1rem;
+  transform: translateY(-50%);
+  background-color: var(--bg-alt);
+  padding: 0;
+}
+
+.timer-reset-center-svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

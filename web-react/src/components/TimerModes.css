@@ -1,0 +1,19 @@
+.timer-modes {
+  display: flex;
+  padding: 0 2rem;
+}
+
+.timer-mode {
+  font-size: 16px;
+  padding: 0.5rem;
+  background-color: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  flex: 1;
+}
+
+.timer-mode-active {
+  font-weight: bold;
+  background-color: var(--bg);
+}

@@ -1,0 +1,25 @@
+.navbar {
+  display: flex;
+  border-bottom: 2px solid var(--bg-alt);
+  padding: 0 0 0.5rem 0;
+}
+
+.navbar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  padding: 0.5rem;
+  background-color: var(--bg-alt);
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.navbar-item-active {
+  font-weight: bold;
+}
+
+.navbar-home {
+  margin-right: auto;
+}
