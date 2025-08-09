@@ -1,6 +1,7 @@
 import TimerArea from "./components/TimerArea";
 import "./App.css";
 import { useEffect, useState } from "react";
+import SettingsPage from "./SettingsPage";
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
@@ -64,6 +65,4 @@ export default function App() {
   );
 }
 
-function SettingsPage() {
-  return <h2>settings are here</h2>;
-}
+

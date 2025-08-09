@@ -1,0 +1,10 @@
+.settings-row {
+    display: flex;
+    border-bottom: 1px solid var(--bg-alt);
+    padding-bottom: 10px;
+
+}
+
+.settings-input {
+    margin-left: auto;
+}

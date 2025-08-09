@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./TimerArea.css";
 import TimerControls from "./TimerControls";
 import TimerModes, { type PomodoroMode } from "./TimerModes";
 import Timer from "./Timer";
+import alert from "../assets/alert.mp3";
+import { SETTINGS } from "../constants";
 
 export const DURATION = new Map<PomodoroMode, number>([
-  ["work", 600],
+  ["work", 3],
   ["break", 120],
 ]);
 
@@ -14,6 +16,14 @@ export default function TimerArea() {
   const [mode, setMode] = useState<PomodoroMode>("work");
   const totalS = DURATION.get(mode)!;
   const [seconds, setSeconds] = useState<number>(totalS);
+  const audio = useRef<HTMLAudioElement | null>(null);
+  const v = localStorage.getItem(SETTINGS.volume);
+  const volume = v !== null ? Number(v) : 50;
+
+  useEffect(() => {
+    audio.current = new Audio(alert);
+    audio.current.preload = "auto";
+  }, []);
 
   useEffect(() => {
     if (!active) return;
@@ -26,10 +36,16 @@ export default function TimerArea() {
   }, [active]);
 
   useEffect(() => {
-    if (seconds <= 0) {
-      setActive(false);
+    if (seconds > 0) return;
+
+    setActive(false);
+
+    if (audio?.current) {
+      audio.current.volume = volume / 100;
+      audio.current.currentTime = 0;
+      audio.current.play();
     }
-  }, [seconds]);
+  }, [seconds, volume]);
 
   return (
     <div className="timer-area">
