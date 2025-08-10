@@ -4,21 +4,23 @@ import TimerControls from "./TimerControls";
 import TimerModes, { type PomodoroMode } from "./TimerModes";
 import Timer from "./Timer";
 import alert from "../assets/alert.mp3";
-import { SETTINGS } from "../constants";
+import { DEFAULTS, SETTINGS } from "../constants";
 
-export const DURATION = new Map<PomodoroMode, number>([
-  ["work", 3],
-  ["break", 120],
-]);
+// TODO: this component needs refactoring
 
 export default function TimerArea() {
   const [active, setActive] = useState(false);
   const [mode, setMode] = useState<PomodoroMode>("work");
-  const totalS = DURATION.get(mode)!;
-  const [seconds, setSeconds] = useState<number>(totalS);
+  const [totalSeconds, setTotalSeconds] = useState<number>(
+    DEFAULTS.durationWork
+  );
+  const [seconds, setSeconds] = useState<number>(() => getDuration("work"));
+
   const audio = useRef<HTMLAudioElement | null>(null);
-  const v = localStorage.getItem(SETTINGS.volume);
-  const volume = v !== null ? Number(v) : 50;
+  const volume = useState(() => {
+    const v = localStorage.getItem(SETTINGS.volume);
+    return v !== null ? Number(v) : DEFAULTS.volume;
+  })[0];
 
   useEffect(() => {
     audio.current = new Audio(alert);
@@ -47,6 +49,10 @@ export default function TimerArea() {
     }
   }, [seconds, volume]);
 
+  useEffect(() => {
+    setTotalSeconds(getDuration(mode));
+  }, [mode]);
+
   return (
     <div className="timer-area">
       <TimerModes mode={mode} onModeChange={onModeChange} />
@@ -54,7 +60,7 @@ export default function TimerArea() {
       <TimerControls
         active={active}
         currentS={seconds}
-        totalS={totalS}
+        totalS={totalSeconds}
         onStart={onStart}
         onPause={onPause}
         onReset={onReset}
@@ -66,7 +72,7 @@ export default function TimerArea() {
     setActive(true);
 
     if (seconds == 0) {
-      setSeconds(totalS);
+      setSeconds(totalSeconds);
     }
   }
 
@@ -76,12 +82,26 @@ export default function TimerArea() {
 
   function onReset() {
     setActive(false);
-    setSeconds(totalS);
+    setSeconds(totalSeconds);
   }
 
   function onModeChange(mode: PomodoroMode) {
     setActive(false);
     setMode(mode);
-    setSeconds(DURATION.get(mode)!);
+    setSeconds(getDuration(mode));
+  }
+}
+
+function getDuration(mode: PomodoroMode) {
+  switch (mode) {
+    case "break": {
+      const v = localStorage.getItem(SETTINGS.durationBreak);
+      return v !== null ? Number(v) : DEFAULTS.durationBreak;
+    }
+    case "work":
+    default: {
+      const v = localStorage.getItem(SETTINGS.durationWork);
+      return v !== null ? Number(v) : DEFAULTS.durationWork;
+    }
   }
 }

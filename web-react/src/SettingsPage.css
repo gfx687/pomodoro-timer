@@ -1,10 +1,12 @@
+.settings {
+  margin-top: 1rem;
+}
 .settings-row {
-    display: flex;
-    border-bottom: 1px solid var(--bg-alt);
-    padding-bottom: 10px;
-
+  display: flex;
+  border-bottom: 1px solid var(--bg-alt);
+  padding: 10px 0;
 }
 
 .settings-input {
-    margin-left: auto;
+  margin-left: auto;
 }
