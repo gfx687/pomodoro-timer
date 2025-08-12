@@ -1,6 +1,6 @@
 import { DEFAULTS, SETTINGS } from "./constants";
 import "./SettingsPage.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function SettingsPage() {
   const [volume, setVolume] = useState(() => {
@@ -18,30 +18,13 @@ export default function SettingsPage() {
     return v !== null ? Number(v) : DEFAULTS.durationBreak;
   });
 
-  useEffect(() => {
-    localStorage.setItem(SETTINGS.volume, volume.toString());
-  }, [volume]);
-
-  useEffect(() => {
-    localStorage.setItem(SETTINGS.durationWork, durationWork.toString());
-  }, [durationWork]);
-
-  useEffect(() => {
-    localStorage.setItem(SETTINGS.durationBreak, durationBreak.toString());
-  }, [durationBreak]);
-
-  const onVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setVolume(Number(event.target.value));
-  };
-
-  const onDurationWorkChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDurationWork(Number(event.target.value));
-  };
-
-  const onDurationBreakChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+  const onNumberChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setting: string,
+    setSetting: (n: number) => void
   ) => {
-    setDurationBreak(Number(event.target.value));
+    setSetting(Number(event.target.value));
+    localStorage.setItem(setting, event.target.value);
   };
 
   return (
@@ -58,7 +41,7 @@ export default function SettingsPage() {
           min="0"
           max="100"
           value={volume}
-          onChange={onVolumeChange}
+          onChange={(e) => onNumberChange(e, SETTINGS.volume, setVolume)}
         />
         <span style={{ marginLeft: "5px" }}>{volume}</span>
       </div>
@@ -69,7 +52,9 @@ export default function SettingsPage() {
           type="number"
           className="settings-input"
           value={durationWork}
-          onChange={onDurationWorkChange}
+          onChange={(e) =>
+            onNumberChange(e, SETTINGS.durationWork, setDurationWork)
+          }
         />
       </div>
       <div className="settings-row">
@@ -79,7 +64,9 @@ export default function SettingsPage() {
           type="number"
           className="settings-input"
           value={durationBreak}
-          onChange={onDurationBreakChange}
+          onChange={(e) =>
+            onNumberChange(e, SETTINGS.durationBreak, setDurationBreak)
+          }
         />
       </div>
     </div>

@@ -13,7 +13,11 @@
   flex: 1;
 }
 
-.timer-mode-active {
+.timer-mode-current {
   font-weight: bold;
   background-color: var(--bg);
+}
+
+.timer-mode-inactive {
+  cursor: not-allowed;
 }

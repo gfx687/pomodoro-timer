@@ -1,28 +1,43 @@
+import type { PomodoroMode } from "../other/types";
 import "./TimerModes.css";
-
-export type PomodoroMode = "work" | "break";
 
 type TimerModesProps = {
   mode: PomodoroMode;
+
+  // Timer exists, whether it is paused or not does not matter
+  inProgress: boolean;
   onModeChange: (mode: PomodoroMode) => void;
 };
 
-export default function TimerModes({ mode, onModeChange }: TimerModesProps) {
+export default function TimerModes({
+  mode,
+  inProgress,
+  onModeChange,
+}: TimerModesProps) {
+  const inactiveClass = (m: PomodoroMode) => {
+    if (!inProgress) return "";
+    return mode === m ? "" : " timer-mode-inactive";
+  };
+
   return (
     <div className="timer-modes">
       <button
         className={
-          "timer-mode " + (mode === "work" ? "timer-mode-active" : "")
+          "timer-mode" +
+          (mode === "Work" ? " timer-mode-current" : "") +
+          inactiveClass("Work")
         }
-        onClick={() => onModeChange("work")}
+        onClick={() => onModeChange("Work")}
       >
         Work
       </button>
       <button
         className={
-          "timer-mode " + (mode === "break" ? "timer-mode-active" : "")
+          "timer-mode" +
+          (mode === "Break" ? " timer-mode-current" : "") +
+          inactiveClass("Break")
         }
-        onClick={() => onModeChange("break")}
+        onClick={() => onModeChange("Break")}
       >
         Break
       </button>
