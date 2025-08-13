@@ -9,8 +9,6 @@ type TimerControlsProps = {
   onReset: () => void;
 };
 
-// BUG: when switching Modes - the reset icon flickers
-
 export default function TimerControls({
   active,
   currentS,

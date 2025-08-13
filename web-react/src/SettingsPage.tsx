@@ -1,4 +1,4 @@
-import { DEFAULTS, SETTINGS } from "./constants";
+import { DEFAULTS, SETTINGS } from "./other/constants";
 import "./SettingsPage.css";
 import { useCallback, useState } from "react";
 

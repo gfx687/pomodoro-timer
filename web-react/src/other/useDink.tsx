@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DEFAULTS, SETTINGS } from "../constants";
+import { DEFAULTS, SETTINGS } from "./constants";
 import alert from "../assets/alert.mp3";
 
 export default function useDink(): () => void {
