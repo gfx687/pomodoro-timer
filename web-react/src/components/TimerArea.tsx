@@ -13,12 +13,15 @@ export default function TimerArea() {
   const { state, reset, pause, start, changeMode } = useTimer();
   const { isFullscreen, setFullscreen } = useFullscreen();
 
+  // should probably just expose isFinished from useTimer() instead
   useEffect(() => {
     if (state.seconds > 0) return;
 
-    pause();
-
-    if (state.isActive) playDink();
+    // needed because otherwise refreshing the page with 00:00 on it will play the sound
+    if (state.isActive) { 
+      playDink();
+      pause();
+    }
   }, [state.seconds, state.isActive, pause, playDink]);
 
   const onPressSpace = useCallback(() => {

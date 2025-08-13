@@ -16,7 +16,11 @@ export function useTimer() {
     WEBSOCKET_URL,
     {
       shouldReconnect: () => true,
-      share: true,
+      retryOnError: true,
+      // share: true,
+      reconnectAttempts: Infinity,
+      reconnectInterval: (attemptNumber) =>
+        Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
     }
   );
 

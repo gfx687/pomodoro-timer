@@ -8,7 +8,9 @@ public class PomodoroManager
             return null;
 
         var remaining = _state.GetRemaining();
-        return remaining <= 0 ? null : new(_state.IsActive, remaining, _state.Mode);
+        return remaining <= 0
+            ? new(false, 0, _state.Mode)
+            : new(_state.IsActive, remaining, _state.Mode);
     }
 
     /// <summary>
@@ -44,7 +46,7 @@ public class PomodoroManager
 
         var remaining = _state.GetRemaining();
         if (remaining <= 0)
-            return null;
+            return new(false, 0, _state.Mode);
 
         if (!_state.IsActive)
             return new(_state.IsActive, _state.GetRemaining(), _state.Mode);
