@@ -1,7 +1,7 @@
 .navbar {
   display: flex;
   border-bottom: 2px solid var(--bg-alt);
-  padding: 0 0 0.5rem 0;
+  padding-bottom: 0.5rem;
 }
 
 .navbar-item {
@@ -22,4 +22,12 @@
 
 .navbar-home {
   margin-right: auto;
+}
+
+.navbar-item:hover {
+  background-color: var(--hover);
+}
+
+.navbar-item:active {
+  background-color: var(--active);
 }

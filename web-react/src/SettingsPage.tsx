@@ -1,6 +1,6 @@
 import { DEFAULTS, SETTINGS } from "./constants";
 import "./SettingsPage.css";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export default function SettingsPage() {
   const [volume, setVolume] = useState(() => {
@@ -18,14 +18,28 @@ export default function SettingsPage() {
     return v !== null ? Number(v) : DEFAULTS.durationBreak;
   });
 
-  const onNumberChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+  const changeSetting = (
     setting: string,
+    newValue: string | number,
     setSetting: (n: number) => void
   ) => {
-    setSetting(Number(event.target.value));
-    localStorage.setItem(setting, event.target.value);
+    setSetting(Number(newValue));
+    localStorage.setItem(setting, newValue.toString());
   };
+
+  const onSettingsReset = useCallback(() => {
+    changeSetting(SETTINGS.volume, DEFAULTS.volume, setVolume);
+    changeSetting(
+      SETTINGS.durationWork,
+      DEFAULTS.durationWork,
+      setDurationWork
+    );
+    changeSetting(
+      SETTINGS.durationBreak,
+      DEFAULTS.durationBreak,
+      setDurationBreak
+    );
+  }, []);
 
   return (
     <div className="settings">
@@ -41,7 +55,9 @@ export default function SettingsPage() {
           min="0"
           max="100"
           value={volume}
-          onChange={(e) => onNumberChange(e, SETTINGS.volume, setVolume)}
+          onChange={(e) =>
+            changeSetting(SETTINGS.volume, e.target.value, setVolume)
+          }
         />
         <span style={{ marginLeft: "5px" }}>{volume}</span>
       </div>
@@ -53,7 +69,11 @@ export default function SettingsPage() {
           className="settings-input"
           value={durationWork}
           onChange={(e) =>
-            onNumberChange(e, SETTINGS.durationWork, setDurationWork)
+            changeSetting(
+              SETTINGS.durationWork,
+              e.target.value,
+              setDurationWork
+            )
           }
         />
       </div>
@@ -65,9 +85,18 @@ export default function SettingsPage() {
           className="settings-input"
           value={durationBreak}
           onChange={(e) =>
-            onNumberChange(e, SETTINGS.durationBreak, setDurationBreak)
+            changeSetting(
+              SETTINGS.durationBreak,
+              e.target.value,
+              setDurationBreak
+            )
           }
         />
+      </div>
+      <div className="settings-row">
+        <button className="settings-reset" onClick={onSettingsReset}>
+          Reset
+        </button>
       </div>
     </div>
   );

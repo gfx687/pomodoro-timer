@@ -78,6 +78,8 @@ function timerReducer(state: TimerState, action: TimerAction): TimerState {
   }
 }
 
+// TODO: split into a state / logic hook usePomodoro and presentation component
+
 export default function TimerArea() {
   const playDink = useDink();
   const [state, dispatch] = useReducer(timerReducer, initialState);

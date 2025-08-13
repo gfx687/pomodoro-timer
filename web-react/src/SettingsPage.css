@@ -1,6 +1,7 @@
 .settings {
   margin-top: 1rem;
 }
+
 .settings-row {
   display: flex;
   border-bottom: 1px solid var(--bg-alt);
@@ -9,4 +10,22 @@
 
 .settings-input {
   margin-left: auto;
+}
+
+.settings-reset {
+  margin-left: auto;
+
+  font-size: 16px;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-alt);
+  border-radius: 10px;
+  border: none;
+}
+
+.settings-reset:hover {
+  background-color: var(--hover);
+}
+
+.settings-reset:active {
+  background-color: var(--active);
 }
