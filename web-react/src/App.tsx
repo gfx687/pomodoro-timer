@@ -2,9 +2,19 @@ import TimerArea from "./components/TimerArea";
 import "./App.css";
 import { useEffect, useState } from "react";
 import SettingsPage from "./SettingsPage";
+import { FullscreenProvider, useFullscreen } from "./other/FullscreenContext";
 
 export default function App() {
+  return (
+    <FullscreenProvider>
+      <AppContent />
+    </FullscreenProvider>
+  );
+}
+
+function AppContent() {
   const [path, setPath] = useState(window.location.pathname);
+  const { isFullscreen } = useFullscreen();
 
   useEffect(() => {
     const handlePopState = () => setPath(window.location.pathname);
@@ -20,7 +30,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <div className={"app" + (isFullscreen ? " hidden" : "")}>
       <nav className="navbar">
         <button
           onClick={() => navigate("/")}
@@ -61,6 +71,6 @@ export default function App() {
         {path === "/settings" && <SettingsPage />}
         {path !== "/" && path !== "/settings" && <h1>404 Not Found</h1>}
       </main>
-    </>
+    </div>
   );
 }

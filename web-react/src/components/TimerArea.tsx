@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import "./TimerArea.css";
 import TimerControls from "./TimerControls";
 import TimerModes from "./TimerModes";
@@ -6,10 +6,12 @@ import Timer from "./Timer";
 import useDink from "../other/useDink";
 import { useTimer } from "../other/useTimer";
 import { getModeDuration } from "../other/useTimer.reducer";
+import { useFullscreen } from "../other/FullscreenContext";
 
 export default function TimerArea() {
   const playDink = useDink();
   const { state, reset, pause, start, changeMode } = useTimer();
+  const { isFullscreen, setFullscreen } = useFullscreen();
 
   useEffect(() => {
     if (state.seconds > 0) return;
@@ -18,6 +20,25 @@ export default function TimerArea() {
 
     if (state.isActive) playDink();
   }, [state.seconds, state.isActive, pause, playDink]);
+
+  const onPressSpace = useCallback(() => {
+    if (state.isActive) pause();
+    else start();
+  }, [state.isActive, pause, start]);
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.code === "Space") {
+        onPressSpace();
+      } else if (e.key === "f" || e.key === "F" || e.code === "KeyF") {
+        setFullscreen((x) => !x);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onPressSpace, setFullscreen]);
 
   return (
     <div className="timer-area">
@@ -28,9 +49,9 @@ export default function TimerArea() {
         }
         onModeChange={changeMode}
       />
-      <Timer seconds={state.seconds} />
+      <Timer seconds={state.seconds} isFullscreen={isFullscreen} />
       <TimerControls
-        active={state.isActive}
+        isActive={state.isActive}
         currentS={state.seconds}
         totalS={getModeDuration(state.mode)}
         onStart={start}

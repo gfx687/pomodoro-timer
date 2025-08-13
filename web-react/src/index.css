@@ -9,15 +9,6 @@ body {
   background-color: var(--bg);
 }
 
-#root {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 500px;
-  padding: 1rem;
-  margin: 0 auto;
-  box-shadow: 0 0 10px var(--fg);
-}
-
 button {
   color: inherit;
 }

@@ -1,14 +1,24 @@
+import "./Timer.css";
+
 type TimerProps = {
   seconds: number;
+  isFullscreen: boolean;
 };
 
-export default function Timer({ seconds }: TimerProps) {
-  const styles = {
+export default function Timer({ seconds, isFullscreen }: TimerProps) {
+  if (isFullscreen) {
+    return <div className="timer-fullscreen">{formatSeconds(seconds)}</div>;
+  }
+
+  const fontSize = {
     fontSize: seconds <= 3600 ? "144px" : "96px",
-    paddingBottom: "1rem",
   };
 
-  return <div style={styles}>{formatSeconds(seconds)}</div>;
+  return (
+    <div style={fontSize} className="timer">
+      {formatSeconds(seconds)}
+    </div>
+  );
 }
 
 /**

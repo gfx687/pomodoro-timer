@@ -1,7 +1,7 @@
 import "./TimerControls.css";
 
 type TimerControlsProps = {
-  active: boolean;
+  isActive: boolean;
   currentS: number;
   totalS: number;
   onStart: () => void;
@@ -10,7 +10,7 @@ type TimerControlsProps = {
 };
 
 export default function TimerControls({
-  active,
+  isActive,
   currentS,
   totalS,
   onStart,
@@ -19,17 +19,17 @@ export default function TimerControls({
 }: TimerControlsProps) {
   return (
     <div className="timer-controls">
-      {!active && (
+      {!isActive && (
         <button tabIndex={1} className="timer-control" onClick={onStart}>
           Start
         </button>
       )}
-      {active && (
+      {isActive && (
         <button className="timer-control" onClick={onPause}>
           Pause
         </button>
       )}
-      {(active || currentS != totalS) && (
+      {(isActive || currentS != totalS) && (
         <button className="timer-control timer-reset" onClick={onReset}>
           <div className="timer-reset-center-svg">
             <svg
