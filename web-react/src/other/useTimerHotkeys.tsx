@@ -1,9 +1,7 @@
 import { useCallback, useEffect, type RefObject } from "react";
 import type { PomodoroMode } from "../other/types";
-import {
-  getModeDuration,
-  type TimerState,
-} from "../other/useTimerState.reducer";
+import { type TimerState } from "../other/useTimerState.reducer";
+import { getModeDuration } from "./useSettings";
 
 export function useTimerHotkeys(
   stateRef: RefObject<TimerState>,

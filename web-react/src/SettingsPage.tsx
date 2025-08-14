@@ -1,53 +1,16 @@
-import { DEFAULTS, SETTINGS } from "./other/constants";
+import { SETTINGS } from "./other/constants";
+import { useSettings } from "./other/useSettings";
 import "./SettingsPage.css";
-import { useCallback, useState } from "react";
 
 export default function SettingsPage() {
-  const [volume, setVolume] = useState(() => {
-    const v = localStorage.getItem(SETTINGS.volume);
-    return v !== null ? Number(v) : DEFAULTS.volume;
-  });
-
-  const [durationWork, setDurationWork] = useState(() => {
-    const v = localStorage.getItem(SETTINGS.durationWork);
-    return v !== null ? Number(v) : DEFAULTS.durationWork;
-  });
-
-  const [durationBreak, setDurationBreak] = useState(() => {
-    const v = localStorage.getItem(SETTINGS.durationBreak);
-    return v !== null ? Number(v) : DEFAULTS.durationBreak;
-  });
-
-  const changeSetting = (
-    setting: string,
-    newValue: string | number,
-    setSetting: (n: number) => void
-  ) => {
-    setSetting(Number(newValue));
-    localStorage.setItem(setting, newValue.toString());
-  };
-
-  const onSettingsReset = useCallback(() => {
-    changeSetting(SETTINGS.volume, DEFAULTS.volume, setVolume);
-    changeSetting(
-      SETTINGS.durationWork,
-      DEFAULTS.durationWork,
-      setDurationWork
-    );
-    changeSetting(
-      SETTINGS.durationBreak,
-      DEFAULTS.durationBreak,
-      setDurationBreak
-    );
-  }, []);
-
+  const { volume, durationWork, durationBreak, changeSetting, resetSettings } =
+    useSettings();
   return (
     <div className="settings">
       <div className="settings-row">
         <label htmlFor="volume" className="settings-label">
           Alert volume
         </label>
-        <br />
         <input
           id="volume"
           type="range"
@@ -55,9 +18,7 @@ export default function SettingsPage() {
           min="0"
           max="100"
           value={volume}
-          onChange={(e) =>
-            changeSetting(SETTINGS.volume, e.target.value, setVolume)
-          }
+          onChange={(e) => changeSetting(SETTINGS.volume.key, e.target.value)}
         />
         <span style={{ marginLeft: "5px" }}>{volume}</span>
       </div>
@@ -69,11 +30,7 @@ export default function SettingsPage() {
           className="settings-input"
           value={durationWork}
           onChange={(e) =>
-            changeSetting(
-              SETTINGS.durationWork,
-              e.target.value,
-              setDurationWork
-            )
+            changeSetting(SETTINGS.durationWork.key, e.target.value)
           }
         />
       </div>
@@ -85,16 +42,12 @@ export default function SettingsPage() {
           className="settings-input"
           value={durationBreak}
           onChange={(e) =>
-            changeSetting(
-              SETTINGS.durationBreak,
-              e.target.value,
-              setDurationBreak
-            )
+            changeSetting(SETTINGS.durationBreak.key, e.target.value)
           }
         />
       </div>
       <div className="settings-row">
-        <button className="settings-reset" onClick={onSettingsReset}>
+        <button className="settings-reset" onClick={resetSettings}>
           Reset
         </button>
       </div>

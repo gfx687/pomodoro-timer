@@ -53,6 +53,11 @@ export interface TimerResetResponse {
   type: "TimerReset";
 }
 
+export interface TimerAlreadyExistsResponse {
+  type: "TimerAlreadyExists";
+  payload: TimerStatusResponsePayload;
+}
+
 export type IncomingMessage =
   | TimerStatusResponse
   | TimerNotFoundResponse

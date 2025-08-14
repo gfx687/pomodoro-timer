@@ -1,14 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { DEFAULTS, SETTINGS } from "./constants";
+import { useCallback, useEffect, useRef } from "react";
 import alert from "../assets/alert.mp3";
+import { useSettings } from "./useSettings";
 
 export default function useDink(): () => void {
   const audio = useRef<HTMLAudioElement | null>(null);
-
-  const [volume] = useState(() => {
-    const v = localStorage.getItem(SETTINGS.volume);
-    return v !== null ? Number(v) : DEFAULTS.volume;
-  });
+  const { volume } = useSettings();
 
   useEffect(() => {
     audio.current = new Audio(alert);

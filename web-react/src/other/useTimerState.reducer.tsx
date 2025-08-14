@@ -1,5 +1,5 @@
-import { DEFAULTS, SETTINGS } from "./constants";
 import type { PomodoroMode, TimerStatusResponsePayload } from "./types";
+import { getModeDuration } from "./useSettings";
 
 export interface TimerState {
   /**
@@ -116,20 +116,6 @@ export function timerReducer(
         isFinished: false,
         startedAt: null,
       };
-  }
-}
-
-export function getModeDuration(mode: PomodoroMode) {
-  switch (mode) {
-    case "Break": {
-      const v = localStorage.getItem(SETTINGS.durationBreak);
-      return v !== null ? Number(v) : DEFAULTS.durationBreak;
-    }
-    case "Work":
-    default: {
-      const v = localStorage.getItem(SETTINGS.durationWork);
-      return v !== null ? Number(v) : DEFAULTS.durationWork;
-    }
   }
 }
 

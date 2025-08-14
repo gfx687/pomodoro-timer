@@ -1,0 +1,1 @@
+Backend for Pomodoro Timer app with WebSocket API using C# and ASP.NET Core.

@@ -5,9 +5,9 @@ import TimerModes from "./TimerModes";
 import Timer from "./Timer";
 import useDink from "../other/useDink";
 import { useTimer } from "../other/useTimer";
-import { getModeDuration } from "../other/useTimerState.reducer";
 import { useFullscreen } from "../other/FullscreenContext";
 import { useTimerHotkeys } from "../other/useTimerHotkeys";
+import { getModeDuration } from "../other/useSettings";
 
 export default function TimerArea() {
   const playDink = useDink();
