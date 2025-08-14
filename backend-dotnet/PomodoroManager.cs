@@ -4,55 +4,52 @@ public class PomodoroManager
 
     public PomodoroStatus? Get()
     {
-        if (_state == null)
+        if (_state == null || _state?.GetRemaining() <= 0)
             return null;
 
-        var remaining = _state.GetRemaining();
-        return remaining <= 0
-            ? new(false, 0, _state.Mode)
-            : new(_state.IsActive, remaining, _state.Mode);
+        return PomodoroStatus.FromState(_state!);
     }
 
     /// <summary>
-    /// Also acts as Unpause.
+    /// If timer does not exist will create one with the provided params
+    /// If already exists will return the existing one
     /// </summary>
-    public PomodoroStatus Start(int duration, PomodoroModes mode)
+    public (PomodoroStatus status, bool alreadyExists) Start(TimerStartRequestPayload payload)
     {
-        if (_state == null)
+        bool alreadyExists = true;
+        var remaining = _state?.GetRemaining();
+        if (_state == null || remaining <= 0)
         {
-            _state = new PomodoroState(duration, mode);
-            return new(_state.IsActive, _state.GetRemaining(), _state.Mode);
+            _state = new PomodoroState(
+                payload.DurationTotal,
+                payload.Mode,
+                payload.StartedAt ?? DateTimeOffset.Now,
+                payload.Remaining ?? payload.DurationTotal
+            );
+            alreadyExists = false;
         }
 
-        var remaining = _state.GetRemaining();
-        if (remaining <= 0 || _state.Mode != mode)
-        {
-            _state = new PomodoroState(duration, mode);
-            return new(_state.IsActive, _state.GetRemaining(), _state.Mode);
-        }
+        return (PomodoroStatus.FromState(_state), alreadyExists);
+    }
 
-        if (!_state.IsActive)
-        {
-            _state.Unpause();
-        }
+    public PomodoroStatus? Unpause()
+    {
+        if (_state == null || _state.GetRemaining() <= 0)
+            return null;
 
-        return new(_state.IsActive, _state.GetRemaining(), _state.Mode);
+        _state.Unpause();
+
+        return PomodoroStatus.FromState(_state);
     }
 
     public PomodoroStatus? Pause()
     {
-        if (_state == null)
+        if (_state == null || _state.GetRemaining() <= 0)
             return null;
 
-        var remaining = _state.GetRemaining();
-        if (remaining <= 0)
-            return new(false, 0, _state.Mode);
-
-        if (!_state.IsActive)
-            return new(_state.IsActive, _state.GetRemaining(), _state.Mode);
-
         _state.Pause();
-        return new(_state.IsActive, _state.GetRemaining(), _state.Mode);
+
+        return PomodoroStatus.FromState(_state);
     }
 
     public void Reset()

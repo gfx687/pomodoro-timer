@@ -1,80 +1,101 @@
-import { useReducer, useEffect, useCallback } from "react";
-import useWebSocket from "react-use-websocket";
-import type { IncomingMessage, PomodoroMode } from "./types";
-import {
-  timerReducer,
-  initialState,
-  getModeDuration,
-} from "./useTimer.reducer";
-
-const WEBSOCKET_URL = "ws://localhost:5170/ws";
+import { useEffect, useCallback, useState, useRef } from "react";
+import type { PomodoroMode } from "./types";
+import { getModeDuration } from "./useTimerState.reducer";
+import { useWebSocketConnection } from "./useWebSocketConnection";
+import { useTimerState } from "./useTimerState";
 
 export function useTimer() {
-  const [state, dispatch] = useReducer(timerReducer, initialState);
+  const { sendMessage, lastMessage } = useWebSocketConnection();
+  const {
+    state,
+    startTimer,
+    pauseTimer,
+    resumeTimer,
+    resetTimer,
+    changeMode: changeModeInternal,
+    setStatus,
+  } = useTimerState();
+  const [syncToBackend, setSyncToBackend] = useState(false);
 
-  const { sendJsonMessage, lastJsonMessage } = useWebSocket<IncomingMessage>(
-    WEBSOCKET_URL,
-    {
-      shouldReconnect: () => true,
-      retryOnError: true,
-      // share: true,
-      reconnectAttempts: Infinity,
-      reconnectInterval: (attemptNumber) =>
-        Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
-    }
-  );
+  const stateRef = useRef(state);
 
   useEffect(() => {
-    if (lastJsonMessage) {
-      switch (lastJsonMessage.type) {
+    stateRef.current = state;
+  }, [state]);
+
+  useEffect(() => {
+    if (lastMessage) {
+      switch (lastMessage.type) {
         case "TimerStatus":
-          dispatch({ type: "SET_STATUS", payload: lastJsonMessage.payload });
+          setStatus(lastMessage.payload);
           break;
-        case "TimerNotFound":
+        case "TimerNotFound": {
+          if (stateRef.current.doesExist) {
+            setSyncToBackend(true);
+          }
+          break;
+        }
         case "TimerReset":
-          dispatch({ type: "TIMER_RESET" });
+          resetTimer();
           break;
         default:
           break;
       }
     }
-  }, [lastJsonMessage]);
+  }, [lastMessage, setStatus, resetTimer]);
 
   useEffect(() => {
-    if (!state.isActive) return;
+    if (!syncToBackend) return;
 
-    const interval = setInterval(() => {
-      dispatch({ type: "TIMER_TICK" });
-    }, 1000);
+    sendMessage({
+      type: "TimerStart",
+      payload: {
+        durationTotal: getModeDuration(stateRef.current.mode),
+        mode: stateRef.current.mode,
+        // TODO: has to be not null at this point but I want to ensure even if a bug sneaks through it will not crash
+        startedAt: stateRef.current.startedAt!,
+        remaining: stateRef.current.seconds,
+      },
+    });
 
-    return () => clearInterval(interval);
-  }, [state.isActive]);
+    setSyncToBackend(false);
+  }, [syncToBackend, sendMessage]);
 
   const start = useCallback(() => {
-    dispatch({ type: "TIMER_START" });
-    sendJsonMessage({
+    const now = new Date();
+    startTimer(now);
+    sendMessage({
       type: "TimerStart",
-      payload: { duration: getModeDuration(state.mode), mode: state.mode },
+      payload: {
+        durationTotal: getModeDuration(state.mode),
+        mode: state.mode,
+        startedAt: now,
+        remaining: getModeDuration(state.mode),
+      },
     });
-  }, [state.mode, sendJsonMessage]);
+  }, [state.mode, sendMessage, startTimer]);
+
+  const resume = useCallback(() => {
+    resumeTimer();
+    sendMessage({ type: "TimerUnpause" });
+  }, [sendMessage, resumeTimer]);
 
   const pause = useCallback(() => {
-    dispatch({ type: "TIMER_INACTIVE" });
-    sendJsonMessage({ type: "TimerPause" });
-  }, [sendJsonMessage]);
+    pauseTimer();
+    sendMessage({ type: "TimerPause" });
+  }, [sendMessage, pauseTimer]);
 
   const reset = useCallback(() => {
-    dispatch({ type: "TIMER_RESET" });
-    sendJsonMessage({ type: "TimerReset" });
-  }, [sendJsonMessage]);
+    resetTimer();
+    sendMessage({ type: "TimerReset" });
+  }, [sendMessage, resetTimer]);
 
-  function changeMode(newMode: PomodoroMode) {
-    if (state.seconds !== 0 && state.seconds !== getModeDuration(state.mode)) {
-      return;
-    }
+  const changeMode = useCallback(
+    (newMode: PomodoroMode) => {
+      changeModeInternal(newMode);
+    },
+    [changeModeInternal]
+  );
 
-    dispatch({ type: "CHANGE_MODE", payload: { mode: newMode } });
-  }
-
-  return { state, reset, pause, start, changeMode };
+  return { state, reset, pause, resume, start, changeMode };
 }

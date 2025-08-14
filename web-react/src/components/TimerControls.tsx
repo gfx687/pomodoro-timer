@@ -1,36 +1,52 @@
 import "./TimerControls.css";
 
 type TimerControlsProps = {
-  isActive: boolean;
+  isTicking: boolean;
   currentS: number;
   totalS: number;
   onStart: () => void;
   onPause: () => void;
+  onResume: () => void;
   onReset: () => void;
 };
 
 export default function TimerControls({
-  isActive,
+  isTicking,
   currentS,
   totalS,
   onStart,
   onPause,
+  onResume,
   onReset,
 }: TimerControlsProps) {
+  const drawStart = !isTicking && (currentS === 0 || currentS === totalS);
+  const drawResume = !isTicking && currentS !== 0 && currentS !== totalS;
+  const drawPause = isTicking;
+  const drawReset = isTicking || currentS != totalS;
+
   return (
     <div className="timer-controls">
-      {!isActive && (
+      {drawStart && (
         <button tabIndex={1} className="timer-control" onClick={onStart}>
           Start
         </button>
       )}
-      {isActive && (
+      {drawPause && (
         <button className="timer-control" onClick={onPause}>
           Pause
         </button>
       )}
-      {(isActive || currentS != totalS) && (
-        <button className="timer-control timer-reset" onClick={onReset}>
+      {drawResume && (
+        <button className="timer-control" onClick={onResume}>
+          Resume
+        </button>
+      )}
+      {drawReset && (
+        <button
+          className="timer-reset"
+          onClick={onReset}
+          title="Reset the timer"
+        >
           <div className="timer-reset-center-svg">
             <svg
               xmlns="http://www.w3.org/2000/svg"

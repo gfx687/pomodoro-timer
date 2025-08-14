@@ -2,7 +2,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 
-public class TempLogic(PomodoroManager _manager)
+public class MessageProcessor(PomodoroManager _manager, ILogger<MessageProcessor> _logger)
 {
     /// <returns>Response and whether or not message should be Broadcast</returns>
     public (SocketResponse Response, bool Broadcast) ProcessMessage(
@@ -16,13 +16,20 @@ public class TempLogic(PomodoroManager _manager)
         try
         {
             req = JsonSerializer.Deserialize<SocketRequest>(json)!;
+            _logger.LogInformation($"Received request type: {req.Type}");
+
+            _logger.LogDebug($"Received payload: {JsonSerializer.Serialize(req.Payload)}");
+
             var resp = ProcessRequest(req);
+
+            _logger.LogDebug($"Sending payload: {JsonSerializer.Serialize(resp.Payload)}");
+
             var broadcast = req.Type != SocketRequestType.TimerGet;
             return (resp, broadcast);
         }
         catch (JsonException ex)
         {
-            System.Console.WriteLine(ex);
+            _logger.LogError(ex, "Unable to deserialize the message");
             return (
                 SocketResponse.Error(
                     new(ErrorType.WrongRequestFormat, "unable to deserialize the message")
@@ -32,7 +39,7 @@ public class TempLogic(PomodoroManager _manager)
         }
         catch (Exception ex)
         {
-            System.Console.WriteLine(ex);
+            _logger.LogError(ex, "something went wrong while processing the message");
             return (
                 SocketResponse.Error(
                     new(
@@ -90,19 +97,29 @@ public class TempLogic(PomodoroManager _manager)
                 }
                 catch (JsonException ex)
                 {
-                    System.Console.WriteLine(ex);
+                    _logger.LogError(ex, "Unable to deserialize the payload");
                     return SocketResponse.Error(
                         new(ErrorType.ValidationError, "unable to deserialize the payload"),
                         req.RequestId
                     );
                 }
 
-                status = _manager.Start(payload.Duration, payload.Mode);
-                return SocketResponse.TimerStatus(status, req.RequestId);
+                (status, var alreadyExists) = _manager.Start(payload);
+
+                return alreadyExists
+                    ? SocketResponse.TimerAlreadyExists(status, req.RequestId)
+                    : SocketResponse.TimerStatus(status, req.RequestId);
             }
             case SocketRequestType.TimerPause:
             {
                 status = _manager.Pause();
+                return status == null
+                    ? SocketResponse.NotFound(req.RequestId)
+                    : SocketResponse.TimerStatus(status, req.RequestId);
+            }
+            case SocketRequestType.TimerUnpause:
+            {
+                status = _manager.Unpause();
                 return status == null
                     ? SocketResponse.NotFound(req.RequestId)
                     : SocketResponse.TimerStatus(status, req.RequestId);

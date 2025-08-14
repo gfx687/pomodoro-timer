@@ -1,115 +1,119 @@
-using System.Net.WebSockets;
-using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using Serilog.Formatting.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
-builder.Services.AddSingleton<PomodoroManager>();
-builder.Services.AddSingleton<SocketConnectionStore>();
-builder.Services.AddTransient<TempLogic>();
+var loggerConfig = new LoggerConfiguration();
 
-var app = builder.Build();
+if (builder.Environment.IsDevelopment())
+    loggerConfig.MinimumLevel.Debug().WriteTo.Console();
+else
+    loggerConfig.MinimumLevel.Information().WriteTo.Console(new JsonFormatter());
 
-app.UseWebSockets();
+Log.Logger = loggerConfig.CreateLogger();
 
-app.Map(
-    "/ws",
-    async (
-        HttpContext context,
-        [FromServices] TempLogic logic,
-        [FromServices] SocketConnectionStore connections
-    ) =>
-    {
-        if (context.WebSockets.IsWebSocketRequest)
+try
+{
+    builder.Services.AddOpenApi();
+    builder.Services.AddHostedService<BackgroundWorker>();
+    builder.Services.AddSerilog();
+
+    builder.Services.AddSingleton<PomodoroManager>();
+    builder.Services.AddSingleton<SocketConnectionStore>();
+    builder.Services.AddSingleton<MessageProcessor>();
+
+    var app = builder.Build();
+
+    app.UseWebSockets();
+
+    app.Map(
+        "/ws",
+        async (
+            HttpContext context,
+            [FromServices] MessageProcessor logic,
+            [FromServices] SocketConnectionStore connections,
+            [FromServices] ILogger<Program> logger
+        ) =>
         {
-            Guid connectionId = Guid.NewGuid();
-            try
+            if (context.WebSockets.IsWebSocketRequest)
             {
-                using var socket = await context.WebSockets.AcceptWebSocketAsync();
-
-                var timerStatus = logic.GetTimerStatus();
-                await socket.SendAsync(timerStatus);
-
-                connectionId = connections.Save(connectionId, socket);
-
-                var buffer = new byte[1024 * 4];
-                var result = await socket.ReceiveAsync(
-                    new ArraySegment<byte>(buffer),
-                    CancellationToken.None
-                );
-
-                while (!result.CloseStatus.HasValue)
+                Guid connectionId = Guid.NewGuid();
+                try
                 {
-                    var resp = logic.ProcessMessage(buffer, result);
+                    using var socket = await context.WebSockets.AcceptWebSocketAsync();
 
-                    if (resp.Broadcast)
-                        foreach (var s in connections.GetAll())
-                            await s.SendAsync(resp.Response);
-                    else
-                        await socket.SendAsync(resp.Response);
+                    var timerStatus = logic.GetTimerStatus();
+                    await socket.SendAsync(timerStatus);
 
-                    result = await socket.ReceiveAsync(
+                    connectionId = connections.Save(connectionId, socket);
+
+                    var buffer = new byte[1024 * 4];
+                    var result = await socket.ReceiveAsync(
                         new ArraySegment<byte>(buffer),
                         CancellationToken.None
                     );
+
+                    while (!result.CloseStatus.HasValue)
+                    {
+                        var resp = logic.ProcessMessage(buffer, result);
+
+                        if (resp.Broadcast)
+                            foreach (var s in connections.GetAll())
+                                await s.SendAsync(resp.Response);
+                        else
+                            await socket.SendAsync(resp.Response);
+
+                        result = await socket.ReceiveAsync(
+                            new ArraySegment<byte>(buffer),
+                            CancellationToken.None
+                        );
+                    }
+
+                    await socket.CloseAsync(
+                        result.CloseStatus.Value,
+                        result.CloseStatusDescription,
+                        CancellationToken.None
+                    );
                 }
-
-                await socket.CloseAsync(
-                    result.CloseStatus.Value,
-                    result.CloseStatusDescription,
-                    CancellationToken.None
-                );
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "A connection-breaking error has occurred.");
+                }
+                finally
+                {
+                    connections.Remove(connectionId);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                System.Console.WriteLine(ex);
-            }
-            finally
-            {
-                connections.Remove(connectionId);
+                context.Response.StatusCode = 400;
             }
         }
-        else
+    );
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+    }
+
+    app.UseHttpsRedirection();
+    app.MapGet(
+        "/state",
+        ([FromServices] PomodoroManager manager) =>
         {
-            context.Response.StatusCode = 400;
+            return manager.Get();
         }
-    }
-);
+    );
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-app.MapGet(
-    "/state",
-    ([FromServices] PomodoroManager manager) =>
-    {
-        return manager.Get();
-    }
-);
-
-app.Run();
-
-public static class WebSocketExtensions
+catch (Exception ex)
 {
-    public static async Task SendAsync(this WebSocket socket, SocketResponse message)
-    {
-        if (socket.State != WebSocketState.Open)
-            return;
-
-        var respJson = JsonSerializer.Serialize(message);
-        var respBytes = Encoding.UTF8.GetBytes(respJson);
-
-        await socket.SendAsync(
-            new ArraySegment<byte>(respBytes),
-            WebSocketMessageType.Text,
-            endOfMessage: true,
-            CancellationToken.None
-        );
-    }
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
 }

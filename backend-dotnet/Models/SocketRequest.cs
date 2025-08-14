@@ -24,6 +24,11 @@ public enum SocketRequestType
     /// Payload - null
     /// </summary>
     TimerReset = 4,
+
+    /// <summary>
+    /// Payload - null
+    /// </summary>
+    TimerUnpause = 5,
 }
 
 public class SocketRequest
@@ -44,12 +49,21 @@ public class SocketRequest
 
 public class TimerStartRequestPayload
 {
-    [JsonPropertyName("duration")]
-    public int Duration { get; set; }
+    [JsonPropertyName("durationTotal")]
+    public int DurationTotal { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     [JsonPropertyName("mode")]
     public PomodoroModes Mode { get; set; }
+
+    /// <summary>
+    /// If provided the timer will start at this remaining number of seconds
+    /// </summary>
+    [JsonPropertyName("remaining")]
+    public int? Remaining { get; set; }
+
+    [JsonPropertyName("startedAt")]
+    public DateTimeOffset? StartedAt { get; set; }
 
     public class Validator : AbstractValidator<TimerStartRequestPayload>
     {
@@ -58,7 +72,8 @@ public class TimerStartRequestPayload
         public Validator()
         {
             RuleFor(x => x.Mode).IsInEnum();
-            RuleFor(x => x.Duration).GreaterThan(0);
+            RuleFor(x => x.DurationTotal).GreaterThan(0);
+            RuleFor(x => x.Remaining).GreaterThan(0).LessThanOrEqualTo(x => x.DurationTotal);
         }
     }
 }

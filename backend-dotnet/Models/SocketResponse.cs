@@ -21,6 +21,11 @@ public enum SocketResponseType
     /// Payload - null
     /// </summary>
     TimerReset = 4,
+
+    /// <summary>
+    /// Payload - <see cref="PomodoroStatus"/>
+    /// </summary>
+    TimerAlreadyExists = 5,
 }
 
 public class SocketResponse
@@ -50,6 +55,17 @@ public class SocketResponse
         return new()
         {
             Type = SocketResponseType.TimerStatus,
+            Payload = payload,
+            RequestId = requestId,
+        };
+    }
+
+    public static SocketResponse TimerAlreadyExists(PomodoroStatus payload, Guid? requestId = null)
+    {
+        ArgumentNullException.ThrowIfNull(payload);
+        return new()
+        {
+            Type = SocketResponseType.TimerAlreadyExists,
             Payload = payload,
             RequestId = requestId,
         };
