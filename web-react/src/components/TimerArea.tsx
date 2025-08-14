@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import "./TimerArea.css";
 import TimerControls from "./TimerControls";
 import TimerModes from "./TimerModes";
@@ -7,42 +7,28 @@ import useDink from "../other/useDink";
 import { useTimer } from "../other/useTimer";
 import { getModeDuration } from "../other/useTimerState.reducer";
 import { useFullscreen } from "../other/FullscreenContext";
+import { useTimerHotkeys } from "../other/useTimerHotkeys";
 
 export default function TimerArea() {
   const playDink = useDink();
-  const { state, reset, pause, resume, start, changeMode } = useTimer();
+  const { state, stateRef, start, pause, resume, reset, changeMode } =
+    useTimer();
   const { isFullscreen, setFullscreen } = useFullscreen();
+  useTimerHotkeys(
+    stateRef,
+    start,
+    pause,
+    resume,
+    reset,
+    changeMode,
+    setFullscreen
+  );
 
   useEffect(() => {
     if (state.isFinished) {
       playDink();
     }
   }, [state.isFinished, playDink]);
-
-  const onPressSpace = useCallback(() => {
-    if (state.isTicking) {
-      pause();
-      return;
-    }
-
-    start();
-  }, [state.isTicking, pause, start]);
-
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.code === "Space") {
-        onPressSpace();
-      } else if (e.key === "f" || e.key === "F" || e.code === "KeyF") {
-        setFullscreen((x) => !x);
-      } else if (e.key === "R") {
-        reset();
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onPressSpace, setFullscreen, reset]);
 
   return (
     <div className="timer-area">

@@ -16,7 +16,6 @@ export function useTimer() {
     setStatus,
   } = useTimerState();
   const [syncToBackend, setSyncToBackend] = useState(false);
-
   const stateRef = useRef(state);
 
   useEffect(() => {
@@ -97,5 +96,5 @@ export function useTimer() {
     [changeModeInternal]
   );
 
-  return { state, reset, pause, resume, start, changeMode };
+  return { state, stateRef, reset, pause, resume, start, changeMode };
 }
