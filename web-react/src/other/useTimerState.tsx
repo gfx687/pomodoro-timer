@@ -1,9 +1,17 @@
 import { useReducer, useEffect, useCallback } from "react";
 import type { PomodoroMode, TimerStatusResponsePayload } from "./types";
-import { timerReducer, initialState } from "./useTimerState.reducer";
+import {
+  timerReducer,
+  initialState,
+  type TimerState,
+} from "./useTimerState.reducer";
 
 export function useTimerState() {
-  const [state, dispatch] = useReducer(timerReducer, initialState);
+  const [state, dispatch] = useReducer(
+    timerReducer,
+    initialState,
+    (initial) => loadStateFromLocalStorage() || initial
+  );
 
   useEffect(() => {
     if (!state.isTicking) return;
@@ -20,6 +28,10 @@ export function useTimerState() {
       dispatch({ type: "TIMER_FINISH" });
     }
   }, [state.seconds, state.isTicking]);
+
+  useEffect(() => {
+    saveStateToLocalStorage(state);
+  }, [state]);
 
   const startTimer = useCallback((startedAt: Date) => {
     dispatch({
@@ -62,4 +74,36 @@ export function useTimerState() {
     changeMode,
     setStatus,
   };
+}
+
+const STORAGE_KEY = "pomodoro-timer-state";
+
+function saveStateToLocalStorage(state: TimerState) {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        ...state,
+        startedAt: state.startedAt?.toISOString() || null,
+      })
+    );
+  } catch (error) {
+    console.warn("Failed to save timer state to localStorage:", error);
+  }
+}
+
+function loadStateFromLocalStorage(): TimerState | null {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return null;
+
+    const parsed = JSON.parse(saved);
+    return {
+      ...parsed,
+      startedAt: parsed.startedAt ? new Date(parsed.startedAt) : null,
+    };
+  } catch (error) {
+    console.warn("Failed to load timer state from localStorage:", error);
+    return null;
+  }
 }
