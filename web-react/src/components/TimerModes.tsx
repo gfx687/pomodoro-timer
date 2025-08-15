@@ -1,10 +1,10 @@
-import type { PomodoroMode } from "../other/types";
+import type { TimerMode } from "../other/types";
 import "./TimerModes.css";
 
 type TimerModesProps = {
-  mode: PomodoroMode;
+  mode: TimerMode;
   timerExists: boolean;
-  onModeChange: (mode: PomodoroMode) => void;
+  onModeChange: (mode: TimerMode) => void;
 };
 
 export default function TimerModes({
@@ -12,7 +12,7 @@ export default function TimerModes({
   timerExists,
   onModeChange,
 }: TimerModesProps) {
-  const getClasses = (m: PomodoroMode) => {
+  const getClasses = (m: TimerMode) => {
     let c = "timer-mode";
     if (mode === m) c += " timer-mode-current";
     else if (timerExists) c += " timer-mode-inactive";

@@ -1,5 +1,5 @@
 import { getModeDuration } from "../contexts/SettingsContext";
-import type { PomodoroMode, TimerStatusResponsePayload } from "./types";
+import type { TimerMode, TimerStatusResponsePayload } from "./types";
 
 export interface TimerState {
   /**
@@ -18,7 +18,7 @@ export interface TimerState {
    */
   isFinished: boolean;
   seconds: number;
-  mode: PomodoroMode;
+  mode: TimerMode;
   startedAt: Date | null;
 }
 
@@ -42,7 +42,7 @@ export type TimerAction =
   | { type: "TIMER_PAUSE" }
   | { type: "TIMER_FINISH" }
   | { type: "TIMER_RESET" }
-  | { type: "CHANGE_MODE"; payload: { mode: PomodoroMode } };
+  | { type: "CHANGE_MODE"; payload: { mode: TimerMode } };
 
 export function timerReducer(
   state: TimerState,
@@ -114,6 +114,6 @@ export function timerReducer(
   }
 }
 
-function doesTimerExist(seconds: number, mode: PomodoroMode) {
+function doesTimerExist(seconds: number, mode: TimerMode) {
   return seconds !== 0 && seconds !== getModeDuration(mode);
 }

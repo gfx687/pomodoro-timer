@@ -20,7 +20,7 @@ try
     builder.Services.AddHostedService<BackgroundWorker>();
     builder.Services.AddSerilog();
 
-    builder.Services.AddSingleton<PomodoroManager>();
+    builder.Services.AddSingleton<TimerManager>();
     builder.Services.AddSingleton<SocketConnectionStore>();
     builder.Services.AddSingleton<MessageProcessor>();
 
@@ -101,7 +101,7 @@ try
     app.UseHttpsRedirection();
     app.MapGet(
         "/state",
-        ([FromServices] PomodoroManager manager) =>
+        ([FromServices] TimerManager manager) =>
         {
             return manager.Get();
         }

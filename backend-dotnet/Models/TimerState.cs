@@ -1,4 +1,4 @@
-public class PomodoroState
+public class TimerState
 {
     /// <summary>
     /// Refers to pause / unpause, not general existence of a timer
@@ -8,9 +8,9 @@ public class PomodoroState
     public int DurationTotal { get; private set; }
     public DateTimeOffset LastUnpausedAt { get; private set; }
     public int ElapsedBeforePause { get; private set; }
-    public PomodoroModes Mode { get; private set; }
+    public TimerModes Mode { get; private set; }
 
-    public PomodoroState(int durationTotal, PomodoroModes mode)
+    public TimerState(int durationTotal, TimerModes mode)
     {
         IsActive = true;
         StartedAt = DateTimeOffset.UtcNow;
@@ -20,12 +20,7 @@ public class PomodoroState
         Mode = mode;
     }
 
-    public PomodoroState(
-        int durationTotal,
-        PomodoroModes mode,
-        DateTimeOffset startedAt,
-        int remaining
-    )
+    public TimerState(int durationTotal, TimerModes mode, DateTimeOffset startedAt, int remaining)
     {
         IsActive = true;
         StartedAt = startedAt;

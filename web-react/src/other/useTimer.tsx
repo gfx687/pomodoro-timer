@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState, useRef } from "react";
-import type { PomodoroMode } from "./types";
+import type { TimerMode } from "./types";
 import { useWebSocketConnection } from "./useWebSocketConnection";
 import { useTimerState } from "./useTimerState";
 import { getModeDuration } from "../contexts/SettingsContext";
@@ -90,7 +90,7 @@ export function useTimer() {
   }, [sendMessage, resetTimer]);
 
   const changeMode = useCallback(
-    (newMode: PomodoroMode) => {
+    (newMode: TimerMode) => {
       changeModeInternal(newMode);
     },
     [changeModeInternal]

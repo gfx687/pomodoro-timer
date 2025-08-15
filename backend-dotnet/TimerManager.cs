@@ -1,26 +1,26 @@
-public class PomodoroManager
+public class TimerManager
 {
-    PomodoroState? _state;
+    TimerState? _state;
 
-    public PomodoroStatus? Get()
+    public TimrerStatus? Get()
     {
         if (_state == null || _state?.GetRemaining() <= 0)
             return null;
 
-        return PomodoroStatus.FromState(_state!);
+        return TimrerStatus.FromState(_state!);
     }
 
     /// <summary>
     /// If timer does not exist will create one with the provided params
     /// If already exists will return the existing one
     /// </summary>
-    public (PomodoroStatus status, bool alreadyExists) Start(TimerStartRequestPayload payload)
+    public (TimrerStatus status, bool alreadyExists) Start(TimerStartRequestPayload payload)
     {
         bool alreadyExists = true;
         var remaining = _state?.GetRemaining();
         if (_state == null || remaining <= 0)
         {
-            _state = new PomodoroState(
+            _state = new TimerState(
                 payload.DurationTotal,
                 payload.Mode,
                 payload.StartedAt ?? DateTimeOffset.Now,
@@ -29,27 +29,27 @@ public class PomodoroManager
             alreadyExists = false;
         }
 
-        return (PomodoroStatus.FromState(_state), alreadyExists);
+        return (TimrerStatus.FromState(_state), alreadyExists);
     }
 
-    public PomodoroStatus? Unpause()
+    public TimrerStatus? Unpause()
     {
         if (_state == null || _state.GetRemaining() <= 0)
             return null;
 
         _state.Unpause();
 
-        return PomodoroStatus.FromState(_state);
+        return TimrerStatus.FromState(_state);
     }
 
-    public PomodoroStatus? Pause()
+    public TimrerStatus? Pause()
     {
         if (_state == null || _state.GetRemaining() <= 0)
             return null;
 
         _state.Pause();
 
-        return PomodoroStatus.FromState(_state);
+        return TimrerStatus.FromState(_state);
     }
 
     public void Reset()

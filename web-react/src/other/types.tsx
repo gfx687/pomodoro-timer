@@ -1,4 +1,4 @@
-export type PomodoroMode = "Work" | "Break";
+export type TimerMode = "Work" | "Break";
 
 export interface TimerGetRequest {
   type: "TimerGet";
@@ -8,7 +8,7 @@ export interface TimerStartRequest {
   type: "TimerStart";
   payload: {
     durationTotal: number;
-    mode: PomodoroMode;
+    mode: TimerMode;
     startedAt: Date;
     remaining: number;
   };
@@ -41,7 +41,7 @@ export interface TimerStatusResponse {
 export interface TimerStatusResponsePayload {
   IsActive: boolean;
   RemainingS: number;
-  Mode: PomodoroMode;
+  Mode: TimerMode;
   StartedAt: Date;
 }
 

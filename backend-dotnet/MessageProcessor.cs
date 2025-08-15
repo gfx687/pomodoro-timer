@@ -2,7 +2,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 
-public class MessageProcessor(PomodoroManager _manager, ILogger<MessageProcessor> _logger)
+public class MessageProcessor(TimerManager _manager, ILogger<MessageProcessor> _logger)
 {
     /// <returns>Response and whether or not message should be Broadcast</returns>
     public (SocketResponse Response, bool Broadcast) ProcessMessage(
@@ -61,7 +61,7 @@ public class MessageProcessor(PomodoroManager _manager, ILogger<MessageProcessor
 
     SocketResponse ProcessRequest(SocketRequest req)
     {
-        PomodoroStatus? status;
+        TimrerStatus? status;
         switch (req.Type)
         {
             case SocketRequestType.TimerGet:

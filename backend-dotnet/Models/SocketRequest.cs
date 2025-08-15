@@ -54,7 +54,7 @@ public class TimerStartRequestPayload
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     [JsonPropertyName("mode")]
-    public PomodoroModes Mode { get; set; }
+    public TimerModes Mode { get; set; }
 
     /// <summary>
     /// If provided the timer will start at this remaining number of seconds

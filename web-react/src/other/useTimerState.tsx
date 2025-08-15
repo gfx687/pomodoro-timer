@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useCallback } from "react";
-import type { PomodoroMode, TimerStatusResponsePayload } from "./types";
+import type { TimerMode, TimerStatusResponsePayload } from "./types";
 import {
   timerReducer,
   initialState,
@@ -53,7 +53,7 @@ export function useTimerState() {
   }, []);
 
   const changeMode = useCallback(
-    (newMode: PomodoroMode) => {
+    (newMode: TimerMode) => {
       if (state.doesExist) return;
 
       dispatch({ type: "CHANGE_MODE", payload: { mode: newMode } });
@@ -76,7 +76,7 @@ export function useTimerState() {
   };
 }
 
-const STORAGE_KEY = "pomodoro-timer-state";
+const STORAGE_KEY = "timer-state";
 
 function saveStateToLocalStorage(state: TimerState) {
   try {

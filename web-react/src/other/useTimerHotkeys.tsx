@@ -1,5 +1,5 @@
 import { useCallback, useEffect, type RefObject } from "react";
-import type { PomodoroMode } from "../other/types";
+import type { TimerMode } from "../other/types";
 import { type TimerState } from "../other/useTimerState.reducer";
 import { getModeDuration } from "../contexts/SettingsContext";
 
@@ -9,7 +9,7 @@ export function useTimerHotkeys(
   pause: () => void,
   resume: () => void,
   reset: () => void,
-  changeMode: (m: PomodoroMode) => void,
+  changeMode: (m: TimerMode) => void,
   setFullscreen: (v: boolean | ((prev: boolean) => boolean)) => void
 ) {
   const onPressSpace = useCallback(() => {
@@ -26,7 +26,7 @@ export function useTimerHotkeys(
   }, [start, pause, resume]);
 
   const onPressW = useCallback(() => {
-    const modes: PomodoroMode[] = ["Work", "Break"];
+    const modes: TimerMode[] = ["Work", "Break"];
     const currentIndex = modes.indexOf(stateRef.current.mode);
     const nextIndex = (currentIndex + 1) % modes.length;
     changeMode(modes[nextIndex]);

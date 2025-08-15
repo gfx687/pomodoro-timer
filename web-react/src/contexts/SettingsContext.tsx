@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { SETTINGS } from "../other/constants";
-import type { PomodoroMode } from "../other/types";
+import type { TimerMode } from "../other/types";
 
 type SettingsContextType = {
   volume: number;
@@ -135,7 +135,7 @@ export function useSettingsContext() {
 }
 
 // TODO: refactor to not read the settings directly, we have a context for this
-export function getModeDuration(mode: PomodoroMode) {
+export function getModeDuration(mode: TimerMode) {
   switch (mode) {
     case "Break": {
       const v = localStorage.getItem(SETTINGS.durationBreak.key);

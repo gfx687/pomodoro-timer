@@ -1,6 +1,6 @@
 public class BackgroundWorker(
     ILogger<BackgroundWorker> _logger,
-    PomodoroManager _pomodoro,
+    TimerManager _timers,
     SocketConnectionStore _connections
 ) : BackgroundService
 {
@@ -12,7 +12,7 @@ public class BackgroundWorker(
         {
             var count = Interlocked.Increment(ref _executionCount);
 
-            var status = _pomodoro.Get();
+            var status = _timers.Get();
             var message =
                 status == null ? SocketResponse.NotFound() : SocketResponse.TimerStatus(status);
 
