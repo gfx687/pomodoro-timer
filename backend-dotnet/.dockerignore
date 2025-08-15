@@ -1,0 +1,14 @@
+**/.git
+.gitignore
+Dockerfile
+.dockerignore
+
+.vscode/
+.config/
+**/.tempfiles/
+
+**/bin/
+**/obj/
+**/out/
+node_modules/
+dist/
