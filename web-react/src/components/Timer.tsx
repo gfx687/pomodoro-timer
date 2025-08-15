@@ -1,3 +1,4 @@
+import { useSettings } from "../other/useSettings";
 import "./Timer.css";
 
 type TimerProps = {
@@ -6,8 +7,17 @@ type TimerProps = {
 };
 
 export default function Timer({ seconds, isFullscreen }: TimerProps) {
+  const { inverseColorsFullscreen } = useSettings();
   if (isFullscreen) {
-    return <div className="timer-fullscreen">{formatSeconds(seconds)}</div>;
+    return (
+      <div
+        className={
+          "timer-fullscreen" + (inverseColorsFullscreen ? " inverse" : "")
+        }
+      >
+        {formatSeconds(seconds)}
+      </div>
+    );
   }
 
   const fontSize = {

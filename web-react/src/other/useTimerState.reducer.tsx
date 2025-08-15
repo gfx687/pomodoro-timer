@@ -50,7 +50,6 @@ export function timerReducer(
 ): TimerState {
   switch (action.type) {
     case "SET_STATUS":
-      console.log("SET_STATUS");
       return {
         ...state,
         doesExist: doesTimerExist(
@@ -61,10 +60,11 @@ export function timerReducer(
         seconds: action.payload.RemainingS,
         mode: action.payload.Mode,
         isFinished: false,
-        startedAt: action.payload.StartedAt,
+        startedAt: action.payload.StartedAt
+          ? new Date(action.payload.StartedAt)
+          : null,
       };
     case "TIMER_START_OR_RESUME":
-      console.log("TIMER_START_OR_RESUME");
       return {
         ...state,
         isTicking: true,
@@ -76,19 +76,16 @@ export function timerReducer(
         startedAt: action.payload.startedAt ?? state.startedAt,
       };
     case "TIMER_TICK":
-      console.log("TIMER_TICK");
       return {
         ...state,
         seconds: state.seconds - 1,
       };
     case "TIMER_PAUSE":
-      console.log("TIMER_PAUSE");
       return {
         ...state,
         isTicking: false,
       };
     case "TIMER_FINISH":
-      console.log("TIMER_FINISH");
       return {
         ...state,
         isTicking: false,
@@ -96,7 +93,6 @@ export function timerReducer(
         isFinished: true,
       };
     case "TIMER_RESET":
-      console.log("TIMER_RESET");
       return {
         ...state,
         isTicking: false,
@@ -106,7 +102,6 @@ export function timerReducer(
         startedAt: null,
       };
     case "CHANGE_MODE":
-      console.log("CHANGE_MODE");
       return {
         ...state,
         isTicking: false,

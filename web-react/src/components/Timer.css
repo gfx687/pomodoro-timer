@@ -14,7 +14,9 @@
   align-items: center;
   font-size: 30vw;
   z-index: 9999;
+}
 
-  /* background-color: var(--fg); */
-  /* color: var(--bg); */
+.inverse {
+  background-color: var(--fg);
+  color: var(--bg);
 }

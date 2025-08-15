@@ -32,36 +32,51 @@ export function useSettings() {
     return v !== null ? Number(v) : SETTINGS.durationBreak.defaultValue;
   });
 
+  const [inverseColorsFullscreen, setInverseColorsFullscreen] = useState(() => {
+    const v = localStorage.getItem(SETTINGS.inverseColorsFullscreen.key);
+    return v !== null
+      ? v === "true"
+      : SETTINGS.inverseColorsFullscreen.defaultValue;
+  });
+
   const changeSetting = useCallback(
-    (setting: SettingsKey, newValue: string | number) => {
+    (setting: SettingsKey, newValue: string) => {
       let setter;
       switch (setting) {
         case "volume":
-          setter = setVolume;
+          setter = (s: string) => setVolume(Number(s));
           break;
         case "durationWork":
-          setter = setDurationWork;
+          setter = (s: string) => setDurationWork(Number(s));
           break;
         case "durationBreak":
-          setter = setDurationBreak;
+          setter = (s: string) => setDurationBreak(Number(s));
+          break;
+        case "inverseColorsFullscreen":
+          setter = (s: string) => {
+            setInverseColorsFullscreen(s === "true");
+          };
           break;
       }
-      setter(Number(newValue));
-      localStorage.setItem(setting, newValue.toString());
+      setter(newValue);
+      localStorage.setItem(setting, newValue);
     },
     []
   );
 
   const resetSettings = useCallback(() => {
-    changeSetting(SETTINGS.volume.key, SETTINGS.volume.defaultValue);
+    changeSetting(SETTINGS.volume.key, SETTINGS.volume.defaultValue.toString());
     changeSetting(
       SETTINGS.durationWork.key,
-
-      SETTINGS.durationWork.defaultValue
+      SETTINGS.durationWork.defaultValue.toString()
     );
     changeSetting(
       SETTINGS.durationBreak.key,
-      SETTINGS.durationBreak.defaultValue
+      SETTINGS.durationBreak.defaultValue.toString()
+    );
+    changeSetting(
+      SETTINGS.inverseColorsFullscreen.key,
+      SETTINGS.inverseColorsFullscreen.defaultValue.toString()
     );
   }, [changeSetting]);
 
@@ -69,6 +84,7 @@ export function useSettings() {
     volume,
     durationWork,
     durationBreak,
+    inverseColorsFullscreen,
     changeSetting,
     resetSettings,
   };

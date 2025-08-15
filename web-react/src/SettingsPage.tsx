@@ -3,8 +3,14 @@ import { useSettings } from "./other/useSettings";
 import "./SettingsPage.css";
 
 export default function SettingsPage() {
-  const { volume, durationWork, durationBreak, changeSetting, resetSettings } =
-    useSettings();
+  const {
+    volume,
+    durationWork,
+    durationBreak,
+    inverseColorsFullscreen,
+    changeSetting,
+    resetSettings,
+  } = useSettings();
   return (
     <div className="settings">
       <div className="settings-row">
@@ -43,6 +49,21 @@ export default function SettingsPage() {
           value={durationBreak}
           onChange={(e) =>
             changeSetting(SETTINGS.durationBreak.key, e.target.value)
+          }
+        />
+      </div>
+      <div className="settings-row">
+        <label htmlFor="fullscreen-inverse">Inverse colors in fullscreen</label>
+        <input
+          id="fullscreen-inverse"
+          type="checkbox"
+          className="settings-input"
+          checked={inverseColorsFullscreen}
+          onChange={(e) =>
+            changeSetting(
+              SETTINGS.inverseColorsFullscreen.key,
+              e.target.checked.toString()
+            )
           }
         />
       </div>

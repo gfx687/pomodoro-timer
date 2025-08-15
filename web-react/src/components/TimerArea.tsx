@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import "./TimerArea.css";
 import TimerControls from "./TimerControls";
 import TimerModes from "./TimerModes";
@@ -24,10 +24,13 @@ export default function TimerArea() {
     setFullscreen
   );
 
+  // don't play sound if user refreshes the page with 00:00 timer
+  const prevIsFinished = useRef(state.isFinished);
   useEffect(() => {
-    if (state.isFinished) {
+    if (state.isFinished && !prevIsFinished.current) {
       playDink();
     }
+    prevIsFinished.current = state.isFinished;
   }, [state.isFinished, playDink]);
 
   return (
