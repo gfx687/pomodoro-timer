@@ -18,10 +18,12 @@ export function FullscreenProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useFullscreen() {
+export function useFullscreenContext() {
   const ctx = useContext(FullscreenContext);
   if (!ctx) {
-    throw new Error("useFullscreen must be used inside FullscreenProvider");
+    throw new Error(
+      "useFullscreenContext must be used inside FullscreenProvider"
+    );
   }
   return ctx;
 }

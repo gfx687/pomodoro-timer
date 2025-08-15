@@ -1,16 +1,18 @@
-import { SETTINGS } from "./other/constants";
-import { useSettings } from "./other/useSettings";
+import { useSettingsContext } from "./contexts/SettingsContext";
 import "./SettingsPage.css";
 
 export default function SettingsPage() {
   const {
     volume,
+    setVolume,
     durationWork,
+    setDurationWork,
     durationBreak,
+    setDurationBreak,
     inverseColorsFullscreen,
-    changeSetting,
+    setInverseColorsFullscreen,
     resetSettings,
-  } = useSettings();
+  } = useSettingsContext();
   return (
     <div className="settings">
       <div className="settings-row">
@@ -24,7 +26,7 @@ export default function SettingsPage() {
           min="0"
           max="100"
           value={volume}
-          onChange={(e) => changeSetting(SETTINGS.volume.key, e.target.value)}
+          onChange={(e) => setVolume(Number(e.target.value))}
         />
         <span style={{ marginLeft: "5px" }}>{volume}</span>
       </div>
@@ -35,9 +37,7 @@ export default function SettingsPage() {
           type="number"
           className="settings-input"
           value={durationWork}
-          onChange={(e) =>
-            changeSetting(SETTINGS.durationWork.key, e.target.value)
-          }
+          onChange={(e) => setDurationWork(Number(e.target.value))}
         />
       </div>
       <div className="settings-row">
@@ -47,9 +47,7 @@ export default function SettingsPage() {
           type="number"
           className="settings-input"
           value={durationBreak}
-          onChange={(e) =>
-            changeSetting(SETTINGS.durationBreak.key, e.target.value)
-          }
+          onChange={(e) => setDurationBreak(Number(e.target.value))}
         />
       </div>
       <div className="settings-row">
@@ -59,12 +57,7 @@ export default function SettingsPage() {
           type="checkbox"
           className="settings-input"
           checked={inverseColorsFullscreen}
-          onChange={(e) =>
-            changeSetting(
-              SETTINGS.inverseColorsFullscreen.key,
-              e.target.checked.toString()
-            )
-          }
+          onChange={(e) => setInverseColorsFullscreen(e.target.checked)}
         />
       </div>
       <div className="settings-row">

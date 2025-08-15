@@ -2,7 +2,7 @@ import { useEffect, useCallback, useState, useRef } from "react";
 import type { PomodoroMode } from "./types";
 import { useWebSocketConnection } from "./useWebSocketConnection";
 import { useTimerState } from "./useTimerState";
-import { getModeDuration } from "./useSettings";
+import { getModeDuration } from "../contexts/SettingsContext";
 
 export function useTimer() {
   const { sendMessage, lastMessage } = useWebSocketConnection();

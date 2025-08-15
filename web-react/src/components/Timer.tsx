@@ -1,4 +1,4 @@
-import { useSettings } from "../other/useSettings";
+import { useSettingsContext } from "../contexts/SettingsContext";
 import "./Timer.css";
 
 type TimerProps = {
@@ -7,7 +7,7 @@ type TimerProps = {
 };
 
 export default function Timer({ seconds, isFullscreen }: TimerProps) {
-  const { inverseColorsFullscreen } = useSettings();
+  const { inverseColorsFullscreen } = useSettingsContext();
   if (isFullscreen) {
     return (
       <div

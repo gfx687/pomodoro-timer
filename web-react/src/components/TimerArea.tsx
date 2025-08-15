@@ -5,15 +5,15 @@ import TimerModes from "./TimerModes";
 import Timer from "./Timer";
 import useDink from "../other/useDink";
 import { useTimer } from "../other/useTimer";
-import { useFullscreen } from "../other/FullscreenContext";
+import { useFullscreenContext } from "../contexts/FullscreenContext";
 import { useTimerHotkeys } from "../other/useTimerHotkeys";
-import { getModeDuration } from "../other/useSettings";
+import { getModeDuration } from "../contexts/SettingsContext";
 
 export default function TimerArea() {
   const playDink = useDink();
   const { state, stateRef, start, pause, resume, reset, changeMode } =
     useTimer();
-  const { isFullscreen, setFullscreen } = useFullscreen();
+  const { isFullscreen, setFullscreen } = useFullscreenContext();
   useTimerHotkeys(
     stateRef,
     start,

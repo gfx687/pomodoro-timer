@@ -2,19 +2,26 @@ import TimerArea from "./components/TimerArea";
 import "./App.css";
 import { useEffect, useState } from "react";
 import SettingsPage from "./SettingsPage";
-import { FullscreenProvider, useFullscreen } from "./other/FullscreenContext";
+import {
+  FullscreenProvider,
+  useFullscreenContext,
+} from "./contexts/FullscreenContext";
+import { SettingsProvider } from "./contexts/SettingsContext";
+import { IconTray } from "./components/IconTray";
 
 export default function App() {
   return (
     <FullscreenProvider>
-      <AppContent />
+      <SettingsProvider>
+        <AppContent />
+      </SettingsProvider>
     </FullscreenProvider>
   );
 }
 
 function AppContent() {
   const [path, setPath] = useState(window.location.pathname);
-  const { isFullscreen } = useFullscreen();
+  const { isFullscreen } = useFullscreenContext();
 
   useEffect(() => {
     const handlePopState = () => setPath(window.location.pathname);
@@ -48,10 +55,12 @@ function AppContent() {
           </svg>
           <span>Pomodoro</span>
         </button>
+        <IconTray />
         <button
           onClick={() => navigate("/settings")}
           className={
-            "navbar-item " + (path === "/settings" && "navbar-item-active")
+            "navbar-item navbar-right " +
+            (path === "/settings" && "navbar-item-active")
           }
         >
           <svg

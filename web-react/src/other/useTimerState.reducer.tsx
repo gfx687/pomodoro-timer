@@ -1,5 +1,5 @@
+import { getModeDuration } from "../contexts/SettingsContext";
 import type { PomodoroMode, TimerStatusResponsePayload } from "./types";
-import { getModeDuration } from "./useSettings";
 
 export interface TimerState {
   /**
