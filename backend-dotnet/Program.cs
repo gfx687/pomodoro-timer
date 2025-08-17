@@ -1,5 +1,5 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Formatting.Json;
 
@@ -8,11 +8,18 @@ var builder = WebApplication.CreateBuilder(args);
 var loggerConfig = new LoggerConfiguration();
 
 if (builder.Environment.IsDevelopment())
-    loggerConfig.MinimumLevel.Debug().WriteTo.Console();
+{
+    loggerConfig
+        // .MinimumLevel.Debug()
+        .MinimumLevel.Information()
+        .WriteTo.Console();
+}
 else
     loggerConfig.MinimumLevel.Information().WriteTo.Console(new JsonFormatter());
 
 Log.Logger = loggerConfig.CreateLogger();
+
+// TODO: why do I return StatedAt from backend?
 
 try
 {
@@ -20,11 +27,26 @@ try
     builder.Services.AddHostedService<BackgroundWorker>();
     builder.Services.AddSerilog();
 
+    var connectionString =
+        Environment.GetEnvironmentVariable("CONNECTION_STRING")
+        ?? throw new InvalidOperationException(
+            "Environment variable 'CONNECTION_STRING' is required."
+        );
+
+    builder.Services.AddDbContext<TimerDbContext>(options => options.UseSqlite(connectionString));
+
     builder.Services.AddSingleton<TimerManager>();
     builder.Services.AddSingleton<SocketConnectionStore>();
     builder.Services.AddSingleton<MessageProcessor>();
 
     var app = builder.Build();
+
+    await using (var scope = app.Services.CreateAsyncScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<TimerDbContext>();
+        await db.Database.MigrateAsync();
+        await db.Database.EnsureCreatedAsync();
+    }
 
     app.UseWebSockets();
 
@@ -57,7 +79,7 @@ try
 
                     while (!result.CloseStatus.HasValue)
                     {
-                        var resp = logic.ProcessMessage(buffer, result);
+                        var resp = await logic.ProcessMessage(buffer, result);
 
                         if (resp.Broadcast)
                             foreach (var s in connections.GetAll())
@@ -99,13 +121,6 @@ try
     }
 
     app.UseHttpsRedirection();
-    app.MapGet(
-        "/state",
-        ([FromServices] TimerManager manager) =>
-        {
-            return manager.Get();
-        }
-    );
 
     app.Run();
 }

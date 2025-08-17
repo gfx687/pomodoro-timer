@@ -76,17 +76,17 @@ export function useTimer() {
 
   const resume = useCallback(() => {
     resumeTimer();
-    sendMessage({ type: "TimerUnpause" });
+    sendMessage({ type: "TimerUnpause", payload: { id: stateRef.current.id } });
   }, [sendMessage, resumeTimer]);
 
   const pause = useCallback(() => {
     pauseTimer();
-    sendMessage({ type: "TimerPause" });
+    sendMessage({ type: "TimerPause", payload: { id: stateRef.current.id } });
   }, [sendMessage, pauseTimer]);
 
   const reset = useCallback(() => {
     resetTimer();
-    sendMessage({ type: "TimerReset" });
+    sendMessage({ type: "TimerReset", payload: { id: stateRef.current.id } });
   }, [sendMessage, resetTimer]);
 
   const changeMode = useCallback(

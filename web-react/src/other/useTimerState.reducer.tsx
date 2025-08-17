@@ -2,6 +2,8 @@ import { getModeDuration } from "../contexts/SettingsContext";
 import type { TimerMode, TimerStatusResponsePayload } from "./types";
 
 export interface TimerState {
+  id: string;
+
   /**
    * Is timer Running or Paused?
    */
@@ -23,6 +25,7 @@ export interface TimerState {
 }
 
 export const initialState: TimerState = {
+  id: "",
   doesExist: false,
   isTicking: false,
   isFinished: false,
@@ -52,6 +55,7 @@ export function timerReducer(
     case "SET_STATUS":
       return {
         ...state,
+        id: action.payload.Id,
         doesExist: doesTimerExist(
           action.payload.RemainingS,
           action.payload.Mode

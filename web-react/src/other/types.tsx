@@ -16,14 +16,24 @@ export interface TimerStartRequest {
 
 export interface TimerPauseRequest {
   type: "TimerPause";
+  payload: TimerIdPayload;
 }
 
 export interface TimerUnpauseRequest {
   type: "TimerUnpause";
+  payload: TimerIdPayload;
 }
 
 export interface TimerResetRequest {
   type: "TimerReset";
+  payload: TimerIdPayload;
+}
+
+export interface TimerIdPayload {
+  /**
+   * UUID
+   */
+  id: string;
 }
 
 export type OutgoingMessage =
@@ -39,6 +49,7 @@ export interface TimerStatusResponse {
 }
 
 export interface TimerStatusResponsePayload {
+  Id: string;
   IsActive: boolean;
   RemainingS: number;
   Mode: TimerMode;

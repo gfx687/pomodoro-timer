@@ -1,7 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using FluentValidation;
-using FluentValidation.Results;
 
 public enum SocketRequestType
 {
@@ -16,17 +15,17 @@ public enum SocketRequestType
     TimerStart = 2,
 
     /// <summary>
-    /// Payload - null
+    /// Payload - <see cref="TimerIdPayload"/>
     /// </summary>
     TimerPause = 3,
 
     /// <summary>
-    /// Payload - null
+    /// Payload - <see cref="TimerIdPayload"/>
     /// </summary>
     TimerReset = 4,
 
     /// <summary>
-    /// Payload - null
+    /// Payload - <see cref="TimerIdPayload"/>
     /// </summary>
     TimerUnpause = 5,
 }
@@ -47,8 +46,20 @@ public class SocketRequest
     public JsonElement? Payload { get; set; }
 }
 
+public class TimerIdPayload
+{
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
+}
+
 public class TimerStartRequestPayload
 {
+    /// <summary>
+    /// If not provided the server will generate it
+    /// </summary>
+    [JsonPropertyName("id")]
+    public Guid? Id { get; set; }
+
     [JsonPropertyName("durationTotal")]
     public int DurationTotal { get; set; }
 
@@ -62,6 +73,9 @@ public class TimerStartRequestPayload
     [JsonPropertyName("remaining")]
     public int? Remaining { get; set; }
 
+    /// <summary>
+    /// If not provided the server will use current time
+    /// </summary>
     [JsonPropertyName("startedAt")]
     public DateTimeOffset? StartedAt { get; set; }
 

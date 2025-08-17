@@ -1,0 +1,14 @@
+services:
+  backend-dotnet:
+    image: gfx687/pomodoro-timer-backend-dotnet:0.1.0
+    environment:
+      - CONNECTION_STRING=Data Source=/data/pomodoro-timer.db
+    volumes:
+      - /opt/my/pomodoro-timer/data:/data
+    ports:
+      - 127.0.0.1:8081:8080
+
+  frontend-react:
+    image: gfx687/pomodoro-timer-web-react:0.1.0
+    ports:
+      - 127.0.0.1:8082:80

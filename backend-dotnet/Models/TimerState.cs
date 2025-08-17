@@ -1,5 +1,7 @@
 public class TimerState
 {
+    public Guid Id { get; private set; }
+
     /// <summary>
     /// Refers to pause / unpause, not general existence of a timer
     /// </summary>
@@ -20,8 +22,15 @@ public class TimerState
         Mode = mode;
     }
 
-    public TimerState(int durationTotal, TimerModes mode, DateTimeOffset startedAt, int remaining)
+    public TimerState(
+        Guid id,
+        int durationTotal,
+        TimerModes mode,
+        DateTimeOffset startedAt,
+        int remaining
+    )
     {
+        Id = id;
         IsActive = true;
         StartedAt = startedAt;
         DurationTotal = durationTotal;
