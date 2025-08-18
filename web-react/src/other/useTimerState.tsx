@@ -4,6 +4,7 @@ import {
   timerReducer,
   initialState,
   type TimerState,
+  isAnActiveStatus,
 } from "./useTimerState.reducer";
 
 export function useTimerState() {
@@ -14,20 +15,20 @@ export function useTimerState() {
   );
 
   useEffect(() => {
-    if (!state.isTicking) return;
+    if (state.status != "ticking") return;
 
     const interval = setInterval(() => {
       dispatch({ type: "TIMER_TICK" });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [state.isTicking]);
+  }, [state.status]);
 
   useEffect(() => {
-    if (state.seconds <= 0 && state.isTicking) {
+    if (state.seconds <= 0 && state.status == "ticking") {
       dispatch({ type: "TIMER_FINISH" });
     }
-  }, [state.seconds, state.isTicking]);
+  }, [state.seconds, state.status]);
 
   useEffect(() => {
     saveStateToLocalStorage(state);
@@ -54,11 +55,11 @@ export function useTimerState() {
 
   const changeMode = useCallback(
     (newMode: TimerMode) => {
-      if (state.doesExist) return;
+      if (isAnActiveStatus(state.status)) return;
 
       dispatch({ type: "CHANGE_MODE", payload: { mode: newMode } });
     },
-    [state.doesExist]
+    [state.status]
   );
 
   const setStatus = useCallback((payload: TimerStatusResponsePayload) => {

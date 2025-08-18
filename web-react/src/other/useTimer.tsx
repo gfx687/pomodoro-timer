@@ -3,6 +3,7 @@ import type { TimerMode } from "./types";
 import { useWebSocketConnection } from "./useWebSocketConnection";
 import { useTimerState } from "./useTimerState";
 import { getModeDuration } from "../contexts/SettingsContext";
+import { isAnActiveStatus } from "./useTimerState.reducer";
 
 export function useTimer() {
   const { sendMessage, lastMessage } = useWebSocketConnection();
@@ -29,7 +30,7 @@ export function useTimer() {
           setStatus(lastMessage.payload);
           break;
         case "TimerNotFound": {
-          if (stateRef.current.doesExist) {
+          if (isAnActiveStatus(stateRef.current.status)) {
             setSyncToBackend(true);
           }
           break;
@@ -37,12 +38,17 @@ export function useTimer() {
         case "TimerReset":
           resetTimer();
           break;
+        case "Error":
+          console.error(lastMessage);
+          break;
         default:
           break;
       }
     }
   }, [lastMessage, setStatus, resetTimer]);
 
+  // BUG: what if backend connection got established while the client was on pause?
+  //      in this case the timer would simply start ticking I assume
   useEffect(() => {
     if (!syncToBackend) return;
 

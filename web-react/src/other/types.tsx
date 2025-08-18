@@ -69,7 +69,24 @@ export interface TimerAlreadyExistsResponse {
   payload: TimerStatusResponsePayload;
 }
 
+export interface ErrorResponse {
+  type: "Error";
+  payload: ErrorPayload;
+}
+
+export type ErrorType =
+  | "UnknownRequestType"
+  | "ValidationError"
+  | "WrongRequestFormat"
+  | "IncorrectTimerId";
+
+export interface ErrorPayload {
+  ErrorType: ErrorType;
+  Message: string;
+}
+
 export type IncomingMessage =
+  | ErrorResponse
   | TimerStatusResponse
   | TimerNotFoundResponse
   | TimerResetResponse;

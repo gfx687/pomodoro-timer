@@ -2,19 +2,19 @@ import type { TimerMode } from "../other/types";
 import "./TimerModes.css";
 
 type TimerModesProps = {
-  mode: TimerMode;
+  currentMode: TimerMode;
   timerExists: boolean;
   onModeChange: (mode: TimerMode) => void;
 };
 
 export default function TimerModes({
-  mode,
+  currentMode,
   timerExists,
   onModeChange,
 }: TimerModesProps) {
   const getClasses = (m: TimerMode) => {
     let c = "timer-mode";
-    if (mode === m) c += " timer-mode-current";
+    if (currentMode === m) c += " timer-mode-current";
     else if (timerExists) c += " timer-mode-inactive";
     return c;
   };
@@ -24,14 +24,14 @@ export default function TimerModes({
       <button
         className={getClasses("Work")}
         onClick={() => onModeChange("Work")}
-        title={mode === "Work" ? "" : "Timer is running."}
+        title={currentMode === "Work" ? "" : "Timer is running."}
       >
         Work
       </button>
       <button
         className={getClasses("Break")}
         onClick={() => onModeChange("Break")}
-        title={mode === "Break" ? "" : "Timer is running."}
+        title={currentMode === "Break" ? "" : "Timer is running."}
       >
         Break
       </button>

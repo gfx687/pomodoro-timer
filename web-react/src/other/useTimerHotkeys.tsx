@@ -1,7 +1,6 @@
 import { useCallback, useEffect, type RefObject } from "react";
 import type { TimerMode } from "../other/types";
 import { type TimerState } from "../other/useTimerState.reducer";
-import { getModeDuration } from "../contexts/SettingsContext";
 
 export function useTimerHotkeys(
   stateRef: RefObject<TimerState>,
@@ -13,14 +12,9 @@ export function useTimerHotkeys(
   setFullscreen: (v: boolean | ((prev: boolean) => boolean)) => void
 ) {
   const onPressSpace = useCallback(() => {
-    if (stateRef.current.isTicking) {
-      pause();
-      return;
-    }
-    return stateRef.current.seconds !== 0 &&
-      stateRef.current.seconds != getModeDuration(stateRef.current.mode)
-      ? resume()
-      : start();
+    if (stateRef.current.status == "ticking") pause();
+    else if (stateRef.current.status == "paused") resume();
+    else start();
     // linter does not know that stateRef is a ref, so it warns us
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start, pause, resume]);

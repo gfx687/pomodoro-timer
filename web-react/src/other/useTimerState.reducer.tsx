@@ -1,24 +1,14 @@
 import { getModeDuration } from "../contexts/SettingsContext";
 import type { TimerMode, TimerStatusResponsePayload } from "./types";
 
+export type TimerStatus = "no timer" | "ticking" | "paused" | "finished";
+
+export const isAnActiveStatus = (status: TimerStatus) =>
+  status == "ticking" || status == "paused";
+
 export interface TimerState {
   id: string;
-
-  /**
-   * Is timer Running or Paused?
-   */
-  isTicking: boolean;
-
-  /**
-   * Does timer exist? Regardless of the Pause state
-   */
-  doesExist: boolean;
-
-  /**
-   * A trigger for subscribers that want to execute an action when timer reaches 0
-   * Does not trigger on Reset
-   */
-  isFinished: boolean;
+  status: TimerStatus;
   seconds: number;
   mode: TimerMode;
   startedAt: Date | null;
@@ -26,9 +16,7 @@ export interface TimerState {
 
 export const initialState: TimerState = {
   id: "",
-  doesExist: false,
-  isTicking: false,
-  isFinished: false,
+  status: "no timer",
   seconds: getModeDuration("Work"),
   mode: "Work",
   startedAt: null,
@@ -56,29 +44,24 @@ export function timerReducer(
       return {
         ...state,
         id: action.payload.Id,
-        doesExist: doesTimerExist(
-          action.payload.RemainingS,
-          action.payload.Mode
-        ),
-        isTicking: action.payload.IsActive,
+        status: action.payload.IsActive ? "ticking" : "paused",
         seconds: action.payload.RemainingS,
         mode: action.payload.Mode,
-        isFinished: false,
         startedAt: action.payload.StartedAt
           ? new Date(action.payload.StartedAt)
           : null,
       };
-    case "TIMER_START_OR_RESUME":
+    case "TIMER_START_OR_RESUME": {
+      const seconds = isAnActiveStatus(state.status)
+        ? state.seconds
+        : getModeDuration(state.mode);
       return {
         ...state,
-        isTicking: true,
-        seconds: doesTimerExist(state.seconds, state.mode)
-          ? state.seconds
-          : getModeDuration(state.mode),
-        doesExist: true,
-        isFinished: false,
+        status: "ticking",
+        seconds: seconds,
         startedAt: action.payload.startedAt ?? state.startedAt,
       };
+    }
     case "TIMER_TICK":
       return {
         ...state,
@@ -87,37 +70,27 @@ export function timerReducer(
     case "TIMER_PAUSE":
       return {
         ...state,
-        isTicking: false,
+        status: "paused",
       };
     case "TIMER_FINISH":
       return {
         ...state,
-        isTicking: false,
-        doesExist: false,
-        isFinished: true,
+        status: "finished",
       };
     case "TIMER_RESET":
       return {
         ...state,
-        isTicking: false,
+        status: "no timer",
         seconds: getModeDuration(state.mode),
-        doesExist: false,
-        isFinished: false,
         startedAt: null,
       };
     case "CHANGE_MODE":
       return {
         ...state,
-        isTicking: false,
+        status: "no timer",
         seconds: getModeDuration(action.payload.mode),
         mode: action.payload.mode,
-        doesExist: false,
-        isFinished: false,
         startedAt: null,
       };
   }
-}
-
-function doesTimerExist(seconds: number, mode: TimerMode) {
-  return seconds !== 0 && seconds !== getModeDuration(mode);
 }

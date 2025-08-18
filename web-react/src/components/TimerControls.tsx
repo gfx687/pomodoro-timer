@@ -1,9 +1,11 @@
+import {
+  isAnActiveStatus,
+  type TimerStatus,
+} from "../other/useTimerState.reducer";
 import "./TimerControls.css";
 
 type TimerControlsProps = {
-  isTicking: boolean;
-  currentS: number;
-  totalS: number;
+  timerStatus: TimerStatus;
   onStart: () => void;
   onPause: () => void;
   onResume: () => void;
@@ -11,18 +13,16 @@ type TimerControlsProps = {
 };
 
 export default function TimerControls({
-  isTicking,
-  currentS,
-  totalS,
+  timerStatus,
   onStart,
   onPause,
   onResume,
   onReset,
 }: TimerControlsProps) {
-  const drawStart = !isTicking && (currentS === 0 || currentS === totalS);
-  const drawResume = !isTicking && currentS !== 0 && currentS !== totalS;
-  const drawPause = isTicking;
-  const drawReset = isTicking || currentS != totalS;
+  const drawStart = !isAnActiveStatus(timerStatus);
+  const drawResume = timerStatus == "paused";
+  const drawPause = timerStatus == "ticking";
+  const drawReset = timerStatus != "no timer";
 
   return (
     <div className="timer-controls">

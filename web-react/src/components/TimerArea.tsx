@@ -7,7 +7,7 @@ import useDink from "../other/useDink";
 import { useTimer } from "../other/useTimer";
 import { useFullscreenContext } from "../contexts/FullscreenContext";
 import { useTimerHotkeys } from "../other/useTimerHotkeys";
-import { getModeDuration } from "../contexts/SettingsContext";
+import { isAnActiveStatus } from "../other/useTimerState.reducer";
 
 export default function TimerArea() {
   const playDink = useDink();
@@ -25,26 +25,24 @@ export default function TimerArea() {
   );
 
   // don't play sound if user refreshes the page with 00:00 timer
-  const prevIsFinished = useRef(state.isFinished);
+  const prevIsFinished = useRef(state.status == "finished");
   useEffect(() => {
-    if (state.isFinished && !prevIsFinished.current) {
+    if (state.status == "finished" && !prevIsFinished.current) {
       playDink();
     }
-    prevIsFinished.current = state.isFinished;
-  }, [state.isFinished, playDink]);
+    prevIsFinished.current = state.status == "finished";
+  }, [state.status, playDink]);
 
   return (
     <div className="timer-area">
       <TimerModes
-        mode={state.mode}
-        timerExists={state.doesExist}
+        currentMode={state.mode}
+        timerExists={isAnActiveStatus(state.status)}
         onModeChange={changeMode}
       />
       <Timer seconds={state.seconds} isFullscreen={isFullscreen} />
       <TimerControls
-        isTicking={state.isTicking}
-        currentS={state.seconds}
-        totalS={getModeDuration(state.mode)}
+        timerStatus={state.status}
         onStart={start}
         onResume={resume}
         onPause={pause}
