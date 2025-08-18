@@ -1,5 +1,7 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PomodoroTimer.MessageHandlers;
 using Serilog;
 using Serilog.Formatting.Json;
 
@@ -19,8 +21,6 @@ else
 
 Log.Logger = loggerConfig.CreateLogger();
 
-// TODO: why do I return StatedAt from backend?
-
 try
 {
     builder.Services.AddOpenApi();
@@ -35,9 +35,22 @@ try
 
     builder.Services.AddDbContext<TimerDbContext>(options => options.UseSqlite(connectionString));
 
-    builder.Services.AddSingleton<TimerManager>();
+    builder.Services.AddSingleton<ITimerManager, TimerManager>();
     builder.Services.AddSingleton<SocketConnectionStore>();
     builder.Services.AddSingleton<MessageProcessor>();
+    builder.Services.AddSingleton<ISystemClock, SystemClock>();
+
+    builder.Services.AddScoped<
+        IValidator<TimerStartRequestPayload>,
+        TimerStartRequestPayload.Validator
+    >();
+
+    builder.Services.AddScoped<ITimerLogRepository, TimerLogRepository>();
+    builder.Services.AddScoped<TimerGetMessageHandler>();
+    builder.Services.AddScoped<TimerStartMessageHandler>();
+    builder.Services.AddScoped<TimerPauseMessageHandler>();
+    builder.Services.AddScoped<TimerUnpauseMessageHandler>();
+    builder.Services.AddScoped<TimerResetMessageHandler>();
 
     var app = builder.Build();
 
@@ -79,13 +92,17 @@ try
 
                     while (!result.CloseStatus.HasValue)
                     {
-                        var resp = await logic.ProcessMessage(buffer, result);
+                        var (Response, Broadcast) = await logic.ProcessMessage(
+                            buffer,
+                            result,
+                            CancellationToken.None // TODO: cancellation token propagation
+                        );
 
-                        if (resp.Broadcast)
+                        if (Broadcast)
                             foreach (var s in connections.GetAll())
-                                await s.SendAsync(resp.Response);
+                                await s.SendAsync(Response);
                         else
-                            await socket.SendAsync(resp.Response);
+                            await socket.SendAsync(Response);
 
                         result = await socket.ReceiveAsync(
                             new ArraySegment<byte>(buffer),

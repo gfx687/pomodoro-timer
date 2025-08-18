@@ -1,6 +1,6 @@
 public class BackgroundWorker(
     ILogger<BackgroundWorker> _logger,
-    TimerManager _timers,
+    ITimerManager _timers,
     SocketConnectionStore _connections
 ) : BackgroundService
 {

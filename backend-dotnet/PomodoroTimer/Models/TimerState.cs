@@ -12,60 +12,56 @@ public class TimerState
     public int ElapsedBeforePause { get; private set; }
     public TimerModes Mode { get; private set; }
 
-    public TimerState(int durationTotal, TimerModes mode)
-    {
-        IsActive = true;
-        StartedAt = DateTimeOffset.UtcNow;
-        DurationTotal = durationTotal;
-        LastUnpausedAt = StartedAt;
-        ElapsedBeforePause = 0;
-        Mode = mode;
-    }
-
     public TimerState(
         Guid id,
         int durationTotal,
         TimerModes mode,
         DateTimeOffset startedAt,
-        int remaining
+        int remaining,
+        DateTimeOffset lastUnpausedAt
     )
     {
+        if (durationTotal <= 0)
+            throw new ArgumentException($"{nameof(durationTotal)} must be more than 0");
+        if (remaining <= 0)
+            throw new ArgumentException($"{nameof(remaining)} must be more than 0");
+
         Id = id;
         IsActive = true;
         StartedAt = startedAt;
         DurationTotal = durationTotal;
-        LastUnpausedAt = DateTimeOffset.UtcNow;
+        LastUnpausedAt = lastUnpausedAt;
         ElapsedBeforePause = durationTotal - remaining;
         Mode = mode;
     }
 
-    public int GetRemaining()
+    public int GetRemaining(DateTimeOffset now)
     {
         var remaining = DurationTotal - ElapsedBeforePause;
 
         if (IsActive)
         {
-            var passed = (int)DateTimeOffset.UtcNow.Subtract(LastUnpausedAt).TotalSeconds;
+            var passed = (int)now.Subtract(LastUnpausedAt).TotalSeconds;
             remaining -= passed;
         }
         return remaining;
     }
 
-    public void Pause()
+    public void Pause(DateTimeOffset now)
     {
         if (!IsActive)
             return;
 
         IsActive = false;
-        ElapsedBeforePause += (int)DateTimeOffset.UtcNow.Subtract(LastUnpausedAt).TotalSeconds;
+        ElapsedBeforePause += (int)now.Subtract(LastUnpausedAt).TotalSeconds;
     }
 
-    public void Unpause()
+    public void Unpause(DateTimeOffset now)
     {
         if (IsActive)
             return;
 
         IsActive = true;
-        LastUnpausedAt = DateTimeOffset.UtcNow;
+        LastUnpausedAt = now;
     }
 }

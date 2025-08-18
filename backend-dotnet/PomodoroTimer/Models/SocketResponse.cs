@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 public enum SocketResponseType
 {
     /// <summary>
-    /// Payload - string
+    /// Payload - <see cref="ErrorDetails"/>
     /// </summary>
     Error = 1,
 

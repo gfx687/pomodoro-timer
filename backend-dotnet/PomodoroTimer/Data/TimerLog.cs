@@ -25,12 +25,12 @@ public class TimerLog
     public int? RemainingAtCreationTime { get; private set; }
 
     // EF Core ctor
-    public TimerLog() { }
+    private TimerLog() { }
 
     public TimerLog(
         Guid id,
         TimerLogActions action,
-        DateTimeOffset? timestamp = null,
+        DateTimeOffset timestamp,
         TimerModes? mode = null,
         int? durationTotal = null,
         int? remainingAtCreationTime = null
@@ -52,7 +52,7 @@ public class TimerLog
 
         Id = id;
         Action = action;
-        Timestamp = timestamp ?? DateTimeOffset.UtcNow;
+        Timestamp = timestamp;
         Mode = mode;
         DurationTotal = durationTotal;
         RemainingAtCreationTime = remainingAtCreationTime;

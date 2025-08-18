@@ -1,0 +1,94 @@
+using System.Net.WebSockets;
+using System.Text;
+using System.Text.Json;
+using PomodoroTimer.MessageHandlers;
+
+public class MessageProcessor(
+    ITimerManager _manager,
+    IServiceProvider _services,
+    ILogger<MessageProcessor> _logger
+)
+{
+    /// <returns>Response and whether or not message should be Broadcast</returns>
+    public async Task<(SocketResponse Response, bool Broadcast)> ProcessMessage(
+        byte[] buffer,
+        WebSocketReceiveResult receiveResult,
+        CancellationToken ct
+    )
+    {
+        var json = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
+
+        SocketRequest? req = null;
+        try
+        {
+            req = JsonSerializer.Deserialize<SocketRequest>(json)!;
+            _logger.LogInformation($"Received request type: {req.Type}");
+            _logger.LogInformation($"Received request: {JsonSerializer.Serialize(req)}");
+
+            var resp = await ProcessRequest(req, ct);
+
+            _logger.LogInformation($"Sending response: {JsonSerializer.Serialize(resp)}");
+
+            var broadcast = req.Type != SocketRequestType.TimerGet;
+            return (resp, broadcast);
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogError(ex, "Unable to deserialize the message");
+            return (
+                SocketResponse.Error(
+                    new(ErrorType.WrongRequestFormat, "unable to deserialize the message")
+                ),
+                false
+            );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "something went wrong while processing the message");
+            return (
+                SocketResponse.Error(
+                    new(
+                        ErrorType.UnknownRequestType,
+                        "something went wrong while processing the message"
+                    ),
+                    req?.RequestId
+                ),
+                false
+            );
+        }
+    }
+
+    public SocketResponse GetTimerStatus()
+    {
+        var status = _manager.Get();
+        return status == null ? SocketResponse.NotFound() : SocketResponse.TimerStatus(status);
+    }
+
+    async Task<SocketResponse> ProcessRequest(SocketRequest req, CancellationToken ct)
+    {
+        await using var scope = _services.CreateAsyncScope();
+
+        return req switch
+        {
+            TimerGetRequest get => await scope
+                .ServiceProvider.GetRequiredService<TimerGetMessageHandler>()
+                .HandleAsync(get, ct),
+            TimerStartRequest start => await scope
+                .ServiceProvider.GetRequiredService<TimerStartMessageHandler>()
+                .HandleAsync(start, ct),
+            TimerPauseRequest pause => await scope
+                .ServiceProvider.GetRequiredService<TimerPauseMessageHandler>()
+                .HandleAsync(pause, ct),
+            TimerUnpauseRequest unpause => await scope
+                .ServiceProvider.GetRequiredService<TimerUnpauseMessageHandler>()
+                .HandleAsync(unpause, ct),
+            TimerResetRequest reset => await scope
+                .ServiceProvider.GetRequiredService<TimerResetMessageHandler>()
+                .HandleAsync(reset, ct),
+            _ => SocketResponse.Error(
+                new(ErrorType.UnknownRequestType, "unknown request type"),
+                req.RequestId
+            ),
+        };
+    }
+}
