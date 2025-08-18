@@ -11,6 +11,7 @@ export interface TimerStartRequest {
     mode: TimerMode;
     startedAt: Date;
     remaining: number;
+    isActive: boolean;
   };
 }
 

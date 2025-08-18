@@ -14,6 +14,7 @@ public class TimerState
 
     public TimerState(
         Guid id,
+        bool isActive,
         int durationTotal,
         TimerModes mode,
         DateTimeOffset startedAt,
@@ -27,7 +28,7 @@ public class TimerState
             throw new ArgumentException($"{nameof(remaining)} must be more than 0");
 
         Id = id;
-        IsActive = true;
+        IsActive = isActive;
         StartedAt = startedAt;
         DurationTotal = durationTotal;
         LastUnpausedAt = lastUnpausedAt;

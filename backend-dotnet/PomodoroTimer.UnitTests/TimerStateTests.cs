@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-
 namespace PomodoroTimer.UnitTests;
 
 public class TimerStateTests
 {
+    #region Ctor
+
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
@@ -14,6 +14,7 @@ public class TimerStateTests
         var exception = Assert.Throws<ArgumentException>(() =>
             new TimerState(
                 Guid.NewGuid(),
+                true,
                 durationTotal,
                 TimerModes.Work,
                 DateTimeOffset.UtcNow,
@@ -35,6 +36,7 @@ public class TimerStateTests
         var exception = Assert.Throws<ArgumentException>(() =>
             new TimerState(
                 Guid.NewGuid(),
+                true,
                 100,
                 TimerModes.Work,
                 DateTimeOffset.UtcNow,
@@ -57,8 +59,9 @@ public class TimerStateTests
     )
     {
         // Act
-        var t = new TimerState(
+        var state = new TimerState(
             Guid.NewGuid(),
+            true,
             durationTotal,
             TimerModes.Work,
             DateTimeOffset.UtcNow,
@@ -67,10 +70,14 @@ public class TimerStateTests
         );
 
         // Assert
-        Assert.True(t.IsActive);
-        Assert.Equal(durationTotal, t.DurationTotal);
-        Assert.Equal(expectedResult, t.ElapsedBeforePause);
+        Assert.True(state.IsActive);
+        Assert.Equal(durationTotal, state.DurationTotal);
+        Assert.Equal(expectedResult, state.ElapsedBeforePause);
     }
+
+    #endregion
+
+    #region GetRemaining
 
     [Theory]
     [InlineData(50, 50)]
@@ -81,14 +88,13 @@ public class TimerStateTests
         // Arrange
         var state = new TimerState(
             Guid.NewGuid(),
+            false,
             durationTotal,
             TimerModes.Work,
             DateTimeOffset.UtcNow,
             remaining,
             DateTimeOffset.UtcNow
         );
-        typeof(TimerState).GetProperty(nameof(TimerState.IsActive))!.SetValue(state, false);
-        Assert.False(state.IsActive);
 
         // Act
         var result = state.GetRemaining(DateTimeOffset.UtcNow);
@@ -113,6 +119,7 @@ public class TimerStateTests
 
         var state = new TimerState(
             Guid.NewGuid(),
+            true,
             durationTotal,
             TimerModes.Work,
             DateTimeOffset.UtcNow,
@@ -127,20 +134,23 @@ public class TimerStateTests
         Assert.Equal(expectedResult, result);
     }
 
+    #endregion
+
+    #region Pause
+
     [Fact]
     public void Pause_IsNotActive_ShouldNotChange()
     {
         // Arrange
         var state = new TimerState(
             Guid.NewGuid(),
+            false,
             100,
             TimerModes.Work,
             DateTimeOffset.UtcNow,
             100,
             DateTimeOffset.UtcNow
         );
-        typeof(TimerState).GetProperty(nameof(TimerState.IsActive))!.SetValue(state, false);
-        Assert.False(state.IsActive);
 
         var oldElapsed = state.ElapsedBeforePause;
 
@@ -160,6 +170,7 @@ public class TimerStateTests
         var secondsPassed = 10;
         var state = new TimerState(
             Guid.NewGuid(),
+            true,
             100,
             TimerModes.Work,
             DateTimeOffset.UtcNow,
@@ -175,6 +186,10 @@ public class TimerStateTests
         Assert.Equal(secondsPassed, state.ElapsedBeforePause);
     }
 
+    #endregion
+
+    #region Unpause
+
     [Fact]
     public void Unpause_IsActive_ShouldNotChange()
     {
@@ -182,6 +197,7 @@ public class TimerStateTests
         var lastUnpausedAt = DateTimeOffset.UtcNow;
         var state = new TimerState(
             Guid.NewGuid(),
+            true,
             100,
             TimerModes.Work,
             DateTimeOffset.UtcNow,
@@ -206,14 +222,13 @@ public class TimerStateTests
 
         var state = new TimerState(
             Guid.NewGuid(),
+            false,
             100,
             TimerModes.Work,
             DateTimeOffset.UtcNow,
             100,
             lastUnpausedAt
         );
-        typeof(TimerState).GetProperty(nameof(TimerState.IsActive))!.SetValue(state, false);
-        Assert.False(state.IsActive);
 
         // Act
         state.Unpause(newUnpausedAt);
@@ -222,4 +237,6 @@ public class TimerStateTests
         Assert.True(state.IsActive);
         Assert.Equal(newUnpausedAt, state.LastUnpausedAt);
     }
+
+    #endregion
 }

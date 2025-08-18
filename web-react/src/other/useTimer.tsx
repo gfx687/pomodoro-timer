@@ -47,8 +47,6 @@ export function useTimer() {
     }
   }, [lastMessage, setStatus, resetTimer]);
 
-  // BUG: what if backend connection got established while the client was on pause?
-  //      in this case the timer would simply start ticking I assume
   useEffect(() => {
     if (!syncToBackend) return;
 
@@ -60,6 +58,7 @@ export function useTimer() {
         // TODO: has to be not null at this point but I want to ensure even if a bug sneaks through it will not crash
         startedAt: stateRef.current.startedAt!,
         remaining: stateRef.current.seconds,
+        isActive: stateRef.current.status == "ticking",
       },
     });
 
@@ -72,13 +71,14 @@ export function useTimer() {
     sendMessage({
       type: "TimerStart",
       payload: {
-        durationTotal: getModeDuration(state.mode),
-        mode: state.mode,
+        durationTotal: getModeDuration(stateRef.current.mode),
+        mode: stateRef.current.mode,
         startedAt: now,
-        remaining: getModeDuration(state.mode),
+        remaining: getModeDuration(stateRef.current.mode),
+        isActive: isAnActiveStatus(stateRef.current.status),
       },
     });
-  }, [state.mode, sendMessage, startTimer]);
+  }, [sendMessage, startTimer]);
 
   const resume = useCallback(() => {
     resumeTimer();

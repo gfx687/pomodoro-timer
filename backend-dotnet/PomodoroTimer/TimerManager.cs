@@ -30,6 +30,7 @@ public class TimerManager(ISystemClock _clock) : ITimerManager
 
         _state = new TimerState(
             id,
+            payload.IsActive,
             payload.DurationTotal,
             payload.Mode,
             payload.StartedAt ?? _clock.UtcNow,
