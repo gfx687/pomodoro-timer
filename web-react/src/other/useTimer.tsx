@@ -75,7 +75,7 @@ export function useTimer() {
         mode: stateRef.current.mode,
         startedAt: now,
         remaining: getModeDuration(stateRef.current.mode),
-        isActive: isAnActiveStatus(stateRef.current.status),
+        isActive: true,
       },
     });
   }, [sendMessage, startTimer]);
