@@ -19,6 +19,11 @@ export default function App() {
   );
 }
 
+const BASE_PATH = import.meta.env.VITE_BASE_PATH;
+
+const rootPath = BASE_PATH + "/";
+const settingsPath = BASE_PATH + "/settings";
+
 function AppContent() {
   const [path, setPath] = useState(window.location.pathname);
   const { isFullscreen } = useFullscreenContext();
@@ -40,9 +45,10 @@ function AppContent() {
     <div className={"app" + (isFullscreen ? " hidden" : "")}>
       <nav className="navbar">
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate(rootPath)}
           className={
-            "navbar-item navbar-home " + (path === "/" && "navbar-item-active")
+            "navbar-item navbar-home " +
+            ((path === rootPath || path === BASE_PATH) && "navbar-item-active")
           }
         >
           <svg
@@ -57,10 +63,10 @@ function AppContent() {
         </button>
         <IconTray />
         <button
-          onClick={() => navigate("/settings")}
+          onClick={() => navigate(settingsPath)}
           className={
             "navbar-item navbar-right " +
-            (path === "/settings" && "navbar-item-active")
+            (path === settingsPath && "navbar-item-active")
           }
         >
           <svg
@@ -76,9 +82,11 @@ function AppContent() {
       </nav>
 
       <main>
-        {path === "/" && <TimerArea />}
-        {path === "/settings" && <SettingsPage />}
-        {path !== "/" && path !== "/settings" && <h1>404 Not Found</h1>}
+        {(path === rootPath || path === BASE_PATH) && <TimerArea />}
+        {path === settingsPath && <SettingsPage />}
+        {path !== rootPath && path !== BASE_PATH && path !== settingsPath && (
+          <h1>404 Not Found</h1>
+        )}
       </main>
     </div>
   );

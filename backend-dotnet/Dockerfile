@@ -2,8 +2,8 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
 # restore packages separately to make use of layer caching
-COPY *.csproj ./backend-dotnet/
-WORKDIR /app/backend-dotnet
+COPY PomodoroTimer/PomodoroTimer.csproj ./PomodoroTimer/
+WORKDIR /app/PomodoroTimer
 RUN dotnet restore
 
 WORKDIR /app
