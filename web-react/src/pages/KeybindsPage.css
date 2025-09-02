@@ -1,0 +1,25 @@
+.keybinds-page {
+  margin-top: 1rem;
+}
+
+.keybinds-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--bg-alt);
+  padding: 10px 0;
+  gap: 0.5rem;
+}
+
+.keybinds-row:last-child {
+  border-bottom: none;
+}
+
+.keybind-label {
+  margin-right: auto;
+}
+
+.keybind {
+  background-color: var(--bg-alt);
+  padding: 0.4rem;
+  border-radius: 8px;
+}

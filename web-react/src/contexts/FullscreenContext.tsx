@@ -2,8 +2,8 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
 type FullscreenContextType = {
-  isFullscreen: boolean;
-  setFullscreen: (v: boolean | ((prev: boolean) => boolean)) => void;
+  isTimerFullscreen: boolean;
+  setIsTimerFullscreen: (v: boolean | ((prev: boolean) => boolean)) => void;
 };
 
 const FullscreenContext = createContext<FullscreenContextType | undefined>(
@@ -11,9 +11,14 @@ const FullscreenContext = createContext<FullscreenContextType | undefined>(
 );
 
 export function FullscreenProvider({ children }: { children: ReactNode }) {
-  const [isFullscreen, setFullscreen] = useState(false);
+  const [isTimerFullscreen, setIsTimerFullscreen] = useState(false);
   return (
-    <FullscreenContext.Provider value={{ isFullscreen, setFullscreen }}>
+    <FullscreenContext.Provider
+      value={{
+        isTimerFullscreen,
+        setIsTimerFullscreen,
+      }}
+    >
       {children}
     </FullscreenContext.Provider>
   );

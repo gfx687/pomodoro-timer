@@ -14,7 +14,7 @@ export default function TimerPage() {
   const playDink = useDink();
   const { state, stateRef, start, pause, resume, reset, changeMode } =
     useTimer();
-  const { isFullscreen, setFullscreen } = useFullscreenContext();
+  const { isTimerFullscreen, setIsTimerFullscreen } = useFullscreenContext();
   useTimerHotkeys(
     stateRef,
     start,
@@ -22,7 +22,7 @@ export default function TimerPage() {
     resume,
     reset,
     changeMode,
-    setFullscreen
+    setIsTimerFullscreen
   );
 
   // don't play sound if user refreshes the page with 00:00 timer
@@ -34,7 +34,7 @@ export default function TimerPage() {
     prevIsFinished.current = state.status == "finished";
   }, [state.status, playDink]);
 
-  if (isFullscreen)
+  if (isTimerFullscreen)
     return (
       <div className="timer-area">
         <TimerFullscreen

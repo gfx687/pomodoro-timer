@@ -8,6 +8,10 @@
   padding: 10px 0;
 }
 
+.settings-row:last-child {
+  border-bottom: none;
+}
+
 .settings-input {
   margin-left: auto;
 }

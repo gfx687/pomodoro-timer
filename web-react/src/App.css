@@ -7,15 +7,15 @@
   box-shadow: 0 0 10px var(--fg);
 }
 
-.hidden {
-  visibility: hidden;
-}
-
 .app-fullwidth {
   max-width: none;
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .navbar {
@@ -31,28 +31,57 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  padding: 0.5rem;
 }
 
-.navbar-item-colored {
-  padding: 0.5rem;
+.navbar-item-link {
   background-color: var(--bg-alt);
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
 }
 
-.navbar-item-active {
-  font-weight: bold;
-}
-
 .navbar-item-right {
   margin-left: auto;
 }
 
-.navbar-item:hover {
+.navbar-hover:hover {
   background-color: var(--hover);
 }
 
-.navbar-item:active {
+.navbar-hover:active {
   background-color: var(--active);
+}
+
+.navbar-dropdown {
+  position: relative;
+}
+
+.navbar-dropdown-content {
+  position: absolute;
+  top: 2rem;
+  right: 0;
+  background-color: var(--bg);
+  box-shadow: 0 0 10px var(--fg);
+
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease, visibility 0.1s ease;
+}
+
+.navbar-dropdown:hover .navbar-dropdown-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+.navbar-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border: none;
+  border-bottom: 1px solid var(--hover);
 }
