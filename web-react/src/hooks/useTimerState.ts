@@ -1,11 +1,14 @@
 import { useReducer, useEffect, useCallback } from "react";
-import type { TimerMode, TimerStatusResponsePayload } from "./types.websocket";
 import {
   timerReducer,
   initialState,
   type TimerState,
   isAnActiveStatus,
-} from "./useTimerState.reducer";
+} from "../hooks/useTimerState.reducer";
+import type {
+  TimerMode,
+  TimerStatusResponsePayload,
+} from "../other/types.websocket";
 
 export function useTimerState() {
   const [state, dispatch] = useReducer(

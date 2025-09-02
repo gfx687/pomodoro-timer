@@ -1,9 +1,9 @@
 import { useEffect, useCallback, useState, useRef } from "react";
-import type { TimerMode } from "./types.websocket";
+import type { TimerMode } from "../other/types.websocket";
 import { useWebSocketConnection } from "./useWebSocketConnection";
 import { useTimerState } from "./useTimerState";
-import { getModeDuration } from "../contexts/SettingsContext";
 import { isAnActiveStatus } from "./useTimerState.reducer";
+import { getModeDuration } from "../utils/getModeDuration";
 
 export function useTimer() {
   const { sendMessage, lastMessage } = useWebSocketConnection();

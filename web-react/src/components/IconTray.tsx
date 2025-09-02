@@ -1,6 +1,6 @@
 import "./IconTray.css";
+import { useWebSocketConnection } from "../hooks/useWebSocketConnection";
 import { useSettingsContext } from "../contexts/SettingsContext";
-import { useWebSocketConnection } from "../other/useWebSocketConnection";
 
 export function IconTray() {
   const { isConnected } = useWebSocketConnection();

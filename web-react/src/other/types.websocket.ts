@@ -1,4 +1,5 @@
-export type TimerMode = "Work" | "Break";
+export const TIMER_MODES = ["Work", "Break"] as const;
+export type TimerMode = (typeof TIMER_MODES)[number];
 
 export interface TimerGetRequest {
   type: "TimerGet";

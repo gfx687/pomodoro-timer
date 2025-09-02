@@ -1,5 +1,5 @@
 import { useCallback, useEffect, type RefObject } from "react";
-import type { TimerMode } from "./types.websocket";
+import { TIMER_MODES, type TimerMode } from "../other/types.websocket";
 import { type TimerState } from "./useTimerState.reducer";
 
 export function useTimerHotkeys(
@@ -20,10 +20,9 @@ export function useTimerHotkeys(
   }, [start, pause, resume]);
 
   const onPressW = useCallback(() => {
-    const modes: TimerMode[] = ["Work", "Break"];
-    const currentIndex = modes.indexOf(stateRef.current.mode);
-    const nextIndex = (currentIndex + 1) % modes.length;
-    changeMode(modes[nextIndex]);
+    const currentIndex = TIMER_MODES.indexOf(stateRef.current.mode);
+    const nextIndex = (currentIndex + 1) % TIMER_MODES.length;
+    changeMode(TIMER_MODES[nextIndex]);
     // linter does not know that stateRef is a ref, so it warns us
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changeMode]);

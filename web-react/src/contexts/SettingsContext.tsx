@@ -1,12 +1,12 @@
+/* eslint-disable react-refresh/only-export-components */
 import {
   createContext,
-  useContext,
   useState,
   useCallback,
   type ReactNode,
+  useContext,
 } from "react";
 import { SETTINGS } from "../other/constants";
-import type { TimerMode } from "../other/types.websocket";
 
 type SettingsContextType = {
   volume: number;
@@ -24,7 +24,7 @@ type SettingsContextType = {
   resetSettings: () => void;
 };
 
-const SettingsContext = createContext<SettingsContextType | undefined>(
+export const SettingsContext = createContext<SettingsContextType | undefined>(
   undefined
 );
 
@@ -155,19 +155,4 @@ export function useSettingsContext() {
     throw new Error("useSettingsContext must be inside SettingsProvider");
   }
   return ctx;
-}
-
-// TODO: refactor to not read the settings directly, we have a context for this
-export function getModeDuration(mode: TimerMode) {
-  switch (mode) {
-    case "Break": {
-      const v = localStorage.getItem(SETTINGS.durationBreak.key);
-      return v !== null ? Number(v) : SETTINGS.durationBreak.defaultValue;
-    }
-    case "Work":
-    default: {
-      const v = localStorage.getItem(SETTINGS.durationWork.key);
-      return v !== null ? Number(v) : SETTINGS.durationWork.defaultValue;
-    }
-  }
 }

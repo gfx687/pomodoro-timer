@@ -3,11 +3,11 @@ import "./TimerPage.css";
 import TimerControls from "../components/TimerControls";
 import TimerModes from "../components/TimerModes";
 import Timer from "../components/Timer";
-import useDink from "../other/useDink";
-import { useTimer } from "../other/useTimer";
+import useDink from "../hooks/useDink";
+import { useTimer } from "../hooks/useTimer";
 import { useFullscreenContext } from "../contexts/FullscreenContext";
-import { useTimerHotkeys } from "../other/useTimerHotkeys";
-import { isAnActiveStatus } from "../other/useTimerState.reducer";
+import { useTimerHotkeys } from "../hooks/useTimerHotkeys";
+import { isAnActiveStatus } from "../hooks/useTimerState.reducer";
 import { TimerFullscreen } from "../components/TimerFullscreen";
 
 export default function TimerPage() {

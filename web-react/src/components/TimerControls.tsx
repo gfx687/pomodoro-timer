@@ -1,7 +1,7 @@
 import {
   isAnActiveStatus,
   type TimerStatus,
-} from "../other/useTimerState.reducer";
+} from "../hooks/useTimerState.reducer";
 import "./TimerControls.css";
 
 type TimerControlsProps = {

@@ -1,6 +1,9 @@
 import { addSeconds, differenceInMilliseconds } from "date-fns";
-import { getModeDuration } from "../contexts/SettingsContext";
-import type { TimerMode, TimerStatusResponsePayload } from "./types.websocket";
+import type {
+  TimerMode,
+  TimerStatusResponsePayload,
+} from "../other/types.websocket";
+import { getModeDuration } from "../utils/getModeDuration";
 
 export type TimerStatus = "no timer" | "ticking" | "paused" | "finished";
 

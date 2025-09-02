@@ -1,7 +1,7 @@
 import "./TimerFullscreen.css";
-import { useSettingsContext } from "../contexts/SettingsContext";
 import type { TimerMode } from "../other/types.websocket";
 import { formatTimerSeconds } from "../utils/formatTimerSeconds";
+import { useSettingsContext } from "../contexts/SettingsContext";
 
 export type TimerFullscreenProps = {
   remainingS: number;

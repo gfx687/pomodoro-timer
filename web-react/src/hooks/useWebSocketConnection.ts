@@ -1,6 +1,9 @@
 import { useCallback } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import type { IncomingMessage, OutgoingMessage } from "./types.websocket";
+import type {
+  IncomingMessage,
+  OutgoingMessage,
+} from "../other/types.websocket";
 
 export function useWebSocketConnection() {
   const { sendJsonMessage, lastJsonMessage, readyState } =
