@@ -39,8 +39,8 @@ export default function TimerPage() {
       <div className="timer-area">
         <TimerFullscreen
           remainingS={state.remainingS}
-          isFullscreen={isFullscreen}
           mode={state.mode}
+          isPaused={state.status === "paused"}
         />
       </div>
     );

@@ -5,23 +5,23 @@ import { formatTimerSeconds } from "../utils/formatTimerSeconds";
 
 export type TimerFullscreenProps = {
   remainingS: number;
-  isFullscreen: boolean;
   mode: TimerMode;
+  isPaused: boolean;
 };
 
 export function TimerFullscreen({
   remainingS,
-  isFullscreen,
   mode,
+  isPaused,
 }: TimerFullscreenProps) {
   const { inverseColorsFullscreen, fullscreenShowMode } = useSettingsContext();
-  if (isFullscreen) {
-    return (
-      <div
-        className={
-          "timer-fullscreen " + (inverseColorsFullscreen ? " inverse" : "")
-        }
-      >
+  return (
+    <div
+      className={
+        "timer-fullscreen" + (inverseColorsFullscreen ? " inverse" : "")
+      }
+    >
+      <div className={isPaused ? "timer-fullscreen-content-paused" : ""}>
         <div className="timer-fullscreen-timer">
           {formatTimerSeconds(remainingS)}
         </div>
@@ -29,6 +29,14 @@ export function TimerFullscreen({
           <div className="timer-fullscreen-mode">{mode}</div>
         )}
       </div>
-    );
-  }
+      {isPaused && (
+        <div className="timer-fullscreen-pause-indicator">
+          <div className="pause-bars">
+            <div className="pause-bar"></div>
+            <div className="pause-bar"></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
