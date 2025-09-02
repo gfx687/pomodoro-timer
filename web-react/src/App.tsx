@@ -89,6 +89,7 @@ function AppContent() {
     >
       <nav className="navbar">
         <button
+          type="button"
           onClick={() => navigate(rootPath)}
           className="navbar-item navbar-item-link navbar-hover"
         >
@@ -98,7 +99,10 @@ function AppContent() {
         <div className="navbar-item">
           <IconTray />
         </div>
-        <button className="navbar-item navbar-item-link navbar-item-right navbar-dropdown">
+        <button
+          type="button"
+          className="navbar-item navbar-item-link navbar-item-right navbar-dropdown"
+        >
           <MenuSvg />
           <div className="navbar-dropdown-content">
             <DropdownNav text="Charts" onClick={() => navigate(chartsPath)} />
@@ -119,10 +123,10 @@ function AppContent() {
   );
 }
 
-type DropdownLinkProps = {
+interface DropdownLinkProps {
   text: string;
   onClick: () => void;
-};
+}
 
 function DropdownNav({ text, onClick }: DropdownLinkProps) {
   let svg: ReactNode;
@@ -141,7 +145,11 @@ function DropdownNav({ text, onClick }: DropdownLinkProps) {
       break;
   }
   return (
-    <button className="navbar-dropdown-item navbar-hover" onClick={onClick}>
+    <button
+      type="button"
+      className="navbar-dropdown-item navbar-hover"
+      onClick={onClick}
+    >
       {svg}
       <span>{text}</span>
     </button>

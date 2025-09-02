@@ -3,11 +3,11 @@ import type { TimerMode } from "../other/types.websocket";
 import { formatTimerSeconds } from "../utils/formatTimerSeconds";
 import { useSettingsContext } from "../contexts/SettingsContext";
 
-export type TimerFullscreenProps = {
+export interface TimerFullscreenProps {
   remainingS: number;
   mode: TimerMode;
   isPaused: boolean;
-};
+}
 
 export function TimerFullscreen({
   remainingS,

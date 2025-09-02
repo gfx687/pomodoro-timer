@@ -2,9 +2,9 @@
 import { Chart, type ChartWrapperOptions } from "react-google-charts";
 import type { ChartData } from "../other/types.api";
 
-export type TodaysTimersProps = {
+export interface TodaysTimersProps {
   data: ChartData;
-};
+}
 
 function TodaysTimers({ data }: TodaysTimersProps) {
   const headers = data[0];
@@ -12,7 +12,7 @@ function TodaysTimers({ data }: TodaysTimersProps) {
     .getPropertyValue("--bg")
     .trim();
 
-  const seriesOptions = {} as { [key: number]: any };
+  const seriesOptions = {} as Record<number, any>;
   let seriesIndex = 0;
   headers.slice(1).forEach((header: any) => {
     if (header.id) {

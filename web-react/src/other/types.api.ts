@@ -1,16 +1,16 @@
 import type { TimerMode } from "./types.websocket";
 
-export type ChartDataResponse = {
+export interface ChartDataResponse {
   raw: TimerLog[];
   processed: ChartData;
-};
+}
 
-export type TimerLog = {
+export interface TimerLog {
   id: string;
   action: "Start" | "Pause" | "Unpause" | "Finish" | "Reset";
   mode: TimerMode | null;
   timestamp: Date;
-};
+}
 
 export type ChartHeader =
   | { type: string; id: string }

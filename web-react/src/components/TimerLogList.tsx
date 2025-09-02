@@ -1,9 +1,9 @@
 import { format } from "date-fns";
 import type { TimerLog } from "../other/types.api";
 
-type TimerLogListProps = {
+interface TimerLogListProps {
   logs: TimerLog[];
-};
+}
 
 export function TimerLogList({ logs }: TimerLogListProps) {
   const { mapped, workStarted, workFinished } = mapLogs(logs);
@@ -17,8 +17,8 @@ export function TimerLogList({ logs }: TimerLogListProps) {
       </p>
       <p>Raw timer actions log:</p>
       <ul>
-        {mapped.map((x, i) => (
-          <li key={i}>
+        {mapped.map((x) => (
+          <li key={`${x.id}-${x.timestamp}`}>
             <span
               style={{
                 backgroundColor:

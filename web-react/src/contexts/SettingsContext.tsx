@@ -4,11 +4,12 @@ import {
   useState,
   useCallback,
   type ReactNode,
-  useContext,
+  use,
+  useMemo,
 } from "react";
 import { SETTINGS } from "../other/constants";
 
-type SettingsContextType = {
+interface SettingsContextType {
   volume: number;
   setVolume: (v: number | ((prev: number) => number)) => void;
   durationWork: number;
@@ -22,7 +23,7 @@ type SettingsContextType = {
   fullscreenShowMode: boolean;
   setFullscreenShowMode: (v: boolean | ((prev: boolean) => boolean)) => void;
   resetSettings: () => void;
-};
+}
 
 export const SettingsContext = createContext<SettingsContextType | undefined>(
   undefined
@@ -128,29 +129,40 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setInverseColorsFullscreen,
   ]);
 
-  return (
-    <SettingsContext.Provider
-      value={{
-        volume,
-        setVolume,
-        durationWork,
-        setDurationWork,
-        durationBreak,
-        setDurationBreak,
-        inverseColorsFullscreen,
-        setInverseColorsFullscreen,
-        fullscreenShowMode,
-        setFullscreenShowMode,
-        resetSettings,
-      }}
-    >
-      {children}
-    </SettingsContext.Provider>
+  const value = useMemo(
+    () => ({
+      volume,
+      setVolume,
+      durationWork,
+      setDurationWork,
+      durationBreak,
+      setDurationBreak,
+      inverseColorsFullscreen,
+      setInverseColorsFullscreen,
+      fullscreenShowMode,
+      setFullscreenShowMode,
+      resetSettings,
+    }),
+    [
+      volume,
+      setVolume,
+      durationWork,
+      setDurationWork,
+      durationBreak,
+      setDurationBreak,
+      inverseColorsFullscreen,
+      setInverseColorsFullscreen,
+      fullscreenShowMode,
+      setFullscreenShowMode,
+      resetSettings,
+    ]
   );
+
+  return <SettingsContext value={value}>{children}</SettingsContext>;
 }
 
 export function useSettingsContext() {
-  const ctx = useContext(SettingsContext);
+  const ctx = use(SettingsContext);
   if (!ctx) {
     throw new Error("useSettingsContext must be inside SettingsProvider");
   }

@@ -1,9 +1,9 @@
 import { formatTimerSeconds } from "../utils/formatTimerSeconds";
 import "./Timer.css";
 
-type TimerProps = {
+interface TimerProps {
   remainingS: number;
-};
+}
 
 export default function Timer({ remainingS }: TimerProps) {
   const fontSize = {

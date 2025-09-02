@@ -4,13 +4,13 @@ import {
 } from "../hooks/useTimerState.reducer";
 import "./TimerControls.css";
 
-type TimerControlsProps = {
+interface TimerControlsProps {
   timerStatus: TimerStatus;
   onStart: () => void;
   onPause: () => void;
   onResume: () => void;
   onReset: () => void;
-};
+}
 
 export default function TimerControls({
   timerStatus,
@@ -27,22 +27,28 @@ export default function TimerControls({
   return (
     <div className="timer-controls">
       {drawStart && (
-        <button tabIndex={1} className="timer-control" onClick={onStart}>
+        <button
+          type="button"
+          tabIndex={1}
+          className="timer-control"
+          onClick={onStart}
+        >
           Start
         </button>
       )}
       {drawPause && (
-        <button className="timer-control" onClick={onPause}>
+        <button type="button" className="timer-control" onClick={onPause}>
           Pause
         </button>
       )}
       {drawResume && (
-        <button className="timer-control" onClick={onResume}>
+        <button type="button" className="timer-control" onClick={onResume}>
           Resume
         </button>
       )}
       {drawReset && (
         <button
+          type="button"
           className="timer-reset"
           onClick={onReset}
           title="Reset the timer"

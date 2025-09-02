@@ -75,7 +75,11 @@ export default function SettingsPage() {
         />
       </div>
       <div className="settings-row">
-        <button className="settings-reset" onClick={resetSettings}>
+        <button
+          type="button"
+          className="settings-reset"
+          onClick={resetSettings}
+        >
           Reset
         </button>
       </div>

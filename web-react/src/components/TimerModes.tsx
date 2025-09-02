@@ -1,11 +1,11 @@
 import type { TimerMode } from "../other/types.websocket";
 import "./TimerModes.css";
 
-type TimerModesProps = {
+interface TimerModesProps {
   currentMode: TimerMode;
   timerExists: boolean;
   onModeChange: (mode: TimerMode) => void;
-};
+}
 
 export default function TimerModes({
   currentMode,
@@ -22,6 +22,7 @@ export default function TimerModes({
   return (
     <div className="timer-modes">
       <button
+        type="button"
         className={getClasses("Work")}
         onClick={() => onModeChange("Work")}
         title={currentMode === "Work" ? "" : "Timer is running."}
@@ -29,6 +30,7 @@ export default function TimerModes({
         Work
       </button>
       <button
+        type="button"
         className={getClasses("Break")}
         onClick={() => onModeChange("Break")}
         title={currentMode === "Break" ? "" : "Timer is running."}
