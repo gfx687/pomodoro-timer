@@ -2,7 +2,8 @@ export type SettingsKey =
   | "volume"
   | "durationWork"
   | "durationBreak"
-  | "inverseColorsFullscreen";
+  | "inverseColorsFullscreen"
+  | "fullscreenShowMode";
 
 export const SETTINGS = {
   volume: {
@@ -19,6 +20,10 @@ export const SETTINGS = {
   },
   inverseColorsFullscreen: {
     key: "inverseColorsFullscreen" as SettingsKey,
+    defaultValue: false,
+  },
+  fullscreenShowMode: {
+    key: "fullscreenShowMode" as SettingsKey,
     defaultValue: false,
   },
 };

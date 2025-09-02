@@ -1,0 +1,26 @@
+.timer-fullscreen {
+  visibility: visible;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.timer-fullscreen-timer {
+  font-size: 30vw;
+}
+
+.timer-fullscreen-mode {
+  font-size: 1vw;
+}
+
+.inverse {
+  background-color: var(--fg);
+  color: var(--bg);
+}

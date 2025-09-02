@@ -11,6 +11,8 @@ export default function SettingsPage() {
     setDurationBreak,
     inverseColorsFullscreen,
     setInverseColorsFullscreen,
+    fullscreenShowMode,
+    setFullscreenShowMode,
     resetSettings,
   } = useSettingsContext();
   return (
@@ -51,13 +53,25 @@ export default function SettingsPage() {
         />
       </div>
       <div className="settings-row">
-        <label htmlFor="fullscreen-inverse">Inverse colors in fullscreen</label>
+        <label htmlFor="fullscreen-inverse">Fullscreen: Inverse colors</label>
         <input
           id="fullscreen-inverse"
           type="checkbox"
           className="settings-input"
           checked={inverseColorsFullscreen}
           onChange={(e) => setInverseColorsFullscreen(e.target.checked)}
+        />
+      </div>
+      <div className="settings-row">
+        <label htmlFor="fullscreen-show-mode">
+          Fullscreen: Show timer mode
+        </label>
+        <input
+          id="fullscreen-show-mode"
+          type="checkbox"
+          className="settings-input"
+          checked={fullscreenShowMode}
+          onChange={(e) => setFullscreenShowMode(e.target.checked)}
         />
       </div>
       <div className="settings-row">

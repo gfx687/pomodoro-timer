@@ -19,6 +19,8 @@ type SettingsContextType = {
   setInverseColorsFullscreen: (
     v: boolean | ((prev: boolean) => boolean)
   ) => void;
+  fullscreenShowMode: boolean;
+  setFullscreenShowMode: (v: boolean | ((prev: boolean) => boolean)) => void;
   resetSettings: () => void;
 };
 
@@ -95,6 +97,25 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  const [fullscreenShowMode, setFullscreenShowModeState] = useState(() => {
+    const v = localStorage.getItem(SETTINGS.fullscreenShowMode.key);
+    return v !== null ? v === "true" : SETTINGS.fullscreenShowMode.defaultValue;
+  });
+
+  const setFullscreenShowMode = useCallback(
+    (v: boolean | ((prev: boolean) => boolean)) => {
+      setFullscreenShowModeState((prev) => {
+        const newValue = typeof v === "function" ? v(prev) : v;
+        localStorage.setItem(
+          SETTINGS.fullscreenShowMode.key,
+          newValue.toString()
+        );
+        return newValue;
+      });
+    },
+    []
+  );
+
   const resetSettings = useCallback(() => {
     setVolume(SETTINGS.volume.defaultValue);
     setDurationWork(SETTINGS.durationWork.defaultValue);
@@ -118,6 +139,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setDurationBreak,
         inverseColorsFullscreen,
         setInverseColorsFullscreen,
+        fullscreenShowMode,
+        setFullscreenShowMode,
         resetSettings,
       }}
     >

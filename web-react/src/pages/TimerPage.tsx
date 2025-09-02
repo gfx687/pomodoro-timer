@@ -8,6 +8,7 @@ import { useTimer } from "../other/useTimer";
 import { useFullscreenContext } from "../contexts/FullscreenContext";
 import { useTimerHotkeys } from "../other/useTimerHotkeys";
 import { isAnActiveStatus } from "../other/useTimerState.reducer";
+import { TimerFullscreen } from "../components/TimerFullscreen";
 
 export default function TimerPage() {
   const playDink = useDink();
@@ -33,6 +34,17 @@ export default function TimerPage() {
     prevIsFinished.current = state.status == "finished";
   }, [state.status, playDink]);
 
+  if (isFullscreen)
+    return (
+      <div className="timer-area">
+        <TimerFullscreen
+          remainingS={state.remainingS}
+          isFullscreen={isFullscreen}
+          mode={state.mode}
+        />
+      </div>
+    );
+
   return (
     <div className="timer-area">
       <TimerModes
@@ -40,7 +52,7 @@ export default function TimerPage() {
         timerExists={isAnActiveStatus(state.status)}
         onModeChange={changeMode}
       />
-      <Timer remainingS={state.remainingS} isFullscreen={isFullscreen} />
+      <Timer remainingS={state.remainingS} />
       <TimerControls
         timerStatus={state.status}
         onStart={start}
