@@ -34,6 +34,8 @@ export function useTimerHotkeys(
         onPressSpace();
       } else if (e.key === "f" || e.key === "F") {
         setFullscreen((x) => !x);
+      } else if (e.key === "Escape") {
+        setFullscreen(false);
       } else if (e.key === "R") {
         reset();
       } else if (e.key === "w" || e.key === "W") {

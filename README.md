@@ -41,7 +41,7 @@ Features:
 Bugfixes:
 - client timer now continues ticking even with the TimerPage not open
 
-## Api
+## API
 
 API for the latest version available.
 
