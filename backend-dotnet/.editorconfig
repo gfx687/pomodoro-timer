@@ -1,4 +1,24 @@
 [*.cs]
 
-# CA1069: Enums values should not be duplicated
-dotnet_diagnostic.CA1069.severity = error
+dotnet_diagnostic.CA2000.severity = warning  # disposable resource is not handled
+dotnet_diagnostic.IDE0051.severity = warning # assigned value is never used
+dotnet_diagnostic.IDE0052.severity = warning # unused private member
+dotnet_diagnostic.IDE0060.severity = warning # unused parameter
+dotnet_diagnostic.IDE0005.severity = warning # unused usings
+dotnet_diagnostic.CA1069.severity = error    # CA1069: Enums values should not be duplicated
+
+# from ChatGPT, figure out which I liked
+
+dotnet_diagnostic.CA1806.severity = warning # Do not ignore method results
+dotnet_diagnostic.CA1822.severity = warning # Use static methods where possible
+# dotnet_diagnostic.CA1062.severity = warning # Validate method parameters
+dotnet_diagnostic.CA1309.severity = warning # Use ordinal string comparisons
+# # dotnet_diagnostic.CA2007.severity = warning # Await tasks with ConfigureAwait
+# dotnet_diagnostic.CA1305.severity = warning # Prefer IFormatProvider overloads
+dotnet_diagnostic.IDE0051.severity = warning # Detect unused private members
+dotnet_diagnostic.CS8618.severity = warning # Warn on uninitialized non-nullable fields
+dotnet_diagnostic.CS8602.severity = warning # Warn on null dereference
+dotnet_diagnostic.IDE0060.severity = warning # Unused parameters
+dotnet_diagnostic.IDE0071.severity = warning # Simplify interpolated strings
+dotnet_diagnostic.CA2001.severity = warning # Avoid problematic methods
+# dotnet_analyzer_diagnostic.category-Performance.severity = warning # Default severity for analyzer diagnostics with category 'Performance'

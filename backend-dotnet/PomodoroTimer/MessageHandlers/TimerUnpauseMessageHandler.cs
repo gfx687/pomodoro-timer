@@ -1,8 +1,11 @@
+using Hangfire;
+
 namespace PomodoroTimer.MessageHandlers;
 
 public class TimerUnpauseMessageHandler(
     ITimerManager _manager,
     ITimerLogRepository _db,
+    IBackgroundJobClient _scheduler,
     ISystemClock _clock
 )
 {
@@ -13,6 +16,13 @@ public class TimerUnpauseMessageHandler(
             var status = _manager.Unpause(req.Payload.Id);
             if (status == null)
                 return SocketResponse.NotFound(req.RequestId);
+
+            var schedulerJobId = _scheduler.Schedule<LogFinishCommandHandler>(
+                x => x.HandleAsync(status.Id, status.ExpiresAt!.Value),
+                TimeSpan.FromSeconds(status.RemainingS)
+            );
+
+            _manager.SetSchedulerJobId(schedulerJobId);
 
             await _db.SaveLogAsync(
                 new TimerLog(req.Payload.Id, TimerLogActions.Unpause, _clock.UtcNow)

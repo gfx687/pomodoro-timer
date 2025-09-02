@@ -16,3 +16,8 @@ button {
 svg {
   fill: var(--fg);
 }
+
+/* google charts flickering tooltip fix */
+svg > g > g.google-visualization-tooltip {
+  pointer-events: none;
+}

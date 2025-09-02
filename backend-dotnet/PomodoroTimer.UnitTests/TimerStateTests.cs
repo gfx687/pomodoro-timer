@@ -27,17 +27,18 @@ public class TimerStateTests
     }
 
     [Theory]
-    [InlineData(0)]
-    [InlineData(-1)]
-    [InlineData(-50)]
-    public void Ctor_RemainingInvalid_ShouldThrowArgumentException(int remaining)
+    [InlineData(0, 100)]
+    [InlineData(-1, 100)]
+    [InlineData(-50, 100)]
+    [InlineData(150, 100)]
+    public void Ctor_RemainingInvalid_ShouldThrowArgumentException(int remaining, int durationTotal)
     {
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() =>
             new TimerState(
                 Guid.NewGuid(),
                 true,
-                100,
+                durationTotal,
                 TimerModes.Work,
                 DateTimeOffset.UtcNow,
                 remaining,
@@ -45,34 +46,7 @@ public class TimerStateTests
             )
         );
 
-        Assert.Contains("remaining must be more than 0", exception.Message);
-    }
-
-    [Theory]
-    [InlineData(50, 50, 0)]
-    [InlineData(100, 50, 50)]
-    [InlineData(150, 30, 120)]
-    public void Ctor_RemainingProvided_ShouldSetCorrectElapsedBeforePause(
-        int durationTotal,
-        int remaining,
-        int expectedResult
-    )
-    {
-        // Act
-        var state = new TimerState(
-            Guid.NewGuid(),
-            true,
-            durationTotal,
-            TimerModes.Work,
-            DateTimeOffset.UtcNow,
-            remaining,
-            DateTimeOffset.UtcNow
-        );
-
-        // Assert
-        Assert.True(state.IsActive);
-        Assert.Equal(durationTotal, state.DurationTotal);
-        Assert.Equal(expectedResult, state.ElapsedBeforePause);
+        Assert.Contains("remainingOnPauseS must be > 0 and <= durationTotal", exception.Message);
     }
 
     #endregion
@@ -80,16 +54,16 @@ public class TimerStateTests
     #region GetRemaining
 
     [Theory]
-    [InlineData(50, 50)]
-    [InlineData(100, 50)]
-    [InlineData(150, 120)]
-    public void GetRemaining_IsNotActive_ShouldReturnExpectedValue(int durationTotal, int remaining)
+    [InlineData(10)]
+    [InlineData(50)]
+    [InlineData(70)]
+    public void GetRemaining_IsNotActive_ShouldReturnExpectedValue(int remaining)
     {
         // Arrange
         var state = new TimerState(
             Guid.NewGuid(),
             false,
-            durationTotal,
+            100,
             TimerModes.Work,
             DateTimeOffset.UtcNow,
             remaining,
@@ -104,31 +78,30 @@ public class TimerStateTests
     }
 
     [Theory]
-    [InlineData(50, 50, 10, 40)]
-    [InlineData(100, 50, 20, 30)]
-    [InlineData(150, 120, 50, 70)]
+    [InlineData(50, 10, 40)]
+    [InlineData(50, 20, 30)]
+    [InlineData(80, 70, 10)]
     public void GetRemaining_IsActive_ShouldReturnExpectedValue(
-        int durationTotal,
         int remaining,
         int secondsPassed,
         int expectedResult
     )
     {
         // Arrange
-        var lastUnpausedAt = DateTimeOffset.UtcNow;
+        var startedAt = DateTimeOffset.UtcNow;
 
         var state = new TimerState(
             Guid.NewGuid(),
             true,
-            durationTotal,
+            100,
             TimerModes.Work,
-            DateTimeOffset.UtcNow,
+            startedAt,
             remaining,
-            lastUnpausedAt
+            startedAt
         );
 
         // Act
-        var result = state.GetRemaining(lastUnpausedAt.AddSeconds(secondsPassed));
+        var result = state.GetRemaining(startedAt.AddSeconds(secondsPassed));
 
         // Assert
         Assert.Equal(expectedResult, result);
@@ -142,48 +115,50 @@ public class TimerStateTests
     public void Pause_IsNotActive_ShouldNotChange()
     {
         // Arrange
+        var startedAt = DateTimeOffset.UtcNow;
+        var oldRemaining = 100;
         var state = new TimerState(
             Guid.NewGuid(),
             false,
             100,
             TimerModes.Work,
-            DateTimeOffset.UtcNow,
-            100,
-            DateTimeOffset.UtcNow
+            startedAt,
+            oldRemaining,
+            startedAt
         );
 
-        var oldElapsed = state.ElapsedBeforePause;
-
         // Act
-        state.Pause(DateTimeOffset.UtcNow);
+        state.Pause(startedAt.AddSeconds(50));
 
         // Assert
         Assert.False(state.IsActive);
-        Assert.Equal(oldElapsed, state.ElapsedBeforePause);
+        Assert.Equal(oldRemaining, state.RemainingOnPauseMs / 1000);
     }
 
     [Fact]
-    public void Pause_IsActive_ShouldBecomeNotActiveAndUpdateElapsedBeforePause()
+    public void Pause_IsActive_ShouldBecomeNotActiveAndUpdateRemaining()
     {
         // Arrange
-        var lastUnpausedAt = DateTimeOffset.UtcNow;
-        var secondsPassed = 10;
+        var secondsPassed = 30;
+        var startedAt = DateTimeOffset.UtcNow;
+        var oldRemaining = 100;
         var state = new TimerState(
             Guid.NewGuid(),
             true,
             100,
             TimerModes.Work,
-            DateTimeOffset.UtcNow,
-            100,
-            lastUnpausedAt
+            startedAt,
+            oldRemaining,
+            startedAt
         );
 
         // Act
-        state.Pause(lastUnpausedAt.AddSeconds(secondsPassed));
+        state.Pause(startedAt.AddSeconds(secondsPassed));
 
         // Assert
+        var expectedRemaining = oldRemaining - secondsPassed;
         Assert.False(state.IsActive);
-        Assert.Equal(secondsPassed, state.ElapsedBeforePause);
+        Assert.Equal(expectedRemaining, state.RemainingOnPauseMs / 1000);
     }
 
     #endregion
@@ -194,48 +169,51 @@ public class TimerStateTests
     public void Unpause_IsActive_ShouldNotChange()
     {
         // Arrange
-        var lastUnpausedAt = DateTimeOffset.UtcNow;
+        var remaining = 100;
+        var startedAt = DateTimeOffset.UtcNow;
+        var expectedExpiresAt = startedAt.AddSeconds(remaining);
         var state = new TimerState(
             Guid.NewGuid(),
             true,
             100,
             TimerModes.Work,
-            DateTimeOffset.UtcNow,
-            100,
-            lastUnpausedAt
+            startedAt,
+            remaining,
+            startedAt
         );
 
         // Act
-        state.Unpause(lastUnpausedAt.AddSeconds(10));
+        state.Unpause(startedAt.AddSeconds(10));
 
         // Assert
         Assert.True(state.IsActive);
-        Assert.Equal(lastUnpausedAt, state.LastUnpausedAt);
+        Assert.Equal(expectedExpiresAt, state.ExpiresAt);
     }
 
     [Fact]
     public void Unpause_IsNotActive_ShouldBecomeActiveWithNewLastUnpausedAt()
     {
         // Arrange
-        var lastUnpausedAt = DateTimeOffset.UtcNow;
-        var newUnpausedAt = lastUnpausedAt.AddSeconds(30);
-
+        var oldRemaining = 100;
+        var secondsPassed = 10;
+        var startedAt = DateTimeOffset.UtcNow;
         var state = new TimerState(
             Guid.NewGuid(),
             false,
             100,
             TimerModes.Work,
-            DateTimeOffset.UtcNow,
-            100,
-            lastUnpausedAt
+            startedAt,
+            oldRemaining,
+            startedAt
         );
 
         // Act
-        state.Unpause(newUnpausedAt);
+        state.Unpause(startedAt.AddSeconds(secondsPassed));
 
         // Assert
+        var expectedExpiresAt = startedAt.AddSeconds(secondsPassed + oldRemaining);
         Assert.True(state.IsActive);
-        Assert.Equal(newUnpausedAt, state.LastUnpausedAt);
+        Assert.Equal(expectedExpiresAt, state.ExpiresAt);
     }
 
     #endregion

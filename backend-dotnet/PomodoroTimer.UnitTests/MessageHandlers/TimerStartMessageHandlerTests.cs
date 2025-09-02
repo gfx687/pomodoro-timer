@@ -1,5 +1,8 @@
 using FluentValidation;
 using FluentValidation.Results;
+using Hangfire;
+using Hangfire.Common;
+using Hangfire.States;
 using NSubstitute;
 using PomodoroTimer.MessageHandlers;
 
@@ -20,8 +23,8 @@ public class TimerStartMessageHandlerTests
         var handler = new TimerStartMessageHandler(
             Substitute.For<ITimerManager>(),
             Substitute.For<ITimerLogRepository>(),
-            validator,
-            Substitute.For<ISystemClock>()
+            Substitute.For<IBackgroundJobClient>(),
+            validator
         );
 
         // Act
@@ -57,8 +60,8 @@ public class TimerStartMessageHandlerTests
         var handler = new TimerStartMessageHandler(
             timerManager,
             Substitute.For<ITimerLogRepository>(),
-            validator,
-            Substitute.For<ISystemClock>()
+            Substitute.For<IBackgroundJobClient>(),
+            validator
         );
 
         // Act
@@ -71,16 +74,11 @@ public class TimerStartMessageHandlerTests
         Assert.Equal(expectedStatus, res.Payload);
     }
 
-    [Theory]
-    [InlineData("2000-05-05", "2000-01-01", "2000-05-05")]
-    [InlineData(null, "2000-01-01", "2000-01-01")]
-    public async Task HandleAsync_TimerDoesNotExist_ShouldReturnNewTimerAndLog(
-        string? startedAt,
-        string systemClockNow,
-        string expectedTime
-    )
+    [Fact]
+    public async Task HandleAsync_TimerDoesNotExist_ShouldReturnNewTimerAndLog()
     {
         // Arrange
+        var startedAt = DateTimeOffset.UtcNow;
         var req = new TimerStartRequest
         {
             RequestId = Guid.NewGuid(),
@@ -88,7 +86,7 @@ public class TimerStartMessageHandlerTests
             {
                 Id = Guid.NewGuid(),
                 Mode = TimerModes.Break,
-                StartedAt = startedAt == null ? null : DateTimeOffset.Parse(startedAt),
+                StartedAt = startedAt,
                 DurationTotal = 1,
                 Remaining = 1,
             },
@@ -102,12 +100,9 @@ public class TimerStartMessageHandlerTests
         timerManager.Start(req.Payload.Id.Value, req.Payload).Returns((expectedStatus, false));
 
         var db = Substitute.For<ITimerLogRepository>();
+        var scheduler = Substitute.For<IBackgroundJobClient>();
 
-        var clockNow = DateTimeOffset.Parse(systemClockNow);
-        var clock = Substitute.For<ISystemClock>();
-        clock.UtcNow.Returns(clockNow);
-
-        var handler = new TimerStartMessageHandler(timerManager, db, validator, clock);
+        var handler = new TimerStartMessageHandler(timerManager, db, scheduler, validator);
 
         // Act
         var res = await handler.HandleAsync(req, CancellationToken.None);
@@ -123,11 +118,17 @@ public class TimerStartMessageHandlerTests
                 Arg.Is<TimerLog>(x =>
                     x.Id == req.Payload.Id.Value
                     && x.Action == TimerLogActions.Start
-                    && x.Timestamp == DateTimeOffset.Parse(expectedTime)
+                    && x.Timestamp == startedAt
                     && x.Mode == req.Payload.Mode
                     && x.DurationTotal == req.Payload.DurationTotal
                     && x.RemainingAtCreationTime == req.Payload.Remaining
                 )
+            );
+        scheduler
+            .Received()
+            .Create(
+                Arg.Is<Job>(x => x.Type == typeof(LogFinishCommandHandler)),
+                Arg.Any<ScheduledState>()
             );
     }
 }

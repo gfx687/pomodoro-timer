@@ -17,25 +17,17 @@ public class TimerStartRequestPayload
     public TimerModes Mode { get; set; }
 
     /// <summary>
-    /// If provided the timer will start at this remaining number of seconds
-    /// Optional. Default = <see cref="DurationTotal"/>
+    /// How much the of the Timer's duration is left.
+    /// Provided for situations where client started a Timer without backend connection
     /// </summary>
-    [JsonPropertyName("remaining")]
-    public int? Remaining { get; set; }
+    [JsonPropertyName("remaining"), JsonRequired]
+    public int Remaining { get; set; }
 
-    /// <summary>
-    /// Optional. Default = current time
-    /// </summary>
-    [JsonPropertyName("startedAt")]
-    public DateTimeOffset? StartedAt { get; set; }
+    [JsonPropertyName("startedAt"), JsonRequired]
+    public DateTimeOffset StartedAt { get; set; }
 
-    /// <summary>
-    /// Whether or not the timer should start active.
-    /// Optional. Default = True.
-    /// Needed for the situation where frontend already had a timer running when connection established.
-    /// </summary>
-    [JsonPropertyName("isActive")]
-    public bool IsActive { get; set; } = true;
+    [JsonPropertyName("isActive"), JsonRequired]
+    public bool IsActive { get; set; }
 
     public class Validator : AbstractValidator<TimerStartRequestPayload>
     {

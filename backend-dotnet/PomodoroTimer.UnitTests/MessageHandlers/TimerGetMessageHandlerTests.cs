@@ -10,9 +10,11 @@ public class TimerGetMessageHandlerTests
     {
         // Arrange
         var id = Guid.NewGuid();
-        var status = new TimerStatus(id, true, 100, TimerModes.Work, DateTimeOffset.UtcNow);
+        var status = MessageHandlersTestsHelpers.EmptyStatus(id);
+
         var manager = Substitute.For<ITimerManager>();
         manager.Get().Returns(status);
+
         var handler = new TimerGetMessageHandler(manager);
 
         // Act

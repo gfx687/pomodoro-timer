@@ -1,0 +1,24 @@
+http://:80 {
+    @pomodoro path /pomodoro /pomodoro/*
+    handle @pomodoro {
+        uri strip_prefix /pomodoro
+
+        handle /ws {
+            reverse_proxy backend:8080
+        }
+
+        handle /api/* {
+            reverse_proxy backend:8080
+        }
+
+        handle {
+            root * /srv/app
+            try_files {path} /index.html
+            file_server
+        }
+    }
+
+    handle {
+        respond "Nothing is here" 404
+    }
+}

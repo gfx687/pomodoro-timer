@@ -1,12 +1,13 @@
 using FluentValidation;
+using Hangfire;
 
 namespace PomodoroTimer.MessageHandlers;
 
 public class TimerStartMessageHandler(
     ITimerManager _manager,
     ITimerLogRepository _db,
-    IValidator<TimerStartRequestPayload> _validator,
-    ISystemClock _clock
+    IBackgroundJobClient _scheduler,
+    IValidator<TimerStartRequestPayload> _validator
 )
 {
     public async Task<SocketResponse> HandleAsync(TimerStartRequest req, CancellationToken ct)
@@ -30,11 +31,18 @@ public class TimerStartMessageHandler(
         if (alreadyExists)
             return SocketResponse.TimerAlreadyExists(status, req.RequestId);
 
+        var schedulerJobId = _scheduler.Schedule<LogFinishCommandHandler>(
+            x => x.HandleAsync(status.Id, status.ExpiresAt!.Value),
+            TimeSpan.FromSeconds(status.RemainingS)
+        );
+
+        _manager.SetSchedulerJobId(schedulerJobId);
+
         await _db.SaveLogAsync(
             new TimerLog(
                 timerId,
                 TimerLogActions.Start,
-                req.Payload.StartedAt ?? _clock.UtcNow,
+                req.Payload.StartedAt,
                 req.Payload.Mode,
                 req.Payload.DurationTotal,
                 req.Payload.Remaining

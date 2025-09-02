@@ -53,6 +53,10 @@ export interface TimerStatusResponsePayload {
   Id: string;
   IsActive: boolean;
   RemainingS: number;
+  /**
+   * Null if IsActive = false
+   */
+  ExpiresAt: Date | null;
   Mode: TimerMode;
   StartedAt: Date;
 }
@@ -68,6 +72,11 @@ export interface TimerResetResponse {
 export interface TimerAlreadyExistsResponse {
   type: "TimerAlreadyExists";
   payload: TimerStatusResponsePayload;
+}
+
+export interface TimerFinishedResponse {
+  type: "TimerFinished";
+  payload: TimerIdPayload;
 }
 
 export interface ErrorResponse {
@@ -90,4 +99,6 @@ export type IncomingMessage =
   | ErrorResponse
   | TimerStatusResponse
   | TimerNotFoundResponse
-  | TimerResetResponse;
+  | TimerResetResponse
+  | TimerAlreadyExistsResponse
+  | TimerFinishedResponse;

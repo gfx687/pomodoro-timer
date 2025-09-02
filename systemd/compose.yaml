@@ -1,14 +1,27 @@
+volumes:
+  caddy_data:
+  caddy_config:
+
 services:
-  backend-dotnet:
-    image: gfx687/pomodoro-timer-backend-dotnet:0.1.0
+  caddy:
+    image: pomodoro-timer-web-react:dev
+    restart: unless-stopped
+    ports:
+      - "8082:80"
+      # - "8083:443"
+      # - "8083:443/udp"
+    volumes:
+      - ./conf:/etc/caddy
+      - caddy_data:/data
+      - caddy_config:/config
+
+  backend:
+    image: pomodoro-timer-backend-dotnet:dev
+    restart: unless-stopped
     environment:
       - CONNECTION_STRING=Data Source=/data/pomodoro-timer.db
+      - HANGFIRE_CONNECTION_STRING=/data/hangfire.db
     volumes:
       - /opt/my/pomodoro-timer/data:/data
     ports:
-      - 127.0.0.1:8081:8080
-
-  frontend-react:
-    image: gfx687/pomodoro-timer-web-react:0.1.0
-    ports:
-      - 127.0.0.1:8082:80
+      - 8081:8080

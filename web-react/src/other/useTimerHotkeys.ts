@@ -1,6 +1,6 @@
 import { useCallback, useEffect, type RefObject } from "react";
-import type { TimerMode } from "../other/types";
-import { type TimerState } from "../other/useTimerState.reducer";
+import type { TimerMode } from "./types.websocket";
+import { type TimerState } from "./useTimerState.reducer";
 
 export function useTimerHotkeys(
   stateRef: RefObject<TimerState>,

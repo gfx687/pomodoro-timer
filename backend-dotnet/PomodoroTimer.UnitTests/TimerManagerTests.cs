@@ -2,8 +2,21 @@ using NSubstitute;
 
 namespace PomodoroTimer.UnitTests;
 
-public class TimerGetMEssageHandlerTests
+public class TimerManagerTests
 {
+    private static TimerStartRequestPayload GetStartRequest()
+    {
+        return new TimerStartRequestPayload
+        {
+            Id = Guid.NewGuid(),
+            IsActive = true,
+            DurationTotal = 100,
+            Mode = TimerModes.Work,
+            StartedAt = DateTimeOffset.UtcNow,
+            Remaining = 100,
+        };
+    }
+
     #region Get
 
     [Fact]
@@ -27,9 +40,10 @@ public class TimerGetMEssageHandlerTests
         var manager = new TimerManager(clock);
 
         // setting up state before the test
-        clock.UtcNow.Returns(DateTimeOffset.UtcNow.AddHours(-1));
-        manager.Start(Guid.NewGuid(), new TimerStartRequestPayload { DurationTotal = 100 });
-        clock.UtcNow.Returns(DateTimeOffset.UtcNow);
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
+        clock.UtcNow.Returns(startRequest.StartedAt.AddSeconds(1000));
 
         // Act
         var res = manager.Get();
@@ -42,19 +56,20 @@ public class TimerGetMEssageHandlerTests
     public void Get_Default_ShouldReturnExpectedValue()
     {
         // Arrange
-        var id = Guid.NewGuid();
         var clock = Substitute.For<ISystemClock>();
         var manager = new TimerManager(clock);
 
         // setting up state before the test
-        manager.Start(id, new TimerStartRequestPayload { DurationTotal = 100 });
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
 
         // Act
         var res = manager.Get();
 
         // Assert
         Assert.NotNull(res);
-        Assert.Equal(id, res.Id);
+        Assert.Equal(startRequest.Id, res.Id);
     }
 
     #endregion
@@ -66,58 +81,54 @@ public class TimerGetMEssageHandlerTests
     {
         // Arrange
         var newId = Guid.NewGuid();
-        var oldId = Guid.NewGuid();
-        var manager = new TimerManager(new SystemClock());
+        var clock = Substitute.For<ISystemClock>();
+        var manager = new TimerManager(clock);
 
         // setting up state before the test
-        manager.Start(oldId, new TimerStartRequestPayload { DurationTotal = 100 });
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
 
         // Act
         var (status, _) = manager.Start(newId, new TimerStartRequestPayload());
 
         // Assert
-        Assert.Equal(oldId, status.Id);
-    }
-
-    [Fact]
-    public void Start_StateIsNull_ShouldReturnNewState()
-    {
-        // Arrange
-        var newId = Guid.NewGuid();
-        var manager = new TimerManager(new SystemClock());
-
-        // Act
-        var (status, _) = manager.Start(
-            newId,
-            new TimerStartRequestPayload { DurationTotal = 100 }
-        );
-
-        // Assert
-        Assert.Equal(newId, status.Id);
+        Assert.Equal(startRequest.Id!.Value, status.Id);
     }
 
     [Fact]
     public void Start_NoRemaining_ShouldReturnNewStateAndLog()
     {
         // Arrange
-        var oldId = Guid.NewGuid();
         var newId = Guid.NewGuid();
         var clock = Substitute.For<ISystemClock>();
         var manager = new TimerManager(clock);
 
         // setting up state before the test
-        clock.UtcNow.Returns(DateTimeOffset.UtcNow.AddHours(-1));
-        manager.Start(oldId, new TimerStartRequestPayload { DurationTotal = 100 });
-        clock.UtcNow.Returns(DateTimeOffset.UtcNow);
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
+        clock.UtcNow.Returns(startRequest.StartedAt.AddSeconds(1000));
 
         // Act
-        var (status, _) = manager.Start(
-            newId,
-            new TimerStartRequestPayload { DurationTotal = 100 }
-        );
+        var (status, _) = manager.Start(newId, startRequest);
 
         // Assert
         Assert.Equal(newId, status.Id);
+    }
+
+    [Fact]
+    public void Start_StateIsNull_ShouldReturnNewState()
+    {
+        // Arrange
+        var manager = new TimerManager(new SystemClock());
+        var startRequest = GetStartRequest();
+
+        // Act
+        var (status, _) = manager.Start(startRequest.Id!.Value, startRequest);
+
+        // Assert
+        Assert.Equal(startRequest.Id!.Value, status.Id);
     }
 
     #endregion
@@ -128,12 +139,14 @@ public class TimerGetMEssageHandlerTests
     public void Unpause_WrongTimerId_ShouldThrow()
     {
         // Arrange
-        var oldId = Guid.NewGuid();
         var newId = Guid.NewGuid();
-        var manager = new TimerManager(new SystemClock());
+        var clock = Substitute.For<ISystemClock>();
+        var manager = new TimerManager(clock);
 
         // setting up state before the test
-        manager.Start(oldId, new TimerStartRequestPayload { DurationTotal = 100 });
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
 
         // Act & Assert
 
@@ -157,17 +170,17 @@ public class TimerGetMEssageHandlerTests
     public void Unpause_NoRemaining_ShouldReturnNull()
     {
         // Arrange
-        var id = Guid.NewGuid();
         var clock = Substitute.For<ISystemClock>();
         var manager = new TimerManager(clock);
 
         // setting up state before the test
-        clock.UtcNow.Returns(DateTimeOffset.UtcNow.AddHours(-1));
-        manager.Start(id, new TimerStartRequestPayload { DurationTotal = 100 });
-        clock.UtcNow.Returns(DateTimeOffset.UtcNow);
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
+        clock.UtcNow.Returns(startRequest.StartedAt.AddSeconds(1000));
 
         // Act
-        var res = manager.Unpause(id);
+        var res = manager.Unpause(startRequest.Id!.Value);
 
         // Assert
         Assert.Null(res);
@@ -177,15 +190,16 @@ public class TimerGetMEssageHandlerTests
     public void Unpause_Default_ShouldUnpause()
     {
         // Arrange
-        var id = Guid.NewGuid();
-        var manager = new TimerManager(new SystemClock());
+        var clock = Substitute.For<ISystemClock>();
+        var manager = new TimerManager(clock);
 
         // setting up state before the test
-        manager.Start(id, new TimerStartRequestPayload { DurationTotal = 100 });
-        manager.Pause(id);
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
 
         // Act
-        var res = manager.Unpause(id);
+        var res = manager.Unpause(startRequest.Id!.Value);
 
         // Assert
         Assert.NotNull(res);
@@ -200,15 +214,16 @@ public class TimerGetMEssageHandlerTests
     public void Pause_WrongTimerId_ShouldThrow()
     {
         // Arrange
-        var oldId = Guid.NewGuid();
         var newId = Guid.NewGuid();
-        var manager = new TimerManager(new SystemClock());
+        var clock = Substitute.For<ISystemClock>();
+        var manager = new TimerManager(clock);
 
         // setting up state before the test
-        manager.Start(oldId, new TimerStartRequestPayload { DurationTotal = 100 });
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
 
         // Act & Assert
-
         Assert.Throws<IncorrectTimerIdException>(() => manager.Pause(newId));
     }
 
@@ -229,17 +244,17 @@ public class TimerGetMEssageHandlerTests
     public void Pause_NoRemaining_ShouldReturnNull()
     {
         // Arrange
-        var id = Guid.NewGuid();
         var clock = Substitute.For<ISystemClock>();
         var manager = new TimerManager(clock);
 
         // setting up state before the test
-        clock.UtcNow.Returns(DateTimeOffset.UtcNow.AddHours(-1));
-        manager.Start(id, new TimerStartRequestPayload { DurationTotal = 100 });
-        clock.UtcNow.Returns(DateTimeOffset.UtcNow);
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
+        clock.UtcNow.Returns(startRequest.StartedAt.AddSeconds(1000));
 
         // Act
-        var res = manager.Pause(id);
+        var res = manager.Pause(startRequest.Id!.Value);
 
         // Assert
         Assert.Null(res);
@@ -249,14 +264,16 @@ public class TimerGetMEssageHandlerTests
     public void Pause_Default_ShouldPause()
     {
         // Arrange
-        var id = Guid.NewGuid();
-        var manager = new TimerManager(new SystemClock());
+        var clock = Substitute.For<ISystemClock>();
+        var manager = new TimerManager(clock);
 
         // setting up state before the test
-        manager.Start(id, new TimerStartRequestPayload { DurationTotal = 100 });
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
 
         // Act
-        var res = manager.Pause(id);
+        var res = manager.Pause(startRequest.Id!.Value);
 
         // Assert
         Assert.NotNull(res);
@@ -271,12 +288,14 @@ public class TimerGetMEssageHandlerTests
     public void Reset_WrongTimerId_ShouldThrow()
     {
         // Arrange
-        var oldId = Guid.NewGuid();
         var newId = Guid.NewGuid();
-        var manager = new TimerManager(new SystemClock());
+        var clock = Substitute.For<ISystemClock>();
+        var manager = new TimerManager(clock);
 
         // setting up state before the test
-        manager.Start(oldId, new TimerStartRequestPayload { DurationTotal = 100 });
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
 
         // Act & Assert
         Assert.Throws<IncorrectTimerIdException>(() => manager.Reset(newId));
@@ -286,14 +305,16 @@ public class TimerGetMEssageHandlerTests
     public void Reset_Default_ShouldReset()
     {
         // Arrange
-        var id = Guid.NewGuid();
-        var manager = new TimerManager(new SystemClock());
+        var clock = Substitute.For<ISystemClock>();
+        var manager = new TimerManager(clock);
 
         // setting up state before the test
-        manager.Start(id, new TimerStartRequestPayload { DurationTotal = 100 });
+        var startRequest = GetStartRequest();
+        clock.UtcNow.Returns(startRequest.StartedAt);
+        manager.Start(startRequest.Id!.Value, startRequest);
 
         // Act
-        manager.Reset(id);
+        manager.Reset(startRequest.Id!.Value);
         var res = manager.Get();
 
         // Assert

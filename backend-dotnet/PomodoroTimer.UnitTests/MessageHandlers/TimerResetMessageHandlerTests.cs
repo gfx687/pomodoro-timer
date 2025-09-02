@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.States;
 using NSubstitute;
 using PomodoroTimer.MessageHandlers;
 
@@ -18,12 +20,13 @@ public class TimerResetMessageHandlerTests
         var timerManager = Substitute.For<ITimerManager>();
 
         var db = Substitute.For<ITimerLogRepository>();
+        var scheduler = Substitute.For<IBackgroundJobClient>();
 
         var now = DateTimeOffset.UtcNow.AddMinutes(-1);
         var clock = Substitute.For<ISystemClock>();
         clock.UtcNow.Returns(now);
 
-        var handler = new TimerResetMessageHandler(timerManager, db, clock);
+        var handler = new TimerResetMessageHandler(timerManager, db, scheduler, clock);
 
         // Act
         var res = await handler.HandleAsync(req, CancellationToken.None);
@@ -40,6 +43,9 @@ public class TimerResetMessageHandlerTests
                     && x.Timestamp == now
                 )
             );
+        scheduler
+            .Received()
+            .ChangeState(Arg.Any<string>(), Arg.Any<DeletedState>(), Arg.Any<string>());
 
         timerManager.Received().Reset(req.Payload.Id);
     }
@@ -60,6 +66,7 @@ public class TimerResetMessageHandlerTests
         var handler = new TimerResetMessageHandler(
             timerManager,
             Substitute.For<ITimerLogRepository>(),
+            Substitute.For<IBackgroundJobClient>(),
             Substitute.For<ISystemClock>()
         );
 

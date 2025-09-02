@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import type { IncomingMessage, OutgoingMessage } from "./types";
+import type { IncomingMessage, OutgoingMessage } from "./types.websocket";
 
 export function useWebSocketConnection() {
   const { sendJsonMessage, lastJsonMessage, readyState } =
@@ -12,6 +12,10 @@ export function useWebSocketConnection() {
         Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
       onError: (event) => {
         console.warn("WebSocket error:", event);
+      },
+      shouldReconnect: () => true,
+      heartbeat: {
+        message: '{"type":"Ping"}',
       },
     });
 

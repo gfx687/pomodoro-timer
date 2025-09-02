@@ -2,11 +2,11 @@ import { useSettingsContext } from "../contexts/SettingsContext";
 import "./Timer.css";
 
 type TimerProps = {
-  seconds: number;
+  remainingS: number;
   isFullscreen: boolean;
 };
 
-export default function Timer({ seconds, isFullscreen }: TimerProps) {
+export default function Timer({ remainingS, isFullscreen }: TimerProps) {
   const { inverseColorsFullscreen } = useSettingsContext();
   if (isFullscreen) {
     return (
@@ -15,18 +15,18 @@ export default function Timer({ seconds, isFullscreen }: TimerProps) {
           "timer-fullscreen" + (inverseColorsFullscreen ? " inverse" : "")
         }
       >
-        {formatSeconds(seconds)}
+        {formatSeconds(remainingS)}
       </div>
     );
   }
 
   const fontSize = {
-    fontSize: seconds <= 3600 ? "144px" : "96px",
+    fontSize: remainingS <= 3600 ? "144px" : "96px",
   };
 
   return (
     <div style={fontSize} className="timer">
-      {formatSeconds(seconds)}
+      {formatSeconds(remainingS)}
     </div>
   );
 }

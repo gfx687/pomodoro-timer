@@ -22,13 +22,7 @@ public class MessageProcessor(
         try
         {
             req = JsonSerializer.Deserialize<SocketRequest>(json)!;
-            _logger.LogInformation($"Received request type: {req.Type}");
-            _logger.LogInformation($"Received request: {JsonSerializer.Serialize(req)}");
-
             var resp = await ProcessRequest(req, ct);
-
-            _logger.LogInformation($"Sending response: {JsonSerializer.Serialize(resp)}");
-
             var broadcast = req.Type != SocketRequestType.TimerGet;
             return (resp, broadcast);
         }
@@ -68,8 +62,11 @@ public class MessageProcessor(
     {
         await using var scope = _services.CreateAsyncScope();
 
-        return req switch
+        SocketResponse resp;
+
+        resp = req switch
         {
+            PingRequest ping => SocketResponse.Pong(ping?.RequestId),
             TimerGetRequest get => await scope
                 .ServiceProvider.GetRequiredService<TimerGetMessageHandler>()
                 .HandleAsync(get, ct),
@@ -90,5 +87,14 @@ public class MessageProcessor(
                 req.RequestId
             ),
         };
+
+        if (req.Type != SocketRequestType.Ping && req.Type != SocketRequestType.TimerGet)
+        {
+            // BUG: type field is logged 3 times (or maybe it is sent 3 times from frontend?)
+            _logger.LogInformation($"Received request: {JsonSerializer.Serialize(req)}");
+            _logger.LogInformation($"Sending response: {JsonSerializer.Serialize(resp)}");
+        }
+
+        return resp;
     }
 }

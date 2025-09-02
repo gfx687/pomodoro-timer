@@ -1,4 +1,4 @@
-import { useSettingsContext } from "./contexts/SettingsContext";
+import { useSettingsContext } from "./../contexts/SettingsContext";
 import "./SettingsPage.css";
 
 export default function SettingsPage() {

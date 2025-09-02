@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState, useRef } from "react";
-import type { TimerMode } from "./types";
+import type { TimerMode } from "./types.websocket";
 import { useWebSocketConnection } from "./useWebSocketConnection";
 import { useTimerState } from "./useTimerState";
 import { getModeDuration } from "../contexts/SettingsContext";
@@ -14,6 +14,7 @@ export function useTimer() {
     resumeTimer,
     resetTimer,
     changeMode: changeModeInternal,
+    finishTimer,
     setStatus,
   } = useTimerState();
   const [syncToBackend, setSyncToBackend] = useState(false);
@@ -26,6 +27,7 @@ export function useTimer() {
   useEffect(() => {
     if (lastMessage) {
       switch (lastMessage.type) {
+        case "TimerAlreadyExists":
         case "TimerStatus":
           setStatus(lastMessage.payload);
           break;
@@ -38,6 +40,10 @@ export function useTimer() {
         case "TimerReset":
           resetTimer();
           break;
+        case "TimerFinished":
+          console.log("FINISH: " + JSON.stringify(lastMessage));
+          finishTimer();
+          break;
         case "Error":
           console.error(lastMessage);
           break;
@@ -45,7 +51,7 @@ export function useTimer() {
           break;
       }
     }
-  }, [lastMessage, setStatus, resetTimer]);
+  }, [lastMessage, setStatus, resetTimer, finishTimer]);
 
   useEffect(() => {
     if (!syncToBackend) return;
@@ -57,7 +63,7 @@ export function useTimer() {
         mode: stateRef.current.mode,
         // TODO: has to be not null at this point but I want to ensure even if a bug sneaks through it will not crash
         startedAt: stateRef.current.startedAt!,
-        remaining: stateRef.current.seconds,
+        remaining: stateRef.current.remainingS,
         isActive: stateRef.current.status == "ticking",
       },
     });

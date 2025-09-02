@@ -1,5 +1,6 @@
+import { addSeconds, differenceInMilliseconds } from "date-fns";
 import { getModeDuration } from "../contexts/SettingsContext";
-import type { TimerMode, TimerStatusResponsePayload } from "./types";
+import type { TimerMode, TimerStatusResponsePayload } from "./types.websocket";
 
 export type TimerStatus = "no timer" | "ticking" | "paused" | "finished";
 
@@ -9,7 +10,8 @@ export const isAnActiveStatus = (status: TimerStatus) =>
 export interface TimerState {
   id: string;
   status: TimerStatus;
-  seconds: number;
+  remainingS: number;
+  expiresAt: Date | null;
   mode: TimerMode;
   startedAt: Date | null;
 }
@@ -17,7 +19,8 @@ export interface TimerState {
 export const initialState: TimerState = {
   id: "",
   status: "no timer",
-  seconds: getModeDuration("Work"),
+  remainingS: getModeDuration("Work"),
+  expiresAt: null,
   mode: "Work",
   startedAt: null,
 };
@@ -45,52 +48,70 @@ export function timerReducer(
         ...state,
         id: action.payload.Id,
         status: action.payload.IsActive ? "ticking" : "paused",
-        seconds: action.payload.RemainingS,
+        remainingS: action.payload.RemainingS,
+        expiresAt: action.payload.ExpiresAt,
         mode: action.payload.Mode,
         startedAt: action.payload.StartedAt
           ? new Date(action.payload.StartedAt)
           : null,
       };
     case "TIMER_START_OR_RESUME": {
-      const seconds = isAnActiveStatus(state.status)
-        ? state.seconds
+      const remainingS = isAnActiveStatus(state.status)
+        ? state.remainingS
         : getModeDuration(state.mode);
       return {
         ...state,
         status: "ticking",
-        seconds: seconds,
+        remainingS: remainingS,
+        expiresAt: addSeconds(new Date(), remainingS),
         startedAt: action.payload.startedAt ?? state.startedAt,
       };
     }
     case "TIMER_TICK":
       return {
         ...state,
-        seconds: state.seconds - 1,
+        remainingS: calculateRemaining(state),
       };
     case "TIMER_PAUSE":
       return {
         ...state,
         status: "paused",
+        expiresAt: null,
       };
     case "TIMER_FINISH":
       return {
         ...state,
         status: "finished",
+        expiresAt: null,
+        remainingS: 0,
       };
     case "TIMER_RESET":
       return {
         ...state,
         status: "no timer",
-        seconds: getModeDuration(state.mode),
+        remainingS: getModeDuration(state.mode),
+        expiresAt: null,
         startedAt: null,
       };
     case "CHANGE_MODE":
       return {
         ...state,
         status: "no timer",
-        seconds: getModeDuration(action.payload.mode),
+        remainingS: getModeDuration(action.payload.mode),
+        expiresAt: null,
         mode: action.payload.mode,
         startedAt: null,
       };
   }
+}
+
+function calculateRemaining(state: TimerState) {
+  if (!isAnActiveStatus(state.status)) return state.remainingS;
+
+  if (state.status === "paused") return state.remainingS;
+
+  // TODO: null check, though it must no be by logic
+  return Math.round(
+    differenceInMilliseconds(state.expiresAt!, new Date()) / 1000
+  );
 }

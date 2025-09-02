@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { SETTINGS } from "../other/constants";
-import type { TimerMode } from "../other/types";
+import type { TimerMode } from "../other/types.websocket";
 
 type SettingsContextType = {
   volume: number;

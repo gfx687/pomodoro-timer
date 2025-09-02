@@ -1,21 +1,27 @@
-import TimerArea from "./components/TimerArea";
+import TimerPage from "./pages/TimerPage";
 import "./App.css";
 import { useEffect, useState } from "react";
-import SettingsPage from "./SettingsPage";
+import SettingsPage from "./pages/SettingsPage";
 import {
   FullscreenProvider,
   useFullscreenContext,
 } from "./contexts/FullscreenContext";
 import { SettingsProvider } from "./contexts/SettingsContext";
 import { IconTray } from "./components/IconTray";
+import { ChartsPage } from "./pages/ChartsPage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <FullscreenProvider>
-      <SettingsProvider>
-        <AppContent />
-      </SettingsProvider>
-    </FullscreenProvider>
+    <QueryClientProvider client={queryClient}>
+      <FullscreenProvider>
+        <SettingsProvider>
+          <AppContent />
+        </SettingsProvider>
+      </FullscreenProvider>
+    </QueryClientProvider>
   );
 }
 
@@ -23,6 +29,7 @@ const BASE_PATH = import.meta.env.VITE_BASE_PATH;
 
 const rootPath = BASE_PATH + "/";
 const settingsPath = BASE_PATH + "/settings";
+const chartsPath = BASE_PATH + "/charts";
 
 function AppContent() {
   const [path, setPath] = useState(window.location.pathname);
@@ -42,12 +49,18 @@ function AppContent() {
   }
 
   return (
-    <div className={"app" + (isFullscreen ? " hidden" : "")}>
+    <div
+      className={
+        "app" +
+        (isFullscreen ? " hidden" : "") +
+        (path === chartsPath ? " app-fullwidth" : "")
+      }
+    >
       <nav className="navbar">
         <button
           onClick={() => navigate(rootPath)}
           className={
-            "navbar-item navbar-home " +
+            "navbar-item navbar-item-colored " +
             ((path === rootPath || path === BASE_PATH) && "navbar-item-active")
           }
         >
@@ -61,11 +74,30 @@ function AppContent() {
           </svg>
           <span>Pomodoro</span>
         </button>
-        <IconTray />
+        <div className="navbar-item">
+          <IconTray />
+        </div>
+        <button
+          onClick={() => navigate(chartsPath)}
+          className={
+            "navbar-item navbar-item-colored navbar-item-right " +
+            (path === chartsPath && "navbar-item-active")
+          }
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+          >
+            <path d="M5 19h-4v-4h4v4zm6 0h-4v-8h4v8zm6 0h-4v-13h4v13zm6 0h-4v-19h4v19zm1 2h-24v2h24v-2z" />
+          </svg>
+          <span>Charts</span>
+        </button>
         <button
           onClick={() => navigate(settingsPath)}
           className={
-            "navbar-item navbar-right " +
+            "navbar-item navbar-item-colored " +
             (path === settingsPath && "navbar-item-active")
           }
         >
@@ -82,11 +114,13 @@ function AppContent() {
       </nav>
 
       <main>
-        {(path === rootPath || path === BASE_PATH) && <TimerArea />}
+        {(path === rootPath || path === BASE_PATH) && <TimerPage />}
         {path === settingsPath && <SettingsPage />}
-        {path !== rootPath && path !== BASE_PATH && path !== settingsPath && (
-          <h1>404 Not Found</h1>
-        )}
+        {path === chartsPath && <ChartsPage />}
+        {path !== rootPath &&
+          path !== BASE_PATH &&
+          path !== settingsPath &&
+          path !== chartsPath && <h1>404 Not Found</h1>}
       </main>
     </div>
   );

@@ -1,8 +1,11 @@
+using Hangfire;
+
 namespace PomodoroTimer.MessageHandlers;
 
 public class TimerResetMessageHandler(
     ITimerManager _manager,
     ITimerLogRepository _db,
+    IBackgroundJobClient _scheduler,
     ISystemClock _clock
 )
 {
@@ -10,10 +13,15 @@ public class TimerResetMessageHandler(
     {
         try
         {
+            var schedulerJobId = _manager.GetSchedulerJobId();
+
             _manager.Reset(req.Payload.Id);
             await _db.SaveLogAsync(
                 new TimerLog(req.Payload.Id, TimerLogActions.Reset, _clock.UtcNow)
             );
+
+            if (schedulerJobId != null)
+                _scheduler.Delete(schedulerJobId);
 
             return SocketResponse.Reset(req.RequestId);
         }

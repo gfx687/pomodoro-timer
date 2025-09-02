@@ -26,6 +26,8 @@ public enum SocketRequestType
     /// Payload - <see cref="TimerIdPayload"/>
     /// </summary>
     TimerUnpause = 5,
+
+    Ping = 6,
 }
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
@@ -34,6 +36,7 @@ public enum SocketRequestType
 [JsonDerivedType(typeof(TimerPauseRequest), nameof(SocketRequestType.TimerPause))]
 [JsonDerivedType(typeof(TimerUnpauseRequest), nameof(SocketRequestType.TimerUnpause))]
 [JsonDerivedType(typeof(TimerResetRequest), nameof(SocketRequestType.TimerReset))]
+[JsonDerivedType(typeof(PingRequest), nameof(SocketRequestType.Ping))]
 public abstract class SocketRequest
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]

@@ -26,6 +26,13 @@ public enum SocketResponseType
     /// Payload - <see cref="TimerStatus"/>
     /// </summary>
     TimerAlreadyExists = 5,
+
+    /// <summary>
+    /// Payload - <see cref="TimerIdPayload"/>
+    /// </summary>
+    TimerFinished = 6,
+
+    Pong = 7,
 }
 
 public class SocketResponse
@@ -42,6 +49,9 @@ public class SocketResponse
 
     [JsonPropertyName("payload")]
     public object? Payload { get; private set; }
+
+    public static SocketResponse Pong(Guid? requestId = null) =>
+        new() { Type = SocketResponseType.Pong, RequestId = requestId };
 
     public static SocketResponse NotFound(Guid? requestId = null) =>
         new() { Type = SocketResponseType.TimerNotFound, RequestId = requestId };
@@ -67,6 +77,16 @@ public class SocketResponse
         {
             Type = SocketResponseType.TimerAlreadyExists,
             Payload = payload,
+            RequestId = requestId,
+        };
+    }
+
+    public static SocketResponse Finished(Guid id, Guid? requestId)
+    {
+        return new()
+        {
+            Type = SocketResponseType.TimerFinished,
+            Payload = new TimerIdPayload { Id = id },
             RequestId = requestId,
         };
     }

@@ -29,9 +29,25 @@ Bugfixes:
 - pausing the timer within one seconds of the start no longer leaves it in a faulty state
 - timer no longer auto-resumes when an offline client connects to the backend
 
-**WebSocket API**:
+### v0.3.0
 
-For the API contracts check out [TypeScript types](https://github.com/gfx687/pomodoro-timer/blob/web-react-0.2.0/web-react/src/other/types.tsx), they are grouped into `OutgoingMessage` and `IncomingMessage`.
+Breaking changes:
+- backend no longer broadcasts TimerStatus every 10 seconds
+
+Features:
+- added Charts page with information about past timers
+- backend now sends out TimerFinished message
+
+Bugfixes:
+- client timer now continues ticking even with the TimerPage not open
+
+## Api
+
+API for the latest version available.
+
+### WebSocket API
+
+For the WebSocket API contracts check [TypeScript types](https://github.com/gfx687/pomodoro-timer/blob/web-react-0.3.0/web-react/src/other/types.websocket.tsx), they are grouped into `OutgoingMessage` and `IncomingMessage`.
 
 Request type | Response types
 -|-
@@ -42,5 +58,12 @@ Request type | Response types
 `TimerResetRequest`|`TimerResetResponse`
 
 Additionally:
-- Responses to all Requests except for `TimerGetRequest` are broadcast to all connected sockets
-- `TimerStatusResponse` is broadcast by backend every 10 seconds
+- `TimerFinishedResponse` is sent by backend when the Timer is finished
+
+### HTTP API
+
+For the HTTP API contracts check [TypeScript types](https://github.com/gfx687/pomodoro-timer/blob/web-react-0.3.0/web-react/src/other/types.api.tsx).
+
+- `/api/timers/chart-day` with query param `from=2025-08-25-03:00`
+  - request specified day's timer data to draw charts page
+  - note the timezone sent in the `from`, it is needed to correctly add chart tooltips

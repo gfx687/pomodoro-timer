@@ -1,4 +1,4 @@
-import type { TimerMode } from "../other/types";
+import type { TimerMode } from "../other/types.websocket";
 import "./TimerModes.css";
 
 type TimerModesProps = {

@@ -1,15 +1,15 @@
 import { useEffect, useRef } from "react";
-import "./TimerArea.css";
-import TimerControls from "./TimerControls";
-import TimerModes from "./TimerModes";
-import Timer from "./Timer";
+import "./TimerPage.css";
+import TimerControls from "../components/TimerControls";
+import TimerModes from "../components/TimerModes";
+import Timer from "../components/Timer";
 import useDink from "../other/useDink";
 import { useTimer } from "../other/useTimer";
 import { useFullscreenContext } from "../contexts/FullscreenContext";
 import { useTimerHotkeys } from "../other/useTimerHotkeys";
 import { isAnActiveStatus } from "../other/useTimerState.reducer";
 
-export default function TimerArea() {
+export default function TimerPage() {
   const playDink = useDink();
   const { state, stateRef, start, pause, resume, reset, changeMode } =
     useTimer();
@@ -40,7 +40,7 @@ export default function TimerArea() {
         timerExists={isAnActiveStatus(state.status)}
         onModeChange={changeMode}
       />
-      <Timer seconds={state.seconds} isFullscreen={isFullscreen} />
+      <Timer remainingS={state.remainingS} isFullscreen={isFullscreen} />
       <TimerControls
         timerStatus={state.status}
         onStart={start}

@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useCallback } from "react";
-import type { TimerMode, TimerStatusResponsePayload } from "./types";
+import type { TimerMode, TimerStatusResponsePayload } from "./types.websocket";
 import {
   timerReducer,
   initialState,
@@ -17,6 +17,8 @@ export function useTimerState() {
   useEffect(() => {
     if (state.status != "ticking") return;
 
+    dispatch({ type: "TIMER_TICK" });
+
     const interval = setInterval(() => {
       dispatch({ type: "TIMER_TICK" });
     }, 1000);
@@ -25,10 +27,10 @@ export function useTimerState() {
   }, [state.status]);
 
   useEffect(() => {
-    if (state.seconds <= 0 && state.status == "ticking") {
+    if (state.remainingS <= 0 && state.status == "ticking") {
       dispatch({ type: "TIMER_FINISH" });
     }
-  }, [state.seconds, state.status]);
+  }, [state.remainingS, state.status]);
 
   useEffect(() => {
     saveStateToLocalStorage(state);
@@ -62,6 +64,10 @@ export function useTimerState() {
     [state.status]
   );
 
+  const finishTimer = useCallback(() => {
+    dispatch({ type: "TIMER_FINISH" });
+  }, []);
+
   const setStatus = useCallback((payload: TimerStatusResponsePayload) => {
     dispatch({ type: "SET_STATUS", payload });
   }, []);
@@ -73,6 +79,7 @@ export function useTimerState() {
     resumeTimer,
     resetTimer,
     changeMode,
+    finishTimer,
     setStatus,
   };
 }

@@ -1,16 +1,18 @@
 public class TimerState
 {
-    public Guid Id { get; private set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// Refers to pause / unpause, not general existence of a timer
     /// </summary>
     public bool IsActive { get; private set; }
-    public DateTimeOffset StartedAt { get; private set; }
-    public int DurationTotal { get; private set; }
-    public DateTimeOffset LastUnpausedAt { get; private set; }
-    public int ElapsedBeforePause { get; private set; }
-    public TimerModes Mode { get; private set; }
+    public DateTimeOffset? ExpiresAt { get; private set; }
+    public int? RemainingOnPauseMs { get; private set; }
+    public string? SchedulerJobId { get; set; }
+
+    public DateTimeOffset StartedAt { get; init; }
+    public int DurationTotalS { get; init; }
+    public TimerModes Mode { get; init; }
 
     public TimerState(
         Guid id,
@@ -18,34 +20,32 @@ public class TimerState
         int durationTotal,
         TimerModes mode,
         DateTimeOffset startedAt,
-        int remaining,
-        DateTimeOffset lastUnpausedAt
+        int remainingOnPauseS,
+        DateTimeOffset now
     )
     {
         if (durationTotal <= 0)
             throw new ArgumentException($"{nameof(durationTotal)} must be more than 0");
-        if (remaining <= 0)
-            throw new ArgumentException($"{nameof(remaining)} must be more than 0");
+        if (remainingOnPauseS <= 0 || remainingOnPauseS > durationTotal)
+            throw new ArgumentException(
+                $"{nameof(remainingOnPauseS)} must be > 0 and <= durationTotal"
+            );
 
         Id = id;
         IsActive = isActive;
-        StartedAt = startedAt;
-        DurationTotal = durationTotal;
-        LastUnpausedAt = lastUnpausedAt;
-        ElapsedBeforePause = durationTotal - remaining;
+        DurationTotalS = durationTotal;
         Mode = mode;
+        StartedAt = startedAt;
+        ExpiresAt = now.AddSeconds(remainingOnPauseS);
+        RemainingOnPauseMs = remainingOnPauseS * 1000;
     }
 
     public int GetRemaining(DateTimeOffset now)
     {
-        var remaining = DurationTotal - ElapsedBeforePause;
-
         if (IsActive)
-        {
-            var passed = (int)now.Subtract(LastUnpausedAt).TotalSeconds;
-            remaining -= passed;
-        }
-        return remaining;
+            return Convert.ToInt32(ExpiresAt!.Value.Subtract(now).TotalSeconds);
+
+        return Convert.ToInt32(RemainingOnPauseMs!.Value / 1000.0);
     }
 
     public void Pause(DateTimeOffset now)
@@ -54,7 +54,8 @@ public class TimerState
             return;
 
         IsActive = false;
-        ElapsedBeforePause += (int)now.Subtract(LastUnpausedAt).TotalSeconds;
+        RemainingOnPauseMs = Convert.ToInt32(ExpiresAt!.Value.Subtract(now).TotalMilliseconds);
+        ExpiresAt = null;
     }
 
     public void Unpause(DateTimeOffset now)
@@ -63,6 +64,7 @@ public class TimerState
             return;
 
         IsActive = true;
-        LastUnpausedAt = now;
+        ExpiresAt = now.AddMilliseconds(RemainingOnPauseMs!.Value);
+        RemainingOnPauseMs = null;
     }
 }

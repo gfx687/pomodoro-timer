@@ -5,6 +5,9 @@ public interface ITimerManager
     void Reset(Guid id);
     (TimerStatus status, bool alreadyExists) Start(Guid id, TimerStartRequestPayload payload);
     TimerStatus? Unpause(Guid id);
+
+    string? GetSchedulerJobId();
+    void SetSchedulerJobId(string jobId);
 }
 
 public class TimerManager(ISystemClock _clock) : ITimerManager
@@ -33,8 +36,8 @@ public class TimerManager(ISystemClock _clock) : ITimerManager
             payload.IsActive,
             payload.DurationTotal,
             payload.Mode,
-            payload.StartedAt ?? _clock.UtcNow,
-            payload.Remaining ?? payload.DurationTotal,
+            payload.StartedAt,
+            payload.Remaining,
             _clock.UtcNow
         );
         return (TimerStatus.FromState(_state, _clock.UtcNow), false);
@@ -72,5 +75,15 @@ public class TimerManager(ISystemClock _clock) : ITimerManager
             throw new IncorrectTimerIdException();
 
         _state = null;
+    }
+
+    public string? GetSchedulerJobId() => _state?.SchedulerJobId;
+
+    public void SetSchedulerJobId(string jobId)
+    {
+        if (_state == null)
+            return;
+
+        _state.SchedulerJobId = jobId;
     }
 }
