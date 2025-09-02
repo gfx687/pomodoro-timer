@@ -7,7 +7,7 @@ interface TimerProps {
 
 export default function Timer({ remainingS }: TimerProps) {
   const fontSize = {
-    fontSize: remainingS <= 3600 ? "144px" : "96px",
+    fontSize: remainingS <= 3600 ? "168px" : "108px",
   };
 
   return (
