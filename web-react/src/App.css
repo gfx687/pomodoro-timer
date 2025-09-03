@@ -84,4 +84,7 @@
   cursor: pointer;
   border: none;
   border-bottom: 1px solid var(--hover);
+
+  /* overwise hovering over Google Chart closes the dropdown */
+  z-index: 1;
 }

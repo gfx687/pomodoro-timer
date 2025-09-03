@@ -52,7 +52,7 @@ function mapLogs(logs: TimerLog[]) {
 
     if (x.mode === "Work") {
       if (x.action === "Start") workStarted++;
-      if (x.action === "Finish") workFinished++;
+      if (x.action === "Finish" && workStarted > workFinished) workFinished++;
     }
 
     return {
