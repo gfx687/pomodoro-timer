@@ -1,7 +1,7 @@
 import { useSettingsContext } from "../contexts/SettingsContext";
 import "./SettingsPage.css";
 
-export default function SettingsPage() {
+export function SettingsPage() {
   const {
     volume,
     setVolume,

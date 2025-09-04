@@ -6,7 +6,7 @@ import { useState, type ChangeEvent } from "react";
 import type { ChartDataResponse } from "../other/types.api";
 import { TimerLogList } from "../components/TimerLogList";
 
-export function ChartsPage() {
+export default function ChartsPage() {
   const [selectedDate, setSelectedDate] = useState<string>(getTodayString());
 
   const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
