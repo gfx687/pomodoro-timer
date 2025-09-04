@@ -8,6 +8,7 @@ import {
   useMemo,
 } from "react";
 import { SETTINGS } from "../other/constants";
+import throttle from "lodash/throttle";
 
 interface SettingsContextType {
   volume: number;
@@ -35,13 +36,24 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     return v !== null ? Number(v) : SETTINGS.volume.defaultValue;
   });
 
-  const setVolume = useCallback((v: number | ((prev: number) => number)) => {
-    setVolumeState((prev) => {
-      const newValue = typeof v === "function" ? v(prev) : v;
-      localStorage.setItem(SETTINGS.volume.key, newValue.toString());
-      return newValue;
-    });
-  }, []);
+  const throttledVolumeSave = useMemo(
+    () =>
+      throttle((value: number) => {
+        localStorage.setItem(SETTINGS.volume.key, value.toString());
+      }, 500),
+    []
+  );
+
+  const setVolume = useCallback(
+    (v: number | ((prev: number) => number)) => {
+      setVolumeState((prev) => {
+        const newValue = typeof v === "function" ? v(prev) : v;
+        throttledVolumeSave(newValue);
+        return newValue;
+      });
+    },
+    [throttledVolumeSave]
+  );
 
   const [durationWork, setDurationWorkState] = useState(() => {
     const v = localStorage.getItem(SETTINGS.durationWork.key);

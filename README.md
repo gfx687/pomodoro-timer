@@ -9,6 +9,8 @@ Backend:
 ## Versioning
 Same number version of the frontend (i.e. `web-react-0.1.0`) should work with the matching versions of the backend (i.e. `backend-dotnet-0.1.0`).
 
+Until the Major version 1 treat Minor versions as Breaking Changes. Patch versions do not introduce breaking changes. Meaning `web-react-0.3.1` should work with `backend-dotnet-0.3.9` but not with `-0.4.0`.
+
 ### v0.1.0
 
 WIP version:
