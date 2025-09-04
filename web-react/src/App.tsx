@@ -88,21 +88,17 @@ function AppContent() {
       }
     >
       <nav className="navbar">
-        <button
-          type="button"
+        <a
           onClick={() => navigate(rootPath)}
           className="navbar-item navbar-item-link navbar-hover"
         >
           <PomodoroSvg />
           <span>Pomodoro</span>
-        </button>
+        </a>
         <div className="navbar-item">
           <IconTray />
         </div>
-        <button
-          type="button"
-          className="navbar-item navbar-item-link navbar-item-right navbar-dropdown"
-        >
+        <div className="navbar-item navbar-item-link navbar-item-right navbar-dropdown">
           <MenuSvg />
           <div className="navbar-dropdown-content">
             <DropdownNav text="Charts" onClick={() => navigate(chartsPath)} />
@@ -115,7 +111,7 @@ function AppContent() {
               onClick={() => navigate(settingsPath)}
             />
           </div>
-        </button>
+        </div>
       </nav>
 
       <main>{content}</main>
@@ -145,13 +141,9 @@ function DropdownNav({ text, onClick }: DropdownLinkProps) {
       break;
   }
   return (
-    <button
-      type="button"
-      className="navbar-dropdown-item navbar-hover"
-      onClick={onClick}
-    >
+    <a className="navbar-dropdown-item navbar-hover" onClick={onClick}>
       {svg}
       <span>{text}</span>
-    </button>
+    </a>
   );
 }
