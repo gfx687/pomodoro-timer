@@ -50,16 +50,13 @@ function mapLogs(logs: TimerLog[]) {
       timerIdx++;
     }
 
-    if (x.mode === "Work") {
+    const mode = x.mode === null ? lastTimer.mode : x.mode;
+    if (mode === "Work") {
       if (x.action === "Start") workStarted++;
       if (x.action === "Finish" && workStarted > workFinished) workFinished++;
     }
 
-    return {
-      ...x,
-      timerId: timerIdx,
-      mode: x.mode === null ? lastTimer.mode : x.mode,
-    };
+    return { ...x, timerId: timerIdx, mode: mode };
   });
 
   return { mapped, workStarted, workFinished };
