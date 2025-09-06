@@ -1,6 +1,7 @@
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using PomodoroTimer.MessageHandlers;
 
 public class MessageProcessor(
@@ -9,6 +10,12 @@ public class MessageProcessor(
     ILogger<MessageProcessor> _logger
 )
 {
+    public static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Converters = { new JsonStringEnumConverter() },
+    };
+
     /// <returns>Response and whether or not message should be Broadcast</returns>
     public async Task<(SocketResponse Response, bool Broadcast)> ProcessMessage(
         byte[] buffer,
@@ -21,7 +28,7 @@ public class MessageProcessor(
         SocketRequest? req = null;
         try
         {
-            req = JsonSerializer.Deserialize<SocketRequest>(json)!;
+            req = JsonSerializer.Deserialize<SocketRequest>(json, JsonOptions)!;
             var resp = await ProcessRequest(req, ct);
             var broadcast = req.Type != SocketRequestType.TimerGet;
             return (resp, broadcast);

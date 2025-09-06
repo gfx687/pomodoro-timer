@@ -51,15 +51,15 @@ export interface TimerStatusResponse {
 }
 
 export interface TimerStatusResponsePayload {
-  Id: string;
-  IsActive: boolean;
-  RemainingS: number;
+  id: string;
+  isActive: boolean;
+  remainingS: number;
   /**
    * Null if IsActive = false
    */
-  ExpiresAt: Date | null;
-  Mode: TimerMode;
-  StartedAt: Date;
+  expiresAt: Date | null;
+  mode: TimerMode;
+  startedAt: Date;
 }
 
 export interface TimerNotFoundResponse {

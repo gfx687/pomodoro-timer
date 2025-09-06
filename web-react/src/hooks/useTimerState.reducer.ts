@@ -49,13 +49,13 @@ export function timerReducer(
     case "SET_STATUS":
       return {
         ...state,
-        id: action.payload.Id,
-        status: action.payload.IsActive ? "ticking" : "paused",
-        remainingS: action.payload.RemainingS,
-        expiresAt: action.payload.ExpiresAt,
-        mode: action.payload.Mode,
-        startedAt: action.payload.StartedAt
-          ? new Date(action.payload.StartedAt)
+        id: action.payload.id,
+        status: action.payload.isActive ? "ticking" : "paused",
+        remainingS: action.payload.remainingS,
+        expiresAt: action.payload.expiresAt,
+        mode: action.payload.mode,
+        startedAt: action.payload.startedAt
+          ? new Date(action.payload.startedAt)
           : null,
       };
     case "TIMER_START_OR_RESUME": {

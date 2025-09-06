@@ -30,7 +30,7 @@ export function Navbar() {
     const handlePopState = () => setPath(window.location.pathname);
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  });
+  }, []);
 
   function navigate(to: string) {
     if (to === path) return;

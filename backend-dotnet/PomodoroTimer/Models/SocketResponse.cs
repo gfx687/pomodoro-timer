@@ -1,104 +1,43 @@
-using System.Text.Json.Serialization;
-
 public enum SocketResponseType
 {
-    /// <summary>
-    /// Payload - <see cref="ErrorDetails"/>
-    /// </summary>
     Error = 1,
-
-    /// <summary>
-    /// Payload - <see cref="TimerStatus"/>
-    /// </summary>
     TimerStatus = 2,
-
-    /// <summary>
-    /// Payload - null
-    /// </summary>
     TimerNotFound = 3,
-
-    /// <summary>
-    /// Payload - null
-    /// </summary>
     TimerReset = 4,
-
-    /// <summary>
-    /// Payload - <see cref="TimerStatus"/>
-    /// </summary>
     TimerAlreadyExists = 5,
-
-    /// <summary>
-    /// Payload - <see cref="TimerIdPayload"/>
-    /// </summary>
     TimerFinished = 6,
-
     Pong = 7,
 }
 
-public class SocketResponse
+public record SocketResponse(SocketResponseType Type, Guid? RequestId, object? Payload = null)
 {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    [JsonPropertyName("type")]
-    public SocketResponseType Type { get; private set; }
-
-    /// <summary>
-    /// Optional RequestId for client to correlate request and response
-    /// </summary>
-    [JsonPropertyName("requestId")]
-    public Guid? RequestId { get; private set; }
-
-    [JsonPropertyName("payload")]
-    public object? Payload { get; private set; }
-
     public static SocketResponse Pong(Guid? requestId = null) =>
-        new() { Type = SocketResponseType.Pong, RequestId = requestId };
+        new(SocketResponseType.Pong, requestId);
 
     public static SocketResponse NotFound(Guid? requestId = null) =>
-        new() { Type = SocketResponseType.TimerNotFound, RequestId = requestId };
+        new(SocketResponseType.TimerNotFound, requestId);
 
     public static SocketResponse Reset(Guid? requestId = null) =>
-        new() { Type = SocketResponseType.TimerReset, RequestId = requestId };
+        new(SocketResponseType.TimerReset, requestId);
 
     public static SocketResponse TimerStatus(TimerStatus payload, Guid? requestId = null)
     {
         ArgumentNullException.ThrowIfNull(payload);
-        return new()
-        {
-            Type = SocketResponseType.TimerStatus,
-            Payload = payload,
-            RequestId = requestId,
-        };
+        return new(SocketResponseType.TimerStatus, requestId, payload);
     }
 
     public static SocketResponse TimerAlreadyExists(TimerStatus payload, Guid? requestId = null)
     {
         ArgumentNullException.ThrowIfNull(payload);
-        return new()
-        {
-            Type = SocketResponseType.TimerAlreadyExists,
-            Payload = payload,
-            RequestId = requestId,
-        };
+        return new(SocketResponseType.TimerAlreadyExists, requestId, payload);
     }
 
-    public static SocketResponse Finished(Guid id, Guid? requestId)
-    {
-        return new()
-        {
-            Type = SocketResponseType.TimerFinished,
-            Payload = new TimerIdPayload { Id = id },
-            RequestId = requestId,
-        };
-    }
+    public static SocketResponse Finished(Guid id, Guid? requestId) =>
+        new(SocketResponseType.TimerFinished, requestId, new TimerIdPayload(id));
 
     public static SocketResponse Error(ErrorDetails e, Guid? requestId = null)
     {
         ArgumentNullException.ThrowIfNull(e);
-        return new()
-        {
-            Type = SocketResponseType.Error,
-            Payload = e,
-            RequestId = requestId,
-        };
+        return new(SocketResponseType.Error, requestId, e);
     }
 }

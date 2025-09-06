@@ -6,27 +6,25 @@ public class TimerStartRequestPayload
     /// <summary>
     /// Optional. Default = new UUID
     /// </summary>
-    [JsonPropertyName("id")]
     public Guid? Id { get; set; }
 
-    [JsonPropertyName("durationTotal"), JsonRequired]
+    [JsonRequired]
     public int DurationTotal { get; set; }
 
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    [JsonPropertyName("mode"), JsonRequired]
+    [JsonRequired]
     public TimerModes Mode { get; set; }
 
     /// <summary>
     /// How much the of the Timer's duration is left.
     /// Provided for situations where client started a Timer without backend connection
     /// </summary>
-    [JsonPropertyName("remaining"), JsonRequired]
+    [JsonRequired]
     public int Remaining { get; set; }
 
-    [JsonPropertyName("startedAt"), JsonRequired]
+    [JsonRequired]
     public DateTimeOffset StartedAt { get; set; }
 
-    [JsonPropertyName("isActive"), JsonRequired]
+    [JsonRequired]
     public bool IsActive { get; set; }
 
     public class Validator : AbstractValidator<TimerStartRequestPayload>

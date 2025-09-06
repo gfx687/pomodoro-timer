@@ -1,0 +1,25 @@
+#!/bin/sh
+
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# Skip merge and revert commits
+# if echo "$commit_msg" | grep -iqE '^(merge|revert)'; then
+#   exit 0
+# fi
+
+# THE CHANGE IS HERE: Added !? to the pattern to allow an optional '!'
+# for breaking changes.
+pattern="^(feat|fix|docs|style|refactor|perf|test|chore)(\([a-zA-Z0-9_-]+\))?!?: .{1,50}"
+
+if ! echo "$commit_msg" | grep -Eq "$pattern"; then
+  echo "❌ Commit message does not follow Conventional Commits format."
+  echo ""
+  echo "Valid formats:"
+  echo "  <type>(optional scope): <description>"
+  echo "  <type>(optional scope)!: <description>  (for breaking changes)"
+  echo ""
+  echo "Example: feat(timer): add pause/resume functionality"
+  echo "Example: feat(auth)!: implement new JWT authentication"
+  exit 1
+fi

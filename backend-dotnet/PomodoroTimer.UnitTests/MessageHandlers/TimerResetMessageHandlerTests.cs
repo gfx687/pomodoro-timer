@@ -14,7 +14,7 @@ public class TimerResetMessageHandlerTests
         var req = new TimerResetRequest
         {
             RequestId = Guid.NewGuid(),
-            Payload = new() { Id = Guid.NewGuid() },
+            Payload = new(Guid.NewGuid()),
         };
 
         var timerManager = Substitute.For<ITimerManager>();
@@ -57,7 +57,7 @@ public class TimerResetMessageHandlerTests
         var req = new TimerResetRequest
         {
             RequestId = Guid.NewGuid(),
-            Payload = new() { Id = Guid.NewGuid() },
+            Payload = new(Guid.NewGuid()),
         };
 
         var timerManager = Substitute.For<ITimerManager>();

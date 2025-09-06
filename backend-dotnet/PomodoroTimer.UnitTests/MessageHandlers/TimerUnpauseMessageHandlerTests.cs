@@ -15,7 +15,7 @@ public class TimerUnpauseMessageHandlerTests
         var req = new TimerUnpauseRequest
         {
             RequestId = Guid.NewGuid(),
-            Payload = new() { Id = Guid.NewGuid() },
+            Payload = new(Guid.NewGuid()),
         };
 
         var timerManager = Substitute.For<ITimerManager>();
@@ -46,7 +46,7 @@ public class TimerUnpauseMessageHandlerTests
         var req = new TimerUnpauseRequest
         {
             RequestId = Guid.NewGuid(),
-            Payload = new() { Id = Guid.NewGuid() },
+            Payload = new(Guid.NewGuid()),
         };
 
         var timerManager = Substitute.For<ITimerManager>();
@@ -76,7 +76,7 @@ public class TimerUnpauseMessageHandlerTests
         var req = new TimerUnpauseRequest
         {
             RequestId = Guid.NewGuid(),
-            Payload = new() { Id = Guid.NewGuid() },
+            Payload = new(Guid.NewGuid()),
         };
         var expectedStatus = MessageHandlersTestsHelpers.EmptyStatus(req.RequestId.Value);
 

@@ -1,7 +1,3 @@
 using System.Text.Json.Serialization;
 
-public class TimerIdPayload
-{
-    [JsonPropertyName("id"), JsonRequired]
-    public Guid Id { get; set; }
-}
+public record TimerIdPayload([property: JsonRequired] Guid Id);

@@ -9,7 +9,7 @@ public static class WebSocketExtensions
         if (socket.State != WebSocketState.Open)
             return;
 
-        var respJson = JsonSerializer.Serialize(message);
+        var respJson = JsonSerializer.Serialize(message, MessageProcessor.JsonOptions);
         var respBytes = Encoding.UTF8.GetBytes(respJson);
 
         await socket.SendAsync(
