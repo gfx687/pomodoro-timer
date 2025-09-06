@@ -18,6 +18,10 @@ export const SETTINGS = {
     key: "durationBreak" as SettingsKey,
     defaultValue: 300,
   },
+  durationLongBreak: {
+    key: "durationLongBreak" as SettingsKey,
+    defaultValue: 900,
+  },
   inverseColorsFullscreen: {
     key: "inverseColorsFullscreen" as SettingsKey,
     defaultValue: false,

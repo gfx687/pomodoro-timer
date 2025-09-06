@@ -39,15 +39,18 @@ export function useTimerState() {
     saveStateToLocalStorage(state);
   }, [state]);
 
-  const startTimer = useCallback((startedAt: Date) => {
+  const startTimer = useCallback((duration: number, startedAt: Date) => {
     dispatch({
-      type: "TIMER_START_OR_RESUME",
-      payload: { startedAt: startedAt },
+      type: "TIMER_START",
+      payload: { duration: duration, startedAt: startedAt },
     });
   }, []);
 
-  const resetTimer = useCallback(() => {
-    dispatch({ type: "TIMER_RESET" });
+  const resetTimer = useCallback((modeDurationS: number) => {
+    dispatch({
+      type: "TIMER_RESET",
+      payload: { modeDurationS: modeDurationS },
+    });
   }, []);
 
   const pauseTimer = useCallback(() => {
@@ -55,14 +58,17 @@ export function useTimerState() {
   }, []);
 
   const resumeTimer = useCallback(() => {
-    dispatch({ type: "TIMER_START_OR_RESUME", payload: { startedAt: null } });
+    dispatch({ type: "TIMER_RESUME" });
   }, []);
 
   const changeMode = useCallback(
-    (newMode: TimerMode) => {
+    (newMode: TimerMode, modeDurationS: number) => {
       if (isAnActiveStatus(state.status)) return;
 
-      dispatch({ type: "CHANGE_MODE", payload: { mode: newMode } });
+      dispatch({
+        type: "CHANGE_MODE",
+        payload: { mode: newMode, modeDurationS: modeDurationS },
+      });
     },
     [state.status]
   );

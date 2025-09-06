@@ -9,6 +9,8 @@ export function SettingsPage() {
     setDurationWork,
     durationBreak,
     setDurationBreak,
+    durationLongBreak,
+    setDurationLongBreak,
     inverseColorsFullscreen,
     setInverseColorsFullscreen,
     fullscreenShowMode,
@@ -50,6 +52,16 @@ export function SettingsPage() {
           className="settings-input"
           value={durationBreak}
           onChange={(e) => setDurationBreak(Number(e.target.value))}
+        />
+      </div>
+      <div className="settings-row">
+        <label htmlFor="duration-long-break">Long Break duration</label>
+        <input
+          id="duration-long-break"
+          type="number"
+          className="settings-input"
+          value={durationLongBreak}
+          onChange={(e) => setDurationLongBreak(Number(e.target.value))}
         />
       </div>
       <div className="settings-row">

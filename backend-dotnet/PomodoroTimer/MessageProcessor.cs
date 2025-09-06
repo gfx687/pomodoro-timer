@@ -98,8 +98,12 @@ public class MessageProcessor(
         if (req.Type != SocketRequestType.Ping && req.Type != SocketRequestType.TimerGet)
         {
             // BUG: type field is logged 3 times (or maybe it is sent 3 times from frontend?)
-            _logger.LogInformation($"Received request: {JsonSerializer.Serialize(req)}");
-            _logger.LogInformation($"Sending response: {JsonSerializer.Serialize(resp)}");
+            _logger.LogInformation(
+                $"Received request: {JsonSerializer.Serialize(req, JsonOptions)}"
+            );
+            _logger.LogInformation(
+                $"Sending response: {JsonSerializer.Serialize(resp, JsonOptions)}"
+            );
         }
 
         return resp;

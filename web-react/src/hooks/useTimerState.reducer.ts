@@ -3,7 +3,6 @@ import type {
   TimerMode,
   TimerStatusResponsePayload,
 } from "../other/types.websocket";
-import { getModeDuration } from "../utils/getModeDuration";
 
 export type TimerStatus = "no timer" | "ticking" | "paused" | "finished";
 
@@ -22,7 +21,7 @@ export interface TimerState {
 export const initialState: TimerState = {
   id: "",
   status: "no timer",
-  remainingS: getModeDuration("Work"),
+  remainingS: 1800,
   expiresAt: null,
   mode: "Work",
   startedAt: null,
@@ -34,12 +33,19 @@ export type TimerAction =
       type: "SET_STATUS";
       payload: TimerStatusResponsePayload;
     }
-  | { type: "TIMER_START_OR_RESUME"; payload: { startedAt: Date | null } }
+  | {
+      type: "TIMER_START";
+      payload: { duration: number; startedAt: Date | null };
+    }
+  | { type: "TIMER_RESUME" }
   | { type: "TIMER_TICK" }
   | { type: "TIMER_PAUSE" }
   | { type: "TIMER_FINISH" }
-  | { type: "TIMER_RESET" }
-  | { type: "CHANGE_MODE"; payload: { mode: TimerMode } };
+  | { type: "TIMER_RESET"; payload: { modeDurationS: number } }
+  | {
+      type: "CHANGE_MODE";
+      payload: { mode: TimerMode; modeDurationS: number };
+    };
 
 export function timerReducer(
   state: TimerState,
@@ -58,10 +64,10 @@ export function timerReducer(
           ? new Date(action.payload.startedAt)
           : null,
       };
-    case "TIMER_START_OR_RESUME": {
+    case "TIMER_START": {
       const remainingS = isAnActiveStatus(state.status)
         ? state.remainingS
-        : getModeDuration(state.mode);
+        : action.payload.duration;
       return {
         ...state,
         status: "ticking",
@@ -70,6 +76,12 @@ export function timerReducer(
         startedAt: action.payload.startedAt ?? state.startedAt,
       };
     }
+    case "TIMER_RESUME":
+      return {
+        ...state,
+        status: "ticking",
+        expiresAt: addSeconds(new Date(), state.remainingS),
+      };
     case "TIMER_TICK":
       return {
         ...state,
@@ -92,7 +104,7 @@ export function timerReducer(
       return {
         ...state,
         status: "no timer",
-        remainingS: getModeDuration(state.mode),
+        remainingS: action.payload.modeDurationS,
         expiresAt: null,
         startedAt: null,
       };
@@ -100,7 +112,7 @@ export function timerReducer(
       return {
         ...state,
         status: "no timer",
-        remainingS: getModeDuration(action.payload.mode),
+        remainingS: action.payload.modeDurationS,
         expiresAt: null,
         mode: action.payload.mode,
         startedAt: null,

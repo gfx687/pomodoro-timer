@@ -17,6 +17,8 @@ interface SettingsContextType {
   setDurationWork: (v: number | ((prev: number) => number)) => void;
   durationBreak: number;
   setDurationBreak: (v: number | ((prev: number) => number)) => void;
+  durationLongBreak: number;
+  setDurationLongBreak: (v: number | ((prev: number) => number)) => void;
   inverseColorsFullscreen: boolean;
   setInverseColorsFullscreen: (
     v: boolean | ((prev: boolean) => boolean)
@@ -87,6 +89,25 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  const [durationLongBreak, setDurationLongBreakState] = useState(() => {
+    const v = localStorage.getItem(SETTINGS.durationLongBreak.key);
+    return v !== null ? Number(v) : SETTINGS.durationLongBreak.defaultValue;
+  });
+
+  const setDurationLongBreak = useCallback(
+    (v: number | ((prev: number) => number)) => {
+      setDurationLongBreakState((prev) => {
+        const newValue = typeof v === "function" ? v(prev) : v;
+        localStorage.setItem(
+          SETTINGS.durationLongBreak.key,
+          newValue.toString()
+        );
+        return newValue;
+      });
+    },
+    []
+  );
+
   const [inverseColorsFullscreen, setInverseColorsFullscreenState] = useState(
     () => {
       const v = localStorage.getItem(SETTINGS.inverseColorsFullscreen.key);
@@ -149,6 +170,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setDurationWork,
       durationBreak,
       setDurationBreak,
+      durationLongBreak,
+      setDurationLongBreak,
       inverseColorsFullscreen,
       setInverseColorsFullscreen,
       fullscreenShowMode,
@@ -162,6 +185,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setDurationWork,
       durationBreak,
       setDurationBreak,
+      durationLongBreak,
+      setDurationLongBreak,
       inverseColorsFullscreen,
       setInverseColorsFullscreen,
       fullscreenShowMode,

@@ -3,7 +3,7 @@ import type { TimerMode } from "../other/types.websocket";
 import { useWebSocketConnection } from "./useWebSocketConnection";
 import { useTimerState } from "./useTimerState";
 import { isAnActiveStatus } from "./useTimerState.reducer";
-import { getModeDuration } from "../utils/getModeDuration";
+import { useSettingsContext } from "../contexts/SettingsContext";
 
 export function useTimer() {
   const { sendMessage, lastMessage } = useWebSocketConnection();
@@ -19,6 +19,27 @@ export function useTimer() {
   } = useTimerState();
   const [syncToBackend, setSyncToBackend] = useState(false);
   const stateRef = useRef(state);
+  const { durationWork, durationBreak, durationLongBreak } =
+    useSettingsContext();
+
+  // TODO: handle
+  const getModeDuration = useCallback(
+    (mode: TimerMode) => {
+      switch (mode) {
+        case "Break": {
+          return durationBreak;
+        }
+        case "LongBreak": {
+          return durationLongBreak;
+        }
+        case "Work":
+        default: {
+          return durationWork;
+        }
+      }
+    },
+    [durationWork, durationBreak, durationLongBreak]
+  );
 
   useEffect(() => {
     stateRef.current = state;
@@ -38,7 +59,7 @@ export function useTimer() {
           break;
         }
         case "TimerReset":
-          resetTimer();
+          resetTimer(getModeDuration(stateRef.current.mode));
           break;
         case "TimerFinished":
           console.log("FINISH: " + JSON.stringify(lastMessage));
@@ -51,7 +72,7 @@ export function useTimer() {
           break;
       }
     }
-  }, [lastMessage, setStatus, resetTimer, finishTimer]);
+  }, [lastMessage, setStatus, resetTimer, finishTimer, getModeDuration]);
 
   useEffect(() => {
     if (!syncToBackend) return;
@@ -69,22 +90,23 @@ export function useTimer() {
     });
 
     setSyncToBackend(false);
-  }, [syncToBackend, sendMessage]);
+  }, [syncToBackend, sendMessage, getModeDuration]);
 
   const start = useCallback(() => {
     const now = new Date();
-    startTimer(now);
+    const duration = getModeDuration(stateRef.current.mode);
+    startTimer(duration, now);
     sendMessage({
       type: "TimerStart",
       payload: {
-        durationTotal: getModeDuration(stateRef.current.mode),
+        durationTotal: duration,
         mode: stateRef.current.mode,
         startedAt: now,
-        remaining: getModeDuration(stateRef.current.mode),
+        remaining: duration,
         isActive: true,
       },
     });
-  }, [sendMessage, startTimer]);
+  }, [sendMessage, startTimer, getModeDuration]);
 
   const resume = useCallback(() => {
     resumeTimer();
@@ -97,15 +119,15 @@ export function useTimer() {
   }, [sendMessage, pauseTimer]);
 
   const reset = useCallback(() => {
-    resetTimer();
+    resetTimer(getModeDuration(stateRef.current.mode));
     sendMessage({ type: "TimerReset", payload: { id: stateRef.current.id } });
-  }, [sendMessage, resetTimer]);
+  }, [sendMessage, resetTimer, getModeDuration]);
 
   const changeMode = useCallback(
     (newMode: TimerMode) => {
-      changeModeInternal(newMode);
+      changeModeInternal(newMode, getModeDuration(newMode));
     },
-    [changeModeInternal]
+    [changeModeInternal, getModeDuration]
   );
 
   return { state, stateRef, reset, pause, resume, start, changeMode };

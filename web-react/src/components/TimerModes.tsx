@@ -37,6 +37,14 @@ export default function TimerModes({
       >
         Break
       </button>
+      <button
+        type="button"
+        className={getClasses("LongBreak")}
+        onClick={() => onModeChange("LongBreak")}
+        title={currentMode === "LongBreak" ? "" : "Timer is running."}
+      >
+        Long Break
+      </button>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using FluentValidation;
 using Hangfire;
 using Hangfire.Storage.SQLite;
@@ -15,7 +17,13 @@ try
     builder.Services.AddOpenApi();
     // builder.Services.AddHostedService<BackgroundWorker>();
     builder.Services.AddSerilog();
-    builder.Services.AddControllers();
+    builder
+        .Services.AddControllers()
+        .AddJsonOptions(o =>
+        {
+            o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
 
     var connectionString =
         Environment.GetEnvironmentVariable("CONNECTION_STRING")
