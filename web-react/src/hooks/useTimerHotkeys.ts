@@ -19,14 +19,6 @@ export function useTimerHotkeys(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start, pause, resume]);
 
-  const onPressW = useCallback(() => {
-    const currentIndex = TIMER_MODES.indexOf(stateRef.current.mode);
-    const nextIndex = (currentIndex + 1) % TIMER_MODES.length;
-    changeMode(TIMER_MODES[nextIndex]);
-    // linter does not know that stateRef is a ref, so it warns us
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [changeMode]);
-
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.code === "Space") {
@@ -37,13 +29,17 @@ export function useTimerHotkeys(
         setFullscreen(false);
       } else if (e.key === "R") {
         reset();
-      } else if (e.key === "w" || e.key === "W") {
-        onPressW();
+      } else if (e.key === "1") {
+        changeMode(TIMER_MODES[0]);
+      } else if (e.key === "2") {
+        changeMode(TIMER_MODES[1]);
+      } else if (e.key === "3") {
+        changeMode(TIMER_MODES[2]);
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onPressSpace, setFullscreen, reset, onPressW]);
+  }, [onPressSpace, setFullscreen, reset, changeMode]);
 }

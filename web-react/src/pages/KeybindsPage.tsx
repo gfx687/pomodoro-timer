@@ -12,14 +12,21 @@ export function KeybindsPage() {
         <span className="keybind">R</span>
       </div>
       <div className="keybinds-row">
-        <label className="keybind-label">Switch timer Mode</label>
-        <span className="keybind">w</span>
-        <span className="keybind">W</span>
-      </div>
-      <div className="keybinds-row">
         <label className="keybind-label">Fullscreen view</label>
         <span className="keybind">f</span>
         <span className="keybind">F</span>
+      </div>
+      <div className="keybinds-row">
+        <label className="keybind-label">Switch to Work mode</label>
+        <span className="keybind">1</span>
+      </div>
+      <div className="keybinds-row">
+        <label className="keybind-label">Switch to Break mode</label>
+        <span className="keybind">2</span>
+      </div>
+      <div className="keybinds-row">
+        <label className="keybind-label">Switch to Long Break mode</label>
+        <span className="keybind">3</span>
       </div>
     </div>
   );
