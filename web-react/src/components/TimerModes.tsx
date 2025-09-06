@@ -15,12 +15,25 @@ export default function TimerModes({
   const getClasses = (m: TimerMode) => {
     let c = "timer-mode";
     if (currentMode === m) c += " timer-mode-current";
-    else if (timerExists) c += " timer-mode-inactive";
+    else if (timerExists) c += " timer-mode-not-allowed";
     return c;
+  };
+
+  const getSliderClass = () => {
+    switch (currentMode) {
+      case "Break":
+        return "timer-modes-slider break";
+      case "LongBreak":
+        return "timer-modes-slider longbreak";
+      case "Work":
+      default:
+        return "timer-modes-slider work";
+    }
   };
 
   return (
     <div className="timer-modes">
+      <div className={getSliderClass()}></div>
       <button
         type="button"
         className={getClasses("Work")}

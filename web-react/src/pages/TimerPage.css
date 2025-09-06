@@ -1,7 +1,12 @@
-.timer-area {
+.timer-page {
   text-align: center;
-  margin-top: 0.5rem;
-  padding: 1rem 1rem 2rem 1rem;
+  margin-top: 1rem;
+}
+
+.timer-page-timer-background {
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
   background-color: var(--bg-alt);
   border-radius: 1rem;
+  padding-bottom: 2rem;
 }

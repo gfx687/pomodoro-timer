@@ -36,7 +36,7 @@ export default function TimerPage() {
 
   if (isTimerFullscreen)
     return (
-      <div className="timer-area">
+      <div className="timer-page">
         <TimerFullscreen
           remainingS={state.remainingS}
           mode={state.mode}
@@ -46,20 +46,22 @@ export default function TimerPage() {
     );
 
   return (
-    <div className="timer-area">
+    <div className="timer-page">
       <TimerModes
         currentMode={state.mode}
         timerExists={isAnActiveStatus(state.status)}
         onModeChange={changeMode}
       />
-      <Timer remainingS={state.remainingS} />
-      <TimerControls
-        timerStatus={state.status}
-        onStart={start}
-        onResume={resume}
-        onPause={pause}
-        onReset={reset}
-      />
+      <div className="timer-page-timer-background">
+        <Timer remainingS={state.remainingS} />
+        <TimerControls
+          timerStatus={state.status}
+          onStart={start}
+          onResume={resume}
+          onPause={pause}
+          onReset={reset}
+        />
+      </div>
     </div>
   );
 }
