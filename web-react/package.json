@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "npx tsc --noEmit --project tsconfig.app.json; eslint .",
+    "lint": "npx tsc --noEmit --project tsconfig.app.json && npx eslint . --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {

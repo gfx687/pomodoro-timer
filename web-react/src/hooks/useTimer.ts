@@ -22,7 +22,6 @@ export function useTimer() {
   const { durationWork, durationBreak, durationLongBreak } =
     useSettingsContext();
 
-  // TODO: handle
   const getModeDuration = useCallback(
     (mode: TimerMode) => {
       switch (mode) {
