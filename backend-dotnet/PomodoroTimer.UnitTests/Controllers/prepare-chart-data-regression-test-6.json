@@ -1,0 +1,57 @@
+{
+  "inputFrom": "2025-08-27T00:00:00+04:00",
+  "inputLogs": [
+    {
+      "primaryKey": 285,
+      "id": "66645138-38a2-4234-8470-dcfe12d40766",
+      "action": "Start",
+      "timestamp": "2025-08-26T20:00:43+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 286,
+      "id": "66645138-38a2-4234-8470-dcfe12d40766",
+      "action": "Finish",
+      "timestamp": "2025-08-26T20:30:43+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    }
+  ],
+  "outputHeaders": [
+    {
+      "type": "string",
+      "id": "Day",
+      "role": null
+    },
+    {
+      "type": "number",
+      "id": "Break_0",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_1",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    }
+  ],
+  "outputDataRow": [
+    "8/27/2025",
+    "1",
+    "Break: 1 min\n\nStarted at 12:00 AM\nFinished at 12:00 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 12:00 AM\nFinished at 12:30 AM"
+  ]
+}

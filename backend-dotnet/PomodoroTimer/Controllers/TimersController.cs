@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Serilog;
@@ -21,34 +20,46 @@ public class TimersController(ITimerLogRepository _timerLogs) : ControllerBase
     /// example: `?from=2025-08-25%2B02:00`  for +2h timezone.
     /// </summary>
     [HttpGet("chart-day")]
-    public async Task<object> Get([BindRequired] DateTimeOffset from)
+    public async Task<ActionResult<object>> Get([BindRequired] DateTimeOffset from)
     {
-        var todayLogs = await _timerLogs.GetDaysLogsAsync(from);
-
-        // - group logs by timer ID
-        // - remove any non-Work modes
-        // - remove non-Finished timers
-        var filtered = todayLogs
-            .GroupBy(x => x.Id)
-            .Where(x =>
-                x.First().Mode == TimerModes.Work && x.Any(y => y.Action == TimerLogActions.Finish)
-            )
-            .SelectMany(group => group.OrderBy(x => x.Timestamp))
-            .ToList();
-
-        var (headers, dataRow) = PrepareChartData([.. filtered], from);
-        return new
+        try
         {
-            Raw = todayLogs.Select((x) => new TimerLogDto(x.Id, x.Action, x.Mode, x.Timestamp)),
-            Processed = new object[] { headers, dataRow },
-        };
+            var todayLogs = await _timerLogs.GetDaysLogsAsync(from);
+
+            // - group logs by timer ID
+            // - remove any non-Work modes
+            // - remove non-Finished timers
+            var filtered = todayLogs
+                .GroupBy(x => x.Id)
+                .Where(x =>
+                    x.First().Mode == TimerModes.Work
+                    && x.Any(y => y.Action == TimerLogActions.Finish)
+                )
+                .SelectMany(group => group.OrderBy(x => x.Timestamp))
+                .ToList();
+
+            var (headers, dataRow) = PrepareChartData(filtered, from);
+            return new
+            {
+                Raw = todayLogs.Select((x) => new TimerLogDto(x.Id, x.Action, x.Mode, x.Timestamp)),
+                Processed = new object[] { headers, dataRow },
+            };
+        }
+        catch (Exception ex)
+        {
+            Log.Logger.Error(ex, "something went wrong");
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                "An unexpected error occurred. Please try again later."
+            );
+        }
     }
 
     /// <summary>
     /// Only handles a single day's logs
     /// </summary>
     /// <returns>Headers and a single Row</returns>
-    private static (List<ChartHeader>, List<string>) PrepareChartData(
+    public static (List<ChartHeader>, List<string>) PrepareChartData(
         List<TimerLog> logs,
         DateTimeOffset from
     )
@@ -66,11 +77,11 @@ public class TimersController(ITimerLogRepository _timerLogs) : ControllerBase
         {
             TimerLog? log = logs[i];
             var timestamp = log.Timestamp.ToOffset(from.Offset);
-            var minutesFromDayStart = Convert.ToInt32(timestamp.TimeOfDay.TotalMinutes);
+            var currentMinuteNext = Convert.ToInt32(timestamp.Subtract(from).TotalMinutes);
 
             // TODO: edge case - next timestamp is earlier than previous one
-            var periodDuration = minutesFromDayStart - currentMinute;
-            currentMinute = minutesFromDayStart;
+            var periodDuration = currentMinuteNext - currentMinute;
+            currentMinute = currentMinuteNext;
 
             var periodType = lastLogAction switch
             {
@@ -87,8 +98,8 @@ public class TimersController(ITimerLogRepository _timerLogs) : ControllerBase
             data.Add(
                 @$"{periodType}: {periodDuration} min
 
-Started at: {lastLogTimestamp:t}
-Finished at: {timestamp:t}"
+Started at {lastLogTimestamp:t}
+Finished at {timestamp:t}"
             );
 
             lastLogAction = log.Action;
@@ -99,7 +110,7 @@ Finished at: {timestamp:t}"
     }
 }
 
-public class ChartHeader
+public record ChartHeader
 {
     public required string Type { get; init; }
     public string? Id { get; init; }

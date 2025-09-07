@@ -1,0 +1,603 @@
+{
+  "inputFrom": "2025-09-04T00:00:00+04:00",
+  "inputLogs": [
+    {
+      "primaryKey": 517,
+      "id": "44a23aff-06cc-4e97-b665-8e7c46a45b17",
+      "action": "Start",
+      "timestamp": "2025-09-04T04:34:06+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 518,
+      "id": "44a23aff-06cc-4e97-b665-8e7c46a45b17",
+      "action": "Finish",
+      "timestamp": "2025-09-04T05:04:06+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 521,
+      "id": "308025a1-8a38-4d2d-b6f7-3650ab22362e",
+      "action": "Start",
+      "timestamp": "2025-09-04T05:12:37+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 524,
+      "id": "308025a1-8a38-4d2d-b6f7-3650ab22362e",
+      "action": "Finish",
+      "timestamp": "2025-09-04T05:42:37+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 522,
+      "id": "6c0506fb-7990-4a17-8145-7f6b161d9b0c",
+      "action": "Start",
+      "timestamp": "2025-09-04T05:12:37+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1210
+    },
+    {
+      "primaryKey": 525,
+      "id": "6c0506fb-7990-4a17-8145-7f6b161d9b0c",
+      "action": "Finish",
+      "timestamp": "2025-09-04T05:42:37+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 523,
+      "id": "e2ea4c94-5f45-4d35-91af-4c51d48ee95f",
+      "action": "Start",
+      "timestamp": "2025-09-04T05:12:37+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1098
+    },
+    {
+      "primaryKey": 526,
+      "id": "e2ea4c94-5f45-4d35-91af-4c51d48ee95f",
+      "action": "Finish",
+      "timestamp": "2025-09-04T05:42:38+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 529,
+      "id": "92492642-f698-4e1f-8210-a9ec35221991",
+      "action": "Start",
+      "timestamp": "2025-09-04T05:49:54+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 530,
+      "id": "92492642-f698-4e1f-8210-a9ec35221991",
+      "action": "Finish",
+      "timestamp": "2025-09-04T06:19:54+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 535,
+      "id": "747c5f3c-4d4a-4e12-8de4-28c33d9376e2",
+      "action": "Start",
+      "timestamp": "2025-09-04T06:51:21+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 536,
+      "id": "747c5f3c-4d4a-4e12-8de4-28c33d9376e2",
+      "action": "Finish",
+      "timestamp": "2025-09-04T07:21:21+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 537,
+      "id": "fdfbc3e4-acfa-4438-b44b-2e65806ec82d",
+      "action": "Start",
+      "timestamp": "2025-09-04T07:26:26+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 538,
+      "id": "fdfbc3e4-acfa-4438-b44b-2e65806ec82d",
+      "action": "Finish",
+      "timestamp": "2025-09-04T07:56:26+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 539,
+      "id": "f7575d81-8a77-4567-b084-62acf706d9cd",
+      "action": "Start",
+      "timestamp": "2025-09-04T08:05:02+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 540,
+      "id": "f7575d81-8a77-4567-b084-62acf706d9cd",
+      "action": "Finish",
+      "timestamp": "2025-09-04T08:35:02+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 541,
+      "id": "ff725fa8-03bf-43b3-a359-0f3648e6f903",
+      "action": "Start",
+      "timestamp": "2025-09-04T11:30:58+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 542,
+      "id": "ff725fa8-03bf-43b3-a359-0f3648e6f903",
+      "action": "Finish",
+      "timestamp": "2025-09-04T12:00:58+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 543,
+      "id": "4f8aac1f-3bba-4533-8145-adcda79a6607",
+      "action": "Start",
+      "timestamp": "2025-09-04T12:06:39+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 544,
+      "id": "4f8aac1f-3bba-4533-8145-adcda79a6607",
+      "action": "Finish",
+      "timestamp": "2025-09-04T12:36:39+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 545,
+      "id": "ef0f50d2-3584-42bd-83b4-f46f6383e7d4",
+      "action": "Start",
+      "timestamp": "2025-09-04T12:42:37+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 546,
+      "id": "ef0f50d2-3584-42bd-83b4-f46f6383e7d4",
+      "action": "Finish",
+      "timestamp": "2025-09-04T13:12:37+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 547,
+      "id": "ab9dc0eb-489b-4734-90bc-b6de57bd6f41",
+      "action": "Start",
+      "timestamp": "2025-09-04T16:49:48+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 548,
+      "id": "ab9dc0eb-489b-4734-90bc-b6de57bd6f41",
+      "action": "Pause",
+      "timestamp": "2025-09-04T16:58:07+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 549,
+      "id": "ab9dc0eb-489b-4734-90bc-b6de57bd6f41",
+      "action": "Unpause",
+      "timestamp": "2025-09-04T16:58:56+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 550,
+      "id": "ab9dc0eb-489b-4734-90bc-b6de57bd6f41",
+      "action": "Finish",
+      "timestamp": "2025-09-04T17:20:37+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 551,
+      "id": "f4fc29f1-badc-4ca1-ab77-245cacf48a84",
+      "action": "Start",
+      "timestamp": "2025-09-04T19:16:20+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 552,
+      "id": "f4fc29f1-badc-4ca1-ab77-245cacf48a84",
+      "action": "Finish",
+      "timestamp": "2025-09-04T19:46:20+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    }
+  ],
+  "outputHeaders": [
+    {
+      "type": "string",
+      "id": "Day",
+      "role": null
+    },
+    {
+      "type": "number",
+      "id": "Break_0",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_1",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_2",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_3",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_4",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_5",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_6",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_7",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_8",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_9",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_10",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_11",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_12",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_13",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_14",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_15",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_16",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_17",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_18",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_19",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_20",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_21",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_22",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_23",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Pause_24",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_25",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_26",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_27",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    }
+  ],
+  "outputDataRow": [
+    "9/4/2025",
+    "514",
+    "Break: 514 min\n\nStarted at 12:00 AM\nFinished at 8:34 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 8:34 AM\nFinished at 9:04 AM",
+    "9",
+    "Break: 9 min\n\nStarted at 9:04 AM\nFinished at 9:12 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 9:12 AM\nFinished at 9:42 AM",
+    "-30",
+    "Break: -30 min\n\nStarted at 9:42 AM\nFinished at 9:12 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 9:12 AM\nFinished at 9:42 AM",
+    "-30",
+    "Break: -30 min\n\nStarted at 9:42 AM\nFinished at 9:12 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 9:12 AM\nFinished at 9:42 AM",
+    "7",
+    "Break: 7 min\n\nStarted at 9:42 AM\nFinished at 9:49 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 9:49 AM\nFinished at 10:19 AM",
+    "31",
+    "Break: 31 min\n\nStarted at 10:19 AM\nFinished at 10:51 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 10:51 AM\nFinished at 11:21 AM",
+    "5",
+    "Break: 5 min\n\nStarted at 11:21 AM\nFinished at 11:26 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 11:26 AM\nFinished at 11:56 AM",
+    "9",
+    "Break: 9 min\n\nStarted at 11:56 AM\nFinished at 12:05 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 12:05 PM\nFinished at 12:35 PM",
+    "176",
+    "Break: 176 min\n\nStarted at 12:35 PM\nFinished at 3:30 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 3:30 PM\nFinished at 4:00 PM",
+    "6",
+    "Break: 6 min\n\nStarted at 4:00 PM\nFinished at 4:06 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 4:06 PM\nFinished at 4:36 PM",
+    "6",
+    "Break: 6 min\n\nStarted at 4:36 PM\nFinished at 4:42 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 4:42 PM\nFinished at 5:12 PM",
+    "217",
+    "Break: 217 min\n\nStarted at 5:12 PM\nFinished at 8:49 PM",
+    "8",
+    "Work: 8 min\n\nStarted at 8:49 PM\nFinished at 8:58 PM",
+    "1",
+    "Pause: 1 min\n\nStarted at 8:58 PM\nFinished at 8:58 PM",
+    "22",
+    "Work: 22 min\n\nStarted at 8:58 PM\nFinished at 9:20 PM",
+    "115",
+    "Break: 115 min\n\nStarted at 9:20 PM\nFinished at 11:16 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 11:16 PM\nFinished at 11:46 PM"
+  ]
+}

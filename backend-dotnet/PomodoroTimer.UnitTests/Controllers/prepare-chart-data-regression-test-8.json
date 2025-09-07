@@ -1,0 +1,477 @@
+{
+  "inputFrom": "2025-09-05T00:00:00+04:00",
+  "inputLogs": [
+    {
+      "primaryKey": 555,
+      "id": "e076a9bb-4a2a-4e3f-9713-dc2c80c4313c",
+      "action": "Start",
+      "timestamp": "2025-09-05T04:47:45+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 556,
+      "id": "e076a9bb-4a2a-4e3f-9713-dc2c80c4313c",
+      "action": "Finish",
+      "timestamp": "2025-09-05T05:17:45+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 559,
+      "id": "57ace739-526f-47aa-aa99-9241605a7d78",
+      "action": "Start",
+      "timestamp": "2025-09-05T05:29:41+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 560,
+      "id": "57ace739-526f-47aa-aa99-9241605a7d78",
+      "action": "Finish",
+      "timestamp": "2025-09-05T05:59:41+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 563,
+      "id": "a6f401d3-25df-4bab-b25f-008033d097ee",
+      "action": "Start",
+      "timestamp": "2025-09-05T06:05:52+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 564,
+      "id": "a6f401d3-25df-4bab-b25f-008033d097ee",
+      "action": "Finish",
+      "timestamp": "2025-09-05T06:35:52+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 567,
+      "id": "919dacd1-4f7b-4d35-bc15-6b0bb1fe18df",
+      "action": "Start",
+      "timestamp": "2025-09-05T06:42:33+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 568,
+      "id": "919dacd1-4f7b-4d35-bc15-6b0bb1fe18df",
+      "action": "Finish",
+      "timestamp": "2025-09-05T07:12:33+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 569,
+      "id": "f832ad89-35b1-4805-a760-b21141ff9273",
+      "action": "Start",
+      "timestamp": "2025-09-05T07:39:05+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 570,
+      "id": "f832ad89-35b1-4805-a760-b21141ff9273",
+      "action": "Finish",
+      "timestamp": "2025-09-05T08:09:05+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 571,
+      "id": "2b5f3252-cb8c-4b98-9da3-33abf111c96c",
+      "action": "Start",
+      "timestamp": "2025-09-05T08:18:22+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 572,
+      "id": "2b5f3252-cb8c-4b98-9da3-33abf111c96c",
+      "action": "Finish",
+      "timestamp": "2025-09-05T08:48:22+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 573,
+      "id": "a1555498-e9fc-4749-9d16-00ebcdd3d994",
+      "action": "Start",
+      "timestamp": "2025-09-05T12:33:19+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 574,
+      "id": "a1555498-e9fc-4749-9d16-00ebcdd3d994",
+      "action": "Finish",
+      "timestamp": "2025-09-05T13:03:19+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 575,
+      "id": "9b5db3fe-c5a6-41a8-94e1-3dbe89138c22",
+      "action": "Start",
+      "timestamp": "2025-09-05T14:31:21+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 576,
+      "id": "9b5db3fe-c5a6-41a8-94e1-3dbe89138c22",
+      "action": "Finish",
+      "timestamp": "2025-09-05T15:01:21+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 577,
+      "id": "ba48aea8-069e-404c-ac2c-9f9b1e4e9928",
+      "action": "Start",
+      "timestamp": "2025-09-05T15:27:33+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 578,
+      "id": "ba48aea8-069e-404c-ac2c-9f9b1e4e9928",
+      "action": "Finish",
+      "timestamp": "2025-09-05T15:57:33+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 579,
+      "id": "8592cb5d-30c0-4d1f-acf3-5bca44a593a5",
+      "action": "Start",
+      "timestamp": "2025-09-05T16:50:31+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 580,
+      "id": "8592cb5d-30c0-4d1f-acf3-5bca44a593a5",
+      "action": "Finish",
+      "timestamp": "2025-09-05T17:20:31+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    },
+    {
+      "primaryKey": 581,
+      "id": "de8af3fc-8ec5-4bde-bca3-8c32c7161f7b",
+      "action": "Start",
+      "timestamp": "2025-09-05T18:17:50+00:00",
+      "mode": "Work",
+      "durationTotal": 1800,
+      "remainingAtCreationTime": 1800
+    },
+    {
+      "primaryKey": 582,
+      "id": "de8af3fc-8ec5-4bde-bca3-8c32c7161f7b",
+      "action": "Finish",
+      "timestamp": "2025-09-05T18:47:50+00:00",
+      "mode": null,
+      "durationTotal": null,
+      "remainingAtCreationTime": null
+    }
+  ],
+  "outputHeaders": [
+    {
+      "type": "string",
+      "id": "Day",
+      "role": null
+    },
+    {
+      "type": "number",
+      "id": "Break_0",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_1",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_2",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_3",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_4",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_5",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_6",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_7",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_8",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_9",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_10",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_11",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_12",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_13",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_14",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_15",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_16",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_17",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_18",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_19",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Break_20",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    },
+    {
+      "type": "number",
+      "id": "Work_21",
+      "role": null
+    },
+    {
+      "type": "string",
+      "id": null,
+      "role": "tooltip"
+    }
+  ],
+  "outputDataRow": [
+    "9/5/2025",
+    "528",
+    "Break: 528 min\n\nStarted at 12:00 AM\nFinished at 8:47 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 8:47 AM\nFinished at 9:17 AM",
+    "12",
+    "Break: 12 min\n\nStarted at 9:17 AM\nFinished at 9:29 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 9:29 AM\nFinished at 9:59 AM",
+    "6",
+    "Break: 6 min\n\nStarted at 9:59 AM\nFinished at 10:05 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 10:05 AM\nFinished at 10:35 AM",
+    "7",
+    "Break: 7 min\n\nStarted at 10:35 AM\nFinished at 10:42 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 10:42 AM\nFinished at 11:12 AM",
+    "26",
+    "Break: 26 min\n\nStarted at 11:12 AM\nFinished at 11:39 AM",
+    "30",
+    "Work: 30 min\n\nStarted at 11:39 AM\nFinished at 12:09 PM",
+    "9",
+    "Break: 9 min\n\nStarted at 12:09 PM\nFinished at 12:18 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 12:18 PM\nFinished at 12:48 PM",
+    "225",
+    "Break: 225 min\n\nStarted at 12:48 PM\nFinished at 4:33 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 4:33 PM\nFinished at 5:03 PM",
+    "88",
+    "Break: 88 min\n\nStarted at 5:03 PM\nFinished at 6:31 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 6:31 PM\nFinished at 7:01 PM",
+    "27",
+    "Break: 27 min\n\nStarted at 7:01 PM\nFinished at 7:27 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 7:27 PM\nFinished at 7:57 PM",
+    "53",
+    "Break: 53 min\n\nStarted at 7:57 PM\nFinished at 8:50 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 8:50 PM\nFinished at 9:20 PM",
+    "57",
+    "Break: 57 min\n\nStarted at 9:20 PM\nFinished at 10:17 PM",
+    "30",
+    "Work: 30 min\n\nStarted at 10:17 PM\nFinished at 10:47 PM"
+  ]
+}

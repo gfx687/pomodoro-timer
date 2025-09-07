@@ -59,12 +59,14 @@ function getTodayString() {
 
 async function fetchChartData(selectedDate: string) {
   const selected = new Date(selectedDate);
-  selected.setHours(0, 0, 0, 0);
+  selected.setHours(6, 0, 0, 0);
 
   const response = await fetch(
     import.meta.env.VITE_API_URL +
       "/api/timers/chart-day?" +
-      new URLSearchParams({ from: format(selected, "yyyy-MM-ddxxx") }),
+      new URLSearchParams({
+        from: format(selected, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+      }),
   );
   if (!response.ok) {
     throw new Error("Network response was not ok");
