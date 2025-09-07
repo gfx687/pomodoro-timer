@@ -4,6 +4,6 @@
   @apply border-bg-alt flex border-b-1 pt-2.5 pb-2.5 last:border-b-0;
 }
 
-.settings-input {
-  @apply ml-auto;
+.settings-input-number {
+  @apply w-30 rounded-sm border-1 bg-white text-right;
 }

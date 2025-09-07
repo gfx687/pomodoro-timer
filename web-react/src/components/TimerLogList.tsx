@@ -16,7 +16,7 @@ export function TimerLogList({ logs }: TimerLogListProps) {
         'Work' timers started: {workStarted}, finished: {workFinished}
       </p>
       <p>Raw timer actions log:</p>
-      <ul>
+      <ul className="ml-8 list-disc">
         {mapped.map((x) => (
           <li key={`${x.id}-${x.timestamp}`}>
             <span

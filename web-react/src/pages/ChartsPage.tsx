@@ -35,15 +35,16 @@ export default function ChartsPage() {
         value={selectedDate}
         onChange={handleDateChange}
         max={getTodayString()}
+        className="w-32 rounded-sm border-1 bg-white text-right"
       />
       {isPending && <p>Fetching...</p>}
       {isError && <p>ERROR: something went wrong</p>}
       {isSuccess && (
         <>
-          <p>
-            Note: The chart only shows 'Work' type timers that were Finished.
-          </p>
           <TodaysTimers data={data!.processed} />
+          <p className="text-center">
+            The chart only shows 'Work' type timers that were Finished.
+          </p>
           <TimerLogList logs={data!.raw} />
         </>
       )}

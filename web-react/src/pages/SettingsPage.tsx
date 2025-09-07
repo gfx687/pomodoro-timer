@@ -27,7 +27,7 @@ export function SettingsPage() {
         <input
           id="volume"
           type="range"
-          className="settings-input"
+          className="ml-auto"
           min="0"
           max="100"
           value={volume}
@@ -40,7 +40,7 @@ export function SettingsPage() {
         <input
           id="duration-work"
           type="number"
-          className="settings-input w-30 rounded-sm border-1 bg-white text-right"
+          className="settings-input-number ml-auto"
           value={durationWork}
           onChange={(e) => setDurationWork(Number(e.target.value))}
         />
@@ -50,7 +50,7 @@ export function SettingsPage() {
         <input
           id="duration-break"
           type="number"
-          className="settings-input w-30 rounded-sm border-1 bg-white text-right"
+          className="settings-input-number ml-auto"
           value={durationBreak}
           onChange={(e) => setDurationBreak(Number(e.target.value))}
         />
@@ -60,7 +60,7 @@ export function SettingsPage() {
         <input
           id="duration-long-break"
           type="number"
-          className="settings-input w-30 rounded-sm border-1 bg-white text-right"
+          className="settings-input-number ml-auto"
           value={durationLongBreak}
           onChange={(e) => setDurationLongBreak(Number(e.target.value))}
         />
@@ -70,7 +70,7 @@ export function SettingsPage() {
         <input
           id="fullscreen-inverse"
           type="checkbox"
-          className="settings-input"
+          className="ml-auto"
           checked={inverseColorsFullscreen}
           onChange={(e) => setInverseColorsFullscreen(e.target.checked)}
         />
@@ -82,7 +82,7 @@ export function SettingsPage() {
         <input
           id="fullscreen-show-mode"
           type="checkbox"
-          className="settings-input"
+          className="ml-auto"
           checked={fullscreenShowMode}
           onChange={(e) => setFullscreenShowMode(e.target.checked)}
         />
