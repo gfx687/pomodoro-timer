@@ -25,7 +25,7 @@ export default function TimerControls({
   const drawReset = timerStatus != "no timer";
 
   return (
-    <div className="timer-controls">
+    <div className="relative">
       {drawStart && (
         <button
           type="button"
@@ -49,11 +49,11 @@ export default function TimerControls({
       {drawReset && (
         <button
           type="button"
-          className="timer-reset"
+          className="absolute top-1/2 ml-4 -translate-y-1/2 cursor-pointer"
           onClick={onReset}
           title="Reset the timer"
         >
-          <div className="timer-reset-center-svg">
+          <div className="flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

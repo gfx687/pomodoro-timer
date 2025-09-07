@@ -1,3 +1,5 @@
+@import "./tailwind.css";
+
 /* roboto-regular - latin */
 @font-face {
   font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
@@ -8,17 +10,20 @@
 }
 
 body {
-  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family:
+    Roboto,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
 
-  --fg: #333;
-  --bg: #eee;
-  --bg-alt: #ddd;
-  --hover: #ccc;
-  --active: #bbb;
-
-  color: var(--fg);
-  background-color: var(--bg);
+  @apply text-fg bg-bg;
 }
 
 button {
@@ -26,7 +31,7 @@ button {
 }
 
 svg {
-  fill: var(--fg);
+  @apply fill-fg;
 }
 
 /* google charts flickering tooltip fix */

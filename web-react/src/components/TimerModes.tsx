@@ -13,26 +13,28 @@ export default function TimerModes({
   onModeChange,
 }: TimerModesProps) {
   const getClasses = (m: TimerMode) => {
-    let c = "timer-mode";
-    if (currentMode === m) c += " timer-mode-current";
-    else if (timerExists) c += " timer-mode-not-allowed";
+    let c =
+      "flex-1 relative p-3 border-0 bg-inherit rounded-tl-xl rounded-tr-xl cursor-pointer";
+    if (currentMode === m) c += " font-bold";
+    else if (timerExists) c += " !cursor-not-allowed";
     return c;
   };
 
   const getSliderClass = () => {
     switch (currentMode) {
-      case "Break":
-        return "timer-modes-slider break";
-      case "LongBreak":
-        return "timer-modes-slider longbreak";
       case "Work":
+        return "timer-modes-slider left-0";
+      case "Break":
+        return "timer-modes-slider left-1/3";
+      case "LongBreak":
+        return "timer-modes-slider left-2/3";
       default:
-        return "timer-modes-slider work";
+        return "timer-modes-slider left-0";
     }
   };
 
   return (
-    <div className="timer-modes">
+    <div className="relative flex">
       <div className={getSliderClass()}></div>
       <button
         type="button"

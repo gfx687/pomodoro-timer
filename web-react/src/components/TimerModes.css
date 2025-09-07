@@ -1,61 +1,15 @@
-.timer-modes {
-  display: flex;
-  position: relative;
-}
-
-.timer-mode-not-allowed {
-  cursor: not-allowed;
-}
-
-.timer-mode {
-  font-size: 16px;
-  padding: 0.75rem;
-  background-color: inherit;
-  cursor: pointer;
-  border: none;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  flex: 1;
-  position: relative;
-  transition: color 0.3s ease;
-}
-
-.timer-mode-current {
-  font-weight: bold;
-}
+@import "../tailwind.css";
 
 .timer-modes-slider {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  background-color: var(--bg-alt);
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  transition: left 0.3s ease, width 0.3s ease;
-  z-index: -1;
-  width: calc(100% / 3);
-}
+  transition:
+    left 0.3s,
+    width 0.3s;
 
-.timer-modes-slider.work {
-  left: 0;
-}
-
-.timer-modes-slider.break {
-  left: calc(100% / 3);
-}
-
-.timer-modes-slider.longbreak {
-  left: calc(200% / 3);
+  @apply bg-bg-alt absolute top-0 bottom-0 -z-1 w-1/3 rounded-tl-xl rounded-tr-xl;
 }
 
 /* hack to not use JS to dynamically pick rounded vs straight corners for the timer below the mode picker */
 /* otherwise the timer corner under the mode picker would be rounded and look disconnected */
 .timer-modes-slider:after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: -25px;
-  width: 100%;
-  height: 25px;
-  background-color: var(--bg-alt);
+  @apply bg-bg-alt absolute right-0 -bottom-[25px] h-[25px] w-full content-[""];
 }

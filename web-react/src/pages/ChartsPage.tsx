@@ -1,4 +1,3 @@
-import "./ChartsPage.css";
 import { useQuery } from "@tanstack/react-query";
 import TodaysTimers from "../dataviz/TodaysTimers";
 import { format } from "date-fns";
@@ -27,7 +26,7 @@ export default function ChartsPage() {
   });
 
   return (
-    <div className="charts-page">
+    <div className="p-4">
       <label htmlFor="chart-data-from">Pick date: </label>
       <input
         type="date"
@@ -65,7 +64,7 @@ async function fetchChartData(selectedDate: string) {
   const response = await fetch(
     import.meta.env.VITE_API_URL +
       "/api/timers/chart-day?" +
-      new URLSearchParams({ from: format(selected, "yyyy-MM-ddxxx") })
+      new URLSearchParams({ from: format(selected, "yyyy-MM-ddxxx") }),
   );
   if (!response.ok) {
     throw new Error("Network response was not ok");

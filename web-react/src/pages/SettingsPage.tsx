@@ -17,8 +17,9 @@ export function SettingsPage() {
     setFullscreenShowMode,
     resetSettings,
   } = useSettingsContext();
+
   return (
-    <div className="settings">
+    <div className="mt-2">
       <div className="settings-row">
         <label htmlFor="volume" className="settings-label">
           Alert volume
@@ -35,31 +36,31 @@ export function SettingsPage() {
         <span style={{ marginLeft: "5px" }}>{volume}</span>
       </div>
       <div className="settings-row">
-        <label htmlFor="duration-work">Work duration</label>
+        <label htmlFor="duration-work">Work duration (sec)</label>
         <input
           id="duration-work"
           type="number"
-          className="settings-input"
+          className="settings-input w-30 rounded-sm border-1 bg-white text-right"
           value={durationWork}
           onChange={(e) => setDurationWork(Number(e.target.value))}
         />
       </div>
       <div className="settings-row">
-        <label htmlFor="duration-break">Break duration</label>
+        <label htmlFor="duration-break">Break duration (sec)</label>
         <input
           id="duration-break"
           type="number"
-          className="settings-input"
+          className="settings-input w-30 rounded-sm border-1 bg-white text-right"
           value={durationBreak}
           onChange={(e) => setDurationBreak(Number(e.target.value))}
         />
       </div>
       <div className="settings-row">
-        <label htmlFor="duration-long-break">Long Break duration</label>
+        <label htmlFor="duration-long-break">Long Break duration (sec)</label>
         <input
           id="duration-long-break"
           type="number"
-          className="settings-input"
+          className="settings-input w-30 rounded-sm border-1 bg-white text-right"
           value={durationLongBreak}
           onChange={(e) => setDurationLongBreak(Number(e.target.value))}
         />
@@ -89,7 +90,7 @@ export function SettingsPage() {
       <div className="settings-row">
         <button
           type="button"
-          className="settings-reset"
+          className="bg-bg-alt hover:bg-hover active:bg-active ml-auto rounded-lg pt-2 pr-4 pb-2 pl-4"
           onClick={resetSettings}
         >
           Reset

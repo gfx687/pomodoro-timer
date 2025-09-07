@@ -1,35 +1,9 @@
-.settings-page {
-  margin-top: 1rem;
-}
+@import "../tailwind.css";
 
 .settings-row {
-  display: flex;
-  border-bottom: 1px solid var(--bg-alt);
-  padding: 10px 0;
-}
-
-.settings-row:last-child {
-  border-bottom: none;
+  @apply border-bg-alt flex border-b-1 pt-2.5 pb-2.5 last:border-b-0;
 }
 
 .settings-input {
-  margin-left: auto;
-}
-
-.settings-reset {
-  margin-left: auto;
-
-  font-size: 16px;
-  padding: 0.5rem 1rem;
-  background-color: var(--bg-alt);
-  border-radius: 10px;
-  border: none;
-}
-
-.settings-reset:hover {
-  background-color: var(--hover);
-}
-
-.settings-reset:active {
-  background-color: var(--active);
+  @apply ml-auto;
 }

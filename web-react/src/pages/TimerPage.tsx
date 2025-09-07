@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import "./TimerPage.css";
 import TimerControls from "../components/TimerControls";
 import TimerModes from "../components/TimerModes";
 import Timer from "../components/Timer";
@@ -22,7 +21,7 @@ export default function TimerPage() {
     resume,
     reset,
     changeMode,
-    setIsTimerFullscreen
+    setIsTimerFullscreen,
   );
 
   // don't play sound if user refreshes the page with 00:00 timer
@@ -36,7 +35,7 @@ export default function TimerPage() {
 
   if (isTimerFullscreen)
     return (
-      <div className="timer-page">
+      <div className="mt-2 text-center">
         <TimerFullscreen
           remainingS={state.remainingS}
           mode={state.mode}
@@ -46,13 +45,13 @@ export default function TimerPage() {
     );
 
   return (
-    <div className="timer-page">
+    <div className="mt-2 text-center">
       <TimerModes
         currentMode={state.mode}
         timerExists={isAnActiveStatus(state.status)}
         onModeChange={changeMode}
       />
-      <div className="timer-page-timer-background">
+      <div className="bg-bg-alt rounded-2xl pb-8">
         <Timer remainingS={state.remainingS} />
         <TimerControls
           timerStatus={state.status}

@@ -1,30 +1,5 @@
-.timer-controls {
-  position: relative;
-}
+@import "../tailwind.css";
 
 .timer-control {
-  color: var(--bg);
-  background-color: var(--fg);
-  border-radius: 10px;
-  border: none;
-  font-size: 30px;
-  cursor: pointer;
-  width: 225px;
-  line-height: 1.5;
-}
-
-.timer-reset {
-  position: absolute;
-  top: 50%;
-  margin-left: 1rem;
-  transform: translateY(-50%);
-  background-color: var(--bg-alt);
-  border: none;
-  cursor: pointer;
-}
-
-.timer-reset-center-svg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply bg-fg text-bg w-56 cursor-pointer rounded-lg border-0 text-3xl/12;
 }

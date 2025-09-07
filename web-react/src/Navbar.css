@@ -1,56 +1,11 @@
-.app {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 500px;
-  padding: 1rem;
-  margin: 0 auto;
-  box-shadow: 0 0 10px var(--fg);
-}
-
-.app-fullwidth {
-  max-width: none;
-  width: 100%;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.hidden {
-  visibility: hidden;
-}
-
-.navbar {
-  max-width: calc(500px - 2rem);
-  margin: 0 auto;
-
-  display: flex;
-  border-bottom: 2px solid var(--bg-alt);
-  padding-bottom: 0.5rem;
-}
+@import "./tailwind.css";
 
 .navbar-item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem;
+  @apply flex items-center gap-1 pt-1.5 pr-2 pb-1.5 pl-2;
 }
 
 .navbar-item-link {
-  background-color: var(--bg-alt);
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-}
-
-.navbar-item-right {
-  margin-left: auto;
-}
-
-.navbar-hover:hover {
-  background-color: var(--hover);
-}
-
-.navbar-hover:active {
-  background-color: var(--active);
+  @apply bg-bg-alt cursor-pointer rounded-lg border-0;
 }
 
 .navbar-dropdown {
@@ -59,33 +14,14 @@
 }
 
 .navbar-dropdown-content {
-  position: absolute;
-  top: 2rem;
-  right: 0;
-  background-color: var(--bg);
-  box-shadow: 0 0 10px var(--fg);
+  transition:
+    opacity 0.1s ease,
+    visibility 0.1s ease;
 
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.1s ease, visibility 0.1s ease;
+  @apply bg-bg shadow-fg invisible absolute top-8 right-0 flex flex-col opacity-0 shadow-[0_0_10px];
 }
 
 .navbar-dropdown:hover .navbar-dropdown-content {
   opacity: 1;
   visibility: visible;
-}
-
-.navbar-dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  border: none;
-  border-bottom: 1px solid var(--hover);
-
-  /* overwise hovering over Google Chart closes the dropdown */
-  z-index: 1;
 }

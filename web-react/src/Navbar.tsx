@@ -64,23 +64,23 @@ export function Navbar() {
   return (
     <div
       className={
-        "app" +
-        (isFullWidthPage ? " app-fullwidth" : "") +
-        (isTimerFullscreen ? " hidden" : "")
+        "shadow-fg mt-2 mr-auto ml-auto w-full max-w-125 p-4 shadow-[0_0_10px]" +
+        (isFullWidthPage ? " box-border !w-98/100 !max-w-full p-4" : "") +
+        (isTimerFullscreen ? " invisible" : "")
       }
     >
-      <nav className="navbar">
+      <nav className="border-bg-alt mr-auto ml-auto flex max-w-117 border-b-2 pb-2">
         <a
           onClick={() => navigate(rootPath)}
-          className="navbar-item navbar-item-link navbar-hover"
+          className="navbar-item navbar-item-link hover:!bg-hover active:!bg-active"
         >
           <PomodoroSvg />
-          <span>Pomodoro</span>
+          Pomodoro
         </a>
         <div className="navbar-item">
           <IconTray />
         </div>
-        <div className="navbar-item navbar-item-link navbar-item-right navbar-dropdown">
+        <div className="navbar-item navbar-item-link navbar-dropdown ml-auto">
           <MenuSvg />
           <div className="navbar-dropdown-content">
             <DropdownNavItem
@@ -126,7 +126,10 @@ function DropdownNavItem({ text, onClick }: DropdownLinkProps) {
       break;
   }
   return (
-    <a className="navbar-dropdown-item navbar-hover" onClick={onClick}>
+    <a
+      className="border-hover hover:!bg-hover active:!bg-active z-1 flex cursor-pointer items-center gap-1 border-b-1 pt-3 pr-4 pb-3 pl-4"
+      onClick={onClick}
+    >
       {svg}
       <span>{text}</span>
     </a>
